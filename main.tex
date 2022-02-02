@@ -1,14 +1,14 @@
 % Load the kaobook class
 \documentclass[
 	fontsize=10pt, % Base font size
-	twoside=false, % Use different layouts for even and odd pages (in particular, if twoside=true, the margin column will be always on the outside)
-	%open=any, % If twoside=true, uncomment this to force new chapters to start on any page, not only on right (odd) pages
+	twoside=true, % Use different layouts for even and odd pages (in particular, if twoside=true, the margin column will be always on the outside)
+	open=any, % If twoside=true, uncomment this to force new chapters to start on any page, not only on right (odd) pages
 	secnumdepth=1, % How deep to number headings. Defaults to 1 (sections)
 ]{kaobook}
 
 % Choose the language
-\usepackage[english]{babel} % Load characters and hyphenation
-\usepackage[english=british]{csquotes}	% English quotes
+\usepackage[main=french,english]{babel} % Load characters and hyphenation
+\usepackage{csquotes}
 
 % Load packages for testing
 \usepackage{blindtext}
@@ -17,7 +17,7 @@
 
 % Load the bibliography package
 \usepackage{kaobiblio}
-\addbibresource{minimal.bib} % Bibliography file
+\addbibresource{references.bib} % Bibliography file
 
 % Load mathematical packages for theorems and related environments
 \usepackage{kaotheorems}
@@ -36,11 +36,12 @@
 %	BOOK INFORMATION
 %----------------------------------------------------------------------------------------
 
-\titlehead{Document Template}
-\title[Template for the {\normalfont\texttt{kaobook}} Class]{Template for the {\normalfont\texttt{kaobook}} Class}
-\author[JBG]{Johnny B. Goode}
+\titlehead{}
+\title{Les besoins en éducation pour les pratiques opensource}
+\subtitle{Mémoire de M2 Sciences de l'Éducation, parcours SYNVA}
+\author[PH]{Paul Hervot}
 \date{\today}
-\publishers{An Awesome Publisher}
+\publishers{Université de Strasbourg} % TODO: is it really the publisher?
 
 %----------------------------------------------------------------------------------------
 
@@ -54,25 +55,23 @@
 \uppertitleback{\@titlehead} % Header
 
 \lowertitleback{
-	\textbf{Disclaimer} \\
-	You can edit this page to suit your needs. For instance, here we have a no copyright statement, a colophon and some other information. This page is based on the corresponding page of Ken Arroyo Ohori's thesis, with minimal changes.
-	
-	\medskip
-	
-	\textbf{No copyright} \\
-	\cczero\ This book is released into the public domain using the CC0 code. To the extent possible under law, I waive all copyright and related or neighbouring rights to this work.
-	
-	To view a copy of the CC0 code, visit: \\\url{http://creativecommons.org/publicdomain/zero/1.0/}
-	
-	\medskip
-	
-	\textbf{Colophon} \\
-	This document was typeset with the help of \href{https://sourceforge.net/projects/koma-script/}{\KOMAScript} and \href{https://www.latex-project.org/}{\LaTeX} using the \href{https://github.com/fmarotta/kaobook/}{kaobook} class.
-	
-	\medskip
-	
-	\textbf{Publisher} \\
-	First printed in May 2019 by \@publishers
+    \textbf{No copyright} \\
+    \ccby\ Ce mémoire est mis à disposition selon les termes de la
+    \href{https://creativecommons.org/licenses/by/3.0/fr/}{Licence Creative
+    Commons Attribution}.
+
+    \medskip
+
+    \textbf{Colophon} \\
+    Ce document a été composé avec l'aide de
+    \href{https://sourceforge.net/projects/koma-script/}{\KOMAScript} et
+    \href{https://www.latex-project.org/}{\LaTeX} en utilisant la classe
+    \href{https://github.com/fmarotta/kaobook/}{kaobook}.
+
+    \medskip
+
+    \textbf{Publisher} \\
+    Première publication le TODO \@publishers % TODO
 }
 \makeatother
 
@@ -81,8 +80,9 @@
 %----------------------------------------------------------------------------------------
 
 \dedication{
-	The harmony of the world is made manifest in Form and Number, and the heart and soul and all the poetry of Natural Philosophy are embodied in the concept of mathematical beauty.\\
-	\flushright -- D'Arcy Wentworth Thompson
+    Insérer ici une citation engageante.\\
+    \flushright -- Personne toute autant engageante
+    % TODO
 }
 
 %----------------------------------------------------------------------------------------
@@ -96,9 +96,9 @@
 %	PREFACE
 %----------------------------------------------------------------------------------------
 
-\chapter*{Preface}
+\chapter*{Préface}
 
-\blindtext
+\Blindtext
 
 %----------------------------------------------------------------------------------------
 %	TABLE OF CONTENTS & LIST OF FIGURES/TABLES
@@ -134,27 +134,27 @@
 \mainmatter % Denotes the start of the main document content, resets page numbering and uses arabic numbers
 \setchapterstyle{kao} % Choose the default chapter heading style
 
-\chapter{First Chapter}
+\chapter{Premier chapitre}
 
-\blindtext
+\Blinddocument
 
 \pagelayout{wide} % No margins
-\addpart{Title of the Part}
+\addpart{Titre de la partie}
 \pagelayout{margin} % Restore margins
 
-\chapter{Second Chapter}
+\chapter{Deuxième chapitre}
 
-\blindtext
+\Blinddocument
 
 \appendix % From here onwards, chapters are numbered with letters, as is the appendix convention
 
 \pagelayout{wide} % No margins
-\addpart{Appendix}
+\addpart{Appendices}
 \pagelayout{margin} % Restore margins
 
 \chapter{Some more blindtext}
 
-\blindtext
+\Blinddocument
 
 %----------------------------------------------------------------------------------------
 
