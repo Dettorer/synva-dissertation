@@ -21,7 +21,7 @@
           footnotebackref tikzpagenodes ifoddpage multirow floatrow etoc
           morewrites enumitem mdframed zref subfiles todonotes algorithm2e relsize
           ccicons glossaries mfirstuc xfor datatool nomencl abstract csquotes
-          blindtext thmtools bigfoot biblatex cleveref
+          blindtext thmtools bigfoot biblatex cleveref biblatex-apa
 
           # utilities
           latex-bin latexmk biber;
