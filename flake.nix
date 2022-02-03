@@ -15,16 +15,56 @@
           # base scheme
           scheme-small
 
-          # template packages
-          xifthen ifmtarg options xpatch xstring imakeidx hyphenat needspace
-          placeins marginnote marginfix sidenotes changepage chngcntr footmisc
-          footnotebackref tikzpagenodes ifoddpage multirow floatrow etoc
-          morewrites enumitem mdframed zref subfiles todonotes algorithm2e relsize
-          ccicons glossaries mfirstuc xfor datatool nomencl abstract csquotes
-          blindtext thmtools bigfoot biblatex cleveref biblatex-apa
+          # extra packages
+          abstract
+          algorithm2e
+          biblatex
+          biblatex-apa
+          bigfoot
+          blindtext
+          ccicons
+          changepage
+          chngcntr
+          cleveref
+          csquotes
+          datatool
+          enumitem
+          etoc
+          floatrow
+          footmisc
+          footnotebackref
+          glossaries
+          hyphenat
+          ifmtarg
+          ifoddpage
+          imakeidx
+          marginfix
+          marginnote
+          mdframed
+          mfirstuc
+          morewrites
+          multirow
+          needspace
+          nomencl
+          options
+          placeins
+          relsize
+          sidenotes
+          subfiles
+          thmtools
+          tikzpagenodes
+          todonotes
+          xfor
+          xifthen
+          xpatch
+          xstring
+          zref
 
           # utilities
-          latex-bin latexmk biber;
+          biber
+          latex-bin
+          latexmk
+        ;
       };
       FONTCONFIG_FILE = pkgs.makeFontsConf {
         fontDirectories = with pkgs; [ libertinus liberation_ttf ];
