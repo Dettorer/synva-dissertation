@@ -1,0 +1,77 @@
+name: "Publish"
+on:
+  push:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+    - uses: actions/checkout@v2.4.0
+    - uses: cachix/install-nix-action@v16
+    - uses: cachix/cachix-action@v10
+      with:
+        name: dettorer
+        authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+
+    - run: nix build
+    - run: nix path-info --recursive | cachix push dettorer
+    - run: cp $(nix path-info)/Paul_Hervot_M2_dissertation.pdf .
+    - run: nix log > build.log
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: "Dissertation PDF and build log"
+        path: |
+          Paul_Hervot_M2_dissertation.pdf
+          build.log
+
+  deploy:
+    runs-on: ubuntu-latest
+    # Deploy will only be on the master branch. Comment out if not needed
+    if: github.ref == 'refs/heads/main'
+    # You can depend on any other job. The order of execution will be adjusted.
+    needs: [build]
+    steps:
+      # This is a hack to yank bash commands and memorize their output
+      - name: Variables
+        # id is used internally: it can be used to refer to results from another
+        # step
+        id: vars
+        # echo in this format will allow you to subsequently reference the
+        # results via ${{steps.<step_id>.outputs.<variable_name>}}
+        run: |
+          echo "::set-output name=date::$(date + '% Y-% m-% d')"
+          echo "::set-output name=sha8::$(echo ${GITHUB_SHA} | cut -c1-8)"
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          # The same key that we specified in upload-artifact
+          name: "Dissertation PDF and build log"
+      - name: Create Release
+        uses: actions/create-release@v1
+        id: create_release
+        env:
+          GITHUB_TOKEN: '${{secrets.GITHUB_TOKEN}}' # This token is provided by Actions
+        with:
+          # Get the result from step with id = vars (see above). 
+          # Get tags like “my_doc- <build date> - <first 8 characters from sha commit>
+          tag_name: 'dissertation-${{ steps.vars.outputs.date }}-${{ steps.vars.outputs.sha8 }}'
+          # The name that will be displayed in the release
+          release_name: 'Dissertation (version ${{steps.vars.outputs.date}})'
+          # Our release is not a draft or a prerelease, so both are false
+          draft: false
+          prerelease: false
+      # Attached files must be filled in with a separate step
+      - name: Upload pdf asset
+        uses: actions/upload-release-asset@v1
+        env:
+          # A token is also required
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+        with:
+          # From the previous step with id = create_release, upload_url is generated - according to it you need to upload
+          upload_url: '${{ steps.create_release.outputs.upload_url }}'
+          # Do not go to the latex_sources folder, as download-artifacts loads into the current directory
+          asset_path: ./Paul_Hervot_M2_dissertation.pdf
+          # The name that will be displayed in the release
+          asset_name: Paul_Hervot_M2_dissertation.pdf
+          asset_content_type: application/pdf
