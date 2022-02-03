@@ -64,6 +64,7 @@
           biber
           latex-bin
           latexmk
+          xindy
         ;
       };
       FONTCONFIG_FILE = pkgs.makeFontsConf {
