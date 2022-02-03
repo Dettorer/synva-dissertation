@@ -1,0 +1,80 @@
+name: "Publish"
+on:
+  push:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+    # Set up the build environment
+    - uses: actions/checkout@v2.4.0
+    - uses: cachix/install-nix-action@v16
+    - uses: cachix/cachix-action@v10
+      with:
+        name: dettorer
+        authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+
+    # Build and publish, publish to cachix and put artifacts in the current
+    # directory
+    - run: nix build
+    - run: nix path-info --recursive | cachix push dettorer
+    - run: cp $(nix path-info)/Paul_Hervot_M2_dissertation.pdf .
+    - run: nix log > build.log
+
+    # Upload the PDF and the build log as job artifacts
+    - uses: actions/upload-artifact@v2
+      with:
+        name: "Dissertation PDF and build log"
+        path: |
+          Paul_Hervot_M2_dissertation.pdf
+          build.log
+
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    needs: [build]
+    steps:
+      # Set up the variables that we will use to build the release name
+      - name: Variables
+        id: vars
+        run: |
+          echo "::set-output name=date::$(date +'%Y-%m-%d-%Hh%Mm%Ss')"
+          echo "::set-output name=sha8::$(echo ${GITHUB_SHA} | cut -c1-8)"
+
+      # Retrieve the PDF and build log
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: "Dissertation PDF and build log"
+
+      # Create a new release to host the PDF
+      - name: Create Release
+        uses: actions/create-release@v1
+        id: create_release
+        env:
+          GITHUB_TOKEN: '${{secrets.GITHUB_TOKEN}}'
+        with:
+          tag_name: 'dissertation-${{ steps.vars.outputs.date }}-${{ steps.vars.outputs.sha8 }}'
+          release_name: 'Dissertation (version ${{ steps.vars.outputs.date }})'
+          draft: false
+          prerelease: false
+
+      # Attach the PDF and the build log to the release
+      - name: Attach PDF
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+        with:
+          upload_url: '${{ steps.create_release.outputs.upload_url }}'
+          asset_path: ./Paul_Hervot_M2_dissertation.pdf
+          asset_name: Paul_Hervot_M2_dissertation.pdf
+          asset_content_type: application/pdf
+      - name: Attach build log
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+        with:
+          upload_url: '${{ steps.create_release.outputs.upload_url }}'
+          asset_path: ./build.log
+          asset_name: build.log
+          asset_content_type: text/plain
