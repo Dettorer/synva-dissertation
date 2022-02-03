@@ -1,1 +1,1 @@
-:autocmd BufRead /*.tex set makeprg=latexmk
+:autocmd BufNewFile,BufRead *.tex,*.bib,.latexmkrc set makeprg=latexmk
