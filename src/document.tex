@@ -1,0 +1,46 @@
+% Book information
+\titlehead{}
+\title{Les besoins en éducation pour les pratiques opensource}
+\subtitle{Mémoire de M2 Sciences de l'Éducation, parcours SYNVA}
+\author[PH]{Paul Hervot}
+\date{\today}
+\publishers{Université de Strasbourg} % TODO: is it really the publisher?
+% TODO: add INSPÉ and UNISTRA logos to the title page
+% TODO: mention the jury on the title page
+
+% Pre-document content, uses roman numerals
+\frontmatter
+
+\input{document_start}
+
+% Main document content, resets page numbering and uses arabic numbers
+\mainmatter
+\setchapterstyle{kao}
+
+\addpart{Partie théorique}
+
+\include{introduction}
+\include{literature_review}
+
+\addpart{Notre étude}
+
+\include{methodology}
+\include{results}
+\include{discussion}
+
+\addpart{Conclusion}
+
+\include{conclusion}
+
+% Number chapters with letters from now on
+\appendix
+
+\addpart{Annexes}
+
+\include{annexes}
+
+% End of the main document content
+\backmatter
+
+\include{document_end}
+

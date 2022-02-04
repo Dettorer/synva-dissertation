@@ -1,185 +1,39 @@
-% Load the kaobook class
 \documentclass[
-    fontsize=10pt, % Base font size
-    twoside=true, % Use different layouts for even and odd pages (in particular, if twoside=true, the margin column will be always on the outside)
-    open=any, % If twoside=true, uncomment this to force new chapters to start on any page, not only on right (odd) pages
-    secnumdepth=1, % How deep to number headings. Defaults to 1 (sections)
+    a4paper,
+    chapterentrydots=true,
+    fontsize=11pt,
+    open=any,      % Force new chapters to start on any page, not only on right (odd) pages
+    secnumdepth=1, % How deep to number headings (1 = sections)
+    twoside=true,  % Use different layouts for even and odd pages
 ]{kaobook}
 
-% Choose the language
-\usepackage[main=french,english]{babel} % Load characters and hyphenation
+% Main and default language is french but there are some parts in english
+\usepackage[main=french,english]{babel}
 \usepackage{csquotes}
 
-% Load the bibliography package
+% Bibliography configuration
 \usepackage[style=apa]{kaobiblio}
-\addbibresource{references.bib} % Bibliography file
+\addbibresource{references.bib}
 
-% Load mathematical packages for theorems and related environments
-\usepackage{kaotheorems}
-
-% Load the package for hyperreferences
+% Hyperref integration
 \usepackage{kaorefs}
 
-\graphicspath{{images/}{./}} % Paths where images are looked for
+% Search paths for images and tex input files
+\graphicspath{{images/}}
 
-\makeindex[columns=3, title=Alphabetical Index, intoc] % Make LaTeX produce the files required to compile the index
-\makeglossaries % make latex produce the files required to compile the glossary
+% Configure the index and the glossary
+\makeindex[columns=3, title=Alphabetical Index, intoc]
+\makeglossaries
+\input{glossary}
 
-\newacronym{gpl}{GPL}{GNU General Public License}
-\newacronym{cc}{CC}{Creative Commons}
-
+% Deactivate the citation/figure margin for new part pages
+\NewCommandCopy{\oldaddpart}{\addpart}
+\renewcommand{\addpart}[1]{%
+    \pagelayout{wide} % no citation/figure margin
+    \oldaddpart{#1}
+    \pagelayout{margin} % restore the margin
+}
 
 \begin{document}
-
-%----------------------------------------------------------------------------------------
-%	BOOK INFORMATION
-%----------------------------------------------------------------------------------------
-
-\titlehead{}
-\title{Les besoins en éducation pour les pratiques opensource}
-\subtitle{Mémoire de M2 Sciences de l'Éducation, parcours SYNVA}
-\author[PH]{Paul Hervot}
-\date{\today}
-\publishers{Université de Strasbourg} % TODO: is it really the publisher?
-
-%----------------------------------------------------------------------------------------
-
-\frontmatter % Denotes the start of the pre-document content, uses roman numerals
-
-%----------------------------------------------------------------------------------------
-%	COPYRIGHT PAGE
-%----------------------------------------------------------------------------------------
-
-\makeatletter
-\uppertitleback{\@titlehead} % Header
-
-\lowertitleback{
-    \textbf{No copyright} \\
-    \ccby\ Ce mémoire est mis à disposition selon les termes de la
-    \href{https://creativecommons.org/licenses/by/3.0/fr/}{Licence Creative
-    Commons Attribution}.
-
-    \medskip
-
-    \textbf{Colophon} \\
-    Ce document a été composé avec l'aide de
-    \href{https://sourceforge.net/projects/koma-script/}{\KOMAScript} et
-    \href{https://www.latex-project.org/}{\LaTeX} en utilisant la classe
-    \href{https://github.com/fmarotta/kaobook/}{kaobook}.
-
-    \medskip
-
-    \textbf{Publisher} \\
-    Première publication le TODO \@publishers % TODO
-}
-\makeatother
-
-%----------------------------------------------------------------------------------------
-%	DEDICATION
-%----------------------------------------------------------------------------------------
-
-\dedication{
-    Insérer ici une citation engageante.\\
-    \flushright -- Personne toute autant engageante
-    % TODO
-}
-
-%----------------------------------------------------------------------------------------
-%	OUTPUT TITLE PAGE AND PREVIOUS
-%----------------------------------------------------------------------------------------
-
-% Note that \maketitle outputs the pages before here
-\maketitle
-
-%----------------------------------------------------------------------------------------
-%	PREFACE
-%----------------------------------------------------------------------------------------
-
-\chapter*{Préface}
-
-%----------------------------------------------------------------------------------------
-%	TABLE OF CONTENTS & LIST OF FIGURES/TABLES
-%----------------------------------------------------------------------------------------
-
-\begingroup % Local scope for the following commands
-
-% Define the style for the TOC, LOF, and LOT
-%\setstretch{1} % Uncomment to modify line spacing in the ToC
-%\hypersetup{linkcolor=blue} % Uncomment to set the colour of links in the ToC
-\setlength{\textheight}{230\vscale} % Manually adjust the height of the ToC pages
-
-% Turn on compatibility mode for the etoc package
-\etocstandarddisplaystyle % "toc display" as if etoc was not loaded
-\etocstandardlines % "toc lines as if etoc was not loaded
-
-\tableofcontents % Output the table of contents
-
-\listoffigures % Output the list of figures
-
-% Comment both of the following lines to have the LOF and the LOT on different pages
-\let\cleardoublepage\bigskip
-\let\clearpage\bigskip
-
-\listoftables % Output the list of tables
-
-\endgroup
-
-%----------------------------------------------------------------------------------------
-%	MAIN BODY
-%----------------------------------------------------------------------------------------
-
-\mainmatter % Denotes the start of the main document content, resets page numbering and uses arabic numbers
-\setchapterstyle{kao} % Choose the default chapter heading style
-
-\chapter{Premier chapitre}
-
-Une référence pertinente (\sidecite{strategies-2012}).
-
-Un exemple d'index\index{index}.
-
-Je ne suis pas sûr que je vais souvent\index{souvent} utiliser des
-index\index{index} cependant.
-
-Un élément de glossaire serait le \acrshort{gpl}.
-
-Et les glossaires par contre je risque de plus souvent les utiliser, par exemple
-pour parler de licences comme la \acrlong{gpl} ou la \acrshort{cc}.
-
-\pagelayout{wide} % No margins
-\addpart{Titre de la partie}
-\pagelayout{margin} % Restore margins
-
-\chapter{Deuxième chapitre}
-
-\appendix % From here onwards, chapters are numbered with letters, as is the appendix convention
-
-\pagelayout{wide} % No margins
-\addpart{Annexes}
-\pagelayout{margin} % Restore margins
-
-\chapter{Première annexe}
-
-%----------------------------------------------------------------------------------------
-
-\backmatter % Denotes the end of the main document content
-\setchapterstyle{plain} % Output plain chapters from this point onwards
-
-%----------------------------------------------------------------------------------------
-%	BIBLIOGRAPHY
-%----------------------------------------------------------------------------------------
-
-% The bibliography needs to be compiled with biber using your LaTeX editor, or on the command line with 'biber main' from the template directory
-
-\defbibnote{bibnote}{Here are the references in citation order.\par\bigskip} % Prepend this text to the bibliography
-\printbibliography[heading=bibintoc, title=Bibliography, prenote=bibnote] % Add the bibliography heading to the ToC, set the title of the bibliography and output the bibliography note
-
-%----------------------------------------------------------------------------------------
-%	INDEX
-%----------------------------------------------------------------------------------------
-
-% The index needs to be compiled on the command line with 'makeindex main' from the template directory
-
-\printindex % Output the index
-\printglossary % Output the glossary
-
+    \input{document}
 \end{document}

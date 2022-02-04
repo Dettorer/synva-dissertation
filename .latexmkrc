@@ -8,6 +8,8 @@ $pdf_previewer = 'start evince';
 
 # template (custom .cls and .sty)
 ensure_path( 'TEXINPUTS', './template/kaobook-0.9.7//' );
+# most tex files are in the src folder
+ensure_path( 'TEXINPUTS', './src//' );
 
 # Glossaries generation
 add_cus_dep('glo', 'gls', 0, 'run_makeglossaries');
