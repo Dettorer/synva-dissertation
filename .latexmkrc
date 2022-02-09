@@ -6,6 +6,9 @@ $out_dir = 'build';
 @default_files = ('./main.tex');
 $pdf_previewer = 'start evince';
 
+# Allow latex to run shell commands
+set_tex_cmds( '--shell-escape %O %S' );
+
 # template (custom .cls and .sty)
 ensure_path( 'TEXINPUTS', './template/kaobook-0.9.7//' );
 # most tex files are in the src folder

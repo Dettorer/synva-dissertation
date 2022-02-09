@@ -22,6 +22,7 @@
           biblatex-apa
           bigfoot
           blindtext
+          catchfile
           ccicons
           changepage
           chngcntr
@@ -51,9 +52,12 @@
           relsize
           sidenotes
           subfiles
+          svg
           thmtools
           tikzpagenodes
           todonotes
+          transparent
+          trimspaces
           xfor
           xifthen
           xpatch
