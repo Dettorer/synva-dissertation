@@ -17,24 +17,34 @@ jobs:
         name: dettorer
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
 
-    # Build, publish to cachix and gather the artifacts in the current directory
+    # Build, publish to cachix and retrieve the PDF in the current directory
     - name: Build the PDF
+      id: nix-build
       run: nix build
-    - name: Publish the PDF to cachix
+    - name: Publish the build result to cachix
       run: nix path-info --recursive | cachix push dettorer
-    - name: Gather artifacts
+    - name: Retrieve the PDF
       run: |
         cp $(nix path-info)/Paul_Hervot_M2_dissertation.pdf .
-        nix log > build.log
 
-    # Upload the PDF and the build log as job artifacts
+    # Upload the PDF as job artifact
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: "Dissertation PDF and build log"
+        name: "Dissertation PDF"
         path: |
           Paul_Hervot_M2_dissertation.pdf
-          build.log
+
+    # If the build failed, upload the build log instead
+    - name: Retrieve build log
+      if: ${{ always() && steps.nix-build.outcome == 'failure' }}
+      run: nix log > build.log
+    - name: Upload the build log artifact
+      uses: actions/upload-artifact@v2
+      if: ${{ always() && steps.nix-build.outcome == 'failure' }}
+      with:
+        name: "Build log"
+        path: build.log
 
   release:
     runs-on: ubuntu-latest
@@ -48,11 +58,11 @@ jobs:
           echo "::set-output name=date::$(date +'%Y-%m-%d-%Hh%Mm%Ss')"
           echo "::set-output name=sha8::$(echo ${GITHUB_SHA} | cut -c1-8)"
 
-      # Retrieve the PDF and build log
+      # Retrieve the PDF
       - name: Download artifacts
         uses: actions/download-artifact@v2
         with:
-          name: "Dissertation PDF and build log"
+          name: "Dissertation PDF"
 
       # Create a new release to host the PDF
       - name: Create Release
@@ -66,7 +76,7 @@ jobs:
           draft: false
           prerelease: false
 
-      # Attach the PDF and the build log to the release
+      # Attach the PDF to the release
       - name: Attach PDF
         uses: actions/upload-release-asset@v1
         env:
@@ -76,12 +86,3 @@ jobs:
           asset_path: ./Paul_Hervot_M2_dissertation.pdf
           asset_name: Paul_Hervot_M2_dissertation.pdf
           asset_content_type: application/pdf
-      - name: Attach build log
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
-        with:
-          upload_url: '${{ steps.create_release.outputs.upload_url }}'
-          asset_path: ./build.log
-          asset_name: build.log
-          asset_content_type: text/plain
