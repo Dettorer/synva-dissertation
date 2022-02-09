@@ -10,6 +10,7 @@
   (utils.lib.eachSystem utils.lib.allSystems (system:
     let
       pkgs = nixpkgs.legacyPackages.${system};
+      texDependencies = with pkgs; [ inkscape coreutils glibcLocales ];
       texDistribution = pkgs.texlive.combine {
         inherit (pkgs.texlive)
           # base scheme
@@ -79,7 +80,7 @@
       packages.dissertation = pkgs.stdenv.mkDerivation {
         name = "PaulHervotSYNVADissertation";
         src = ./.;
-        buildInputs = [ pkgs.coreutils texDistribution pkgs.glibcLocales ];
+        buildInputs = [ texDistribution ] ++ texDependencies;
         phases = [ "unpackPhase" "buildPhase" "installPhase" ];
         buildPhase = ''
           export FONTCONFIG_FILE=${FONTCONFIG_FILE}
@@ -100,7 +101,7 @@
 
       devShell = pkgs.mkShell {
         inherit FONTCONFIG_FILE;
-        buildInputs = [ texDistribution pkgs.glibcLocales pkgs.biber pkgs.evince ];
+        buildInputs = [ texDistribution pkgs.evince ] ++ texDependencies;
       };
     }
   ));
