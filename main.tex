@@ -18,7 +18,7 @@
 
 % Main and default language is french but there are some parts in english
 \usepackage[main=french,english]{babel}
-\newcommand{\english}[1]{\foreignlanguage{english}{\itshape #1}}
+\newcommand{\en}[1]{\foreignlanguage{english}{\itshape #1}}
 \usepackage{csquotes}
 
 % Allow to include SVG with \includesvg similarly to \includegraphics for other image formats
@@ -38,6 +38,11 @@
 \makeindex[columns=3, title=Alphabetical Index, intoc]
 \makeglossaries
 \input{glossary}
+% shortcut for english glossary entries
+\newcommand{\engl}[1]{\en{\gls{#1}}}
+\newcommand{\enGl}[1]{\en{\Gls{#1}}}
+\newcommand{\englpl}[1]{\en{\glspl{#1}}}
+\newcommand{\enGlpl}[1]{\en{\Glspl{#1}}}
 
 % Deactivate the citation/figure margin for new part pages
 \NewCommandCopy{\oldaddpart}{\addpart}
