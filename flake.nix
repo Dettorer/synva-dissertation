@@ -52,6 +52,7 @@
           placeins
           relsize
           sidenotes
+          silence
           subfiles
           svg
           thmtools
