@@ -1,0 +1,11 @@
+" To use this configuration with nvim, create a `.nvimrc` file containing:
+"   source .dettorer_nvimrc
+
+" Default the build program to latexmk if we're editting a latex file
+:autocmd BufNewFile,BufRead *.tex,*.bib,.latexmkrc set makeprg=latexmk
+
+" Increase the line length for tex file from 80 to 110
+:autocmd BufNewFile,BufRead *.tex set textwidth=110
+
+" Ignore the `build/` folder for stuff like ctrlp
+set wildignore+=*/build/*
