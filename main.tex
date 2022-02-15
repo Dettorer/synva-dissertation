@@ -52,6 +52,13 @@
     \pagelayout{margin} % restore the margin
 }
 
+% Tell hyperref at which level should it define the PDF bookmarks associated with margin tocs (kaobook doesn't
+% define that level, I set it one level deeper than sections).
+\makeatletter
+  \providecommand*{\toclevel@mtocsection}{0} 
+  \edef\toclevel@authorch{\the\numexpr\toclevel@section+1} 
+\makeatother
+
 \begin{document}
     \input{document}
 \end{document}
