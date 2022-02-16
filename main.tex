@@ -6,6 +6,8 @@
   {Loading aborted} % I can't find where it is loaded, probably somewhere in kao's cls or sty
 \WarningFilter{latex}
   {Unused global option} % They are, but kaobook is silently passing them to its base class
+\WarningFilter{latex}
+  {Marginpar on page} % Margin stuff moved to not overlap with other stuff, this is fine
 
 \documentclass[
     a4paper,
@@ -51,13 +53,6 @@
     \oldaddpart{#1}
     \pagelayout{margin} % restore the margin
 }
-
-% Tell hyperref at which level should it define the PDF bookmarks associated with margin tocs (kaobook doesn't
-% define that level, I set it one level deeper than sections).
-\makeatletter
-  \providecommand*{\toclevel@mtocsection}{0} 
-  \edef\toclevel@authorch{\the\numexpr\toclevel@section+1} 
-\makeatother
 
 \begin{document}
     \input{document}
