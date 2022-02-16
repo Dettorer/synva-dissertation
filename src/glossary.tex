@@ -1,11 +1,80 @@
 % Accronyms
 \newacronym{gpl}{GPL}{GNU General Public License}
 \newacronym{cc}{CC}{Creative Commons}
+\newacronym{OSL}{OSL}{Open Source Lab}
 
 % Glossary
 \newglossaryentry{commit}{
-    name=commit,
-    description={Contribution au code. Un commit est l'enregistrement d'un petit ensemble de modifications
-    (suppression, ajout ou modification de une ou plusieurs lignes, dans un ou plusieurs fichiers) apporté au
-    code source d'un projet},
+    name=\en{commit},
+    description={
+        Une contribution au code. Un \en{commit} est l'enregistrement d'un petit ensemble de modifications
+        (suppression, ajout ou modification de une ou plusieurs lignes, dans un ou plusieurs fichiers) apporté
+        au code source d'un projet
+    },
+}
+
+\newglossaryentry{git}{
+    name=git,
+    description={
+        \url{https://git-scm.com/}\\
+        Un système de versionnement. Git est un logiciel permettant de sauvegarder l'historique de
+        développement d'un projet (ses \englpl{commit}) et d'organiser les contributions d'un petit ou grand
+        nombre de personnes. Il est pensé pour mais pas limité aux logiciels libre, git a été conçu à
+        l'origine pour organiser le développement du noyeau de système d'exploitation \gls{linux}).
+        L'historique d'un projet tel que sauvegardé par Git est communément appelé un "\gls{dépôt} Git"
+    },
+}
+
+\newglossaryentry{dépôt}{
+    name=dépôt,
+    description={Voir \gls{git}},
+}
+
+\newglossaryentry{linux}{
+    name=Linux,
+    description={\url{https://www.kernel.org/}\\Un système d'exploitation libre},
+}
+
+\newglossaryentry{github}{
+    name=GitHub,
+    description={
+        \url{https://github.com/}\\
+        Une plateforme d'hébergement de \glspl{dépôt} \gls{git}, gérée par une entreprise privée
+    },
+}
+
+\newglossaryentry{gitlab}{
+    name=GitLab,
+    description={
+        \url{https://about.gitlab.com/}\\
+        Un logiciel libre permettant de créer des plateformes d'hébergement de \glspl{dépôt} \gls{git}
+    },
+}
+
+\newglossaryentry{fosdem}{
+    name=FOSDEM,
+    description={
+        \url{https://fosdem.org}\\
+        Acronyme de "\en{Free and Open Source Developers' European Meeting}". Il s'agit d'une conférence
+        annuelle à l'accès gratuit hébergeant le temps d'un week-end de nombreuses présentations, ateliers et
+        discussions autour du logiciel libre
+    },
+}
+
+\newglossaryentry{synva}{
+    name=SYNVA,
+    description={
+        \href{https://sfc.unistra.fr/formations/formation_-_ingenierie-de-formation_-_master-2-ingenierie-des-systemes-numeriques-virtuels-pour-lapprentissage-synva_-_2393/}
+             {\nolinkurl{https://sfc.unistra.fr/[...]}}\\
+        Master 2 ingénierie des SYstème Numériques Virtuels pour l'Apprentissage. Une formation dispensée par
+        l'université de Strasbourg
+    },
+}
+
+\newglossaryentry{epita}{
+    name=EPITA,
+    description={
+        \url{https://www.epita.fr/}\\
+        École d'ingénieurs privée, acronyme de "École pour l'Informatique et les Techniques Avancées"
+    },
 }

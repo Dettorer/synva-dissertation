@@ -1,17 +1,19 @@
 \chapter{Revue de littérature}
 
-\sidetextcite{strategies-2012} identifient 5 grandes étapes dans les intéraction que les entreprises ont
+\section{TODO article lus mais sans catégorie}
+
+\textcite{strategies-2012} identifient 5 grandes étapes dans les intéraction que les entreprises ont
 généralement avec les logiciels libres :
 \begin{description}
-    \item[identification] : évaluer la qualité d'un logiciel libre, ses garanties et les potentiels brevets
+    \item[identification] -- évaluer la qualité d'un logiciel libre, ses garanties et les potentiels brevets
         utilisés ;
-    \item[adoption] : utilisation du logiciel ;
-    \item[conformité] : examen des licence attachées au logiciel, de leur compatibilité avec les activités de
+    \item[adoption] -- utilisation du logiciel ;
+    \item[conformité] -- examen des licence attachées au logiciel, de leur compatibilité avec les activités de
         l'entreprise, et des contraintes qu'elles apportent dans les activités futures ;
-    \item[contribution] : partage avec la communauté.
+    \item[contribution] -- partage avec la communauté.
 \end{description}
 
-\textcite{strategies-2012} notent un grand besoin de formation au sein des entreprises sur le sujet des
+\sidetextcite{strategies-2012} notent un grand besoin de formation au sein des entreprises sur le sujet des
 licences, ainsi qu'un intérêt pour celle-ci à participer aux projets qu'elles utilisent.
 
 Au sein d'un projet de logiciel, la communité produit généralement plus de \englpl{commit} que de messages sur
@@ -22,7 +24,55 @@ participent aux échanges sur les listes de diffusion proportionnellement au nom
 font. Si l'on souhaite enseigner ces comportements aux étudiants, il ne faut donc pas négliger cet aspect
 communication.
 
+\section{Les barrières d'entrée}
+
 \sidetextcite{barriers-2018} notent la difficulté des nouveaux volontaires à rejoindre une communauté de
 logiciel libre, citant comme exemple extrême le projet \en{Apache Hadoop} voyant 82\% de ses nouveau
 volontaire quitter le projet après leur première contribution \sideparencite{hadoop-dropout-2013} (TODO: lire
-cet article en détail et comprendre les nuances).
+cet article en détail et comprendre les nuances). Les études que \textcite[p.~1005]{barriers-2018} citent
+mentionnent deux approches différentes de la résolution de problèmes observées dans les projets informatique :
+l'une consiste à d'abord rassembler le plus d'informations possibles sur le problème avant de tenter en un
+deuxième temps de le résoudre (approche statistiquement plus commune chez les femmes que les hommes), l'autre
+consiste à agir sur la première information prometteuse trouvée, quitte à revenir en arrière et chercher de
+nouvelles informations si la piste n'était pas concluante (approche statistiquement plus commune chez les
+hommes que les femmes). De façon peut être plus importante pour ce mémoire, et toujours d'après les études
+citées par \textcite[p.~1005]{barriers-2018}, on observe deux façons d'apprendre les fonctionnalités d'un
+logiciel statistiquement préférées de façon inégales selon le genre : l'une, statistiquement plus probable
+chez les femmes, consiste à les apprendre méthodiquement en suivant des processus d'apprentissage clairs.
+L'autre, statistiquement plus probable chez les hommes, consiste à expérimenter à la manière d'un jeu avec ces
+fonctionnalités. \textbf{TODO : JE M'ÉTAIS ARRÊTÉ À LA SECTION 2.3 DE \textcite{barriers-2018}, DONC DEUXIÈME
+PARTIE DE LA PAGE 1006}.
+
+Il a été théorisé et souvent observé de façon générale que la diversité de genre, d'origines et d'ancienneté
+au sein d'une équipe augmente sa productivité (TODO : trouver une citation générique). C'est ce que
+\sidetextcite{diversity-2015} ont pu confirmer dans le cas précis des projets de logiciel libre hébergés sur
+\gls{github}. Ils mettent cette observation en persective avec celle de la proportion de
+femmes dans ce type d'équipe, en très forte minoritée, et concluent en suggérant que des efforts
+supplémentaires d'inclusivité et de réduction des barrières d'entrée pour ces population en minorité
+permettraient probablement d'augmenter la valeur globale de ce type de projets.
+
+Liste de barrière d'entrée que rencontrent les nouveaux arrivants dans un projet de logiciel libre :
+
+\begin{itemize}
+    \item l'identification d'une tâche par laquelle commencer \sideparencite{first-task-2015}. (Note : je
+        pense que ça justifie l'utilité des tags "good first issue" sur \gls{github}) ;
+    \item la mise en place de l'environnement propre au projet abordé permettant de faire une première
+        contribution (\sidetextcite{social-barriers-2015}, allegedly, mais je l'ai pas encore lu <- TODO)
+\end{itemize}
+
+\section{Éléments d'évaluation des formations}
+
+TODO : trouver des éléments d'évaluation de l'efficacité / pertinence d'un cours.
+
+\section{TODO potentiellemment à lire}
+
+\begin{itemize}
+    \item \sidetextcite{mining-github-2014} ;
+    \item \sidetextcite{social-barriers-2015} (note: qualitatif, mais dit compléter une littérature déjà très
+        quantitative, les références peut être intéressantes) ;
+    \item des trucs sur \en{"Cognitive Walkthrough"} ? (méthode \en{science-based} d'évaluation/découverte des
+        problèmes d'utilisation d'un logiciel pour les nouveaux utilisateurs)
+        \sideparencite{cognitive-walkthrough-2000, cognitive-walkthrough-1994}
+    \item des trucs sur "GenderMag" ? Un type de \en{Cognitive Walkthrough} spécialisé sur les problèmes liés
+        au genre. \sideparencite{gendermag-2016}
+\end{itemize}

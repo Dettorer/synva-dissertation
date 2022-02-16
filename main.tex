@@ -27,6 +27,7 @@
 \usepackage[inkscapepath=./build/svg-inkscape/]{svg}
 
 % Bibliography configuration
+% TODO: understand why side citations repeat the author summary twice and make it stop
 \usepackage[style=apa]{kaobiblio}
 \addbibresource{references.bib}
 
@@ -39,6 +40,7 @@
 % Configure the index and the glossary
 \makeindex[columns=3, title=Alphabetical Index, intoc]
 \makeglossaries
+\setglossarystyle{altlist} % TODO: switch to altlistgroup if I end up with a lot entries
 \input{glossary}
 % shortcut for english glossary entries
 \newcommand{\engl}[1]{\en{\gls{#1}}}
