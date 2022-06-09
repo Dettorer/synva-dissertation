@@ -1,0 +1,234 @@
+\ProvidesFile{galician-apa.lbx}[2021/12/24\space v9.15\space APA biblatex localisation]
+\InheritBibliographyExtras{galician}
+
+\setcounter{smartand}{0} % Turn off "smart and" or ampersands will all be replaced
+
+\NewBibliographyString{jourarticle}
+\NewBibliographyString{revisededition}
+\NewBibliographyString{typechair}
+\NewBibliographyString{typechairs}
+\NewBibliographyString{typevolume}
+\NewBibliographyString{typevolumes}
+\NewBibliographyString{typeseries}
+\NewBibliographyString{typeseriess}
+\NewBibliographyString{typevolseries}
+\NewBibliographyString{typevolseriess}
+\NewBibliographyString{on}
+\NewBibliographyString{retrieved}
+\NewBibliographyString{available}
+\NewBibliographyString{from}
+\NewBibliographyString{archivedat}
+\NewBibliographyString{origyear}
+\NewBibliographyString{reviewof}
+\NewBibliographyString{with}
+\NewBibliographyString{supplement}
+\NewBibliographyString{commenton}
+\NewBibliographyString{manunpub}
+\NewBibliographyString{maninprep}
+\NewBibliographyString{mansub}
+\NewBibliographyString{producer}
+\NewBibliographyString{producers}
+\NewBibliographyString{execproducer}
+\NewBibliographyString{execproducers}
+\NewBibliographyString{execdirector}
+\NewBibliographyString{execdirectors}
+\NewBibliographyString{director}
+\NewBibliographyString{directors}
+\NewBibliographyString{writer}
+\NewBibliographyString{writers}
+\NewBibliographyString{host}
+\NewBibliographyString{hosts}
+\NewBibliographyString{guestexpert}
+\NewBibliographyString{guestexperts}
+\NewBibliographyString{narrator}
+\NewBibliographyString{narrators}
+\NewBibliographyString{film}
+\NewBibliographyString{tvseries}
+\NewBibliographyString{tvepisode}
+\NewBibliographyString{video}
+\NewBibliographyString{song}
+\NewBibliographyString{album}
+\NewBibliographyString{podcast}
+\NewBibliographyString{podcastepisode}
+\NewBibliographyString{interview}
+\NewBibliographyString{speech}
+\NewBibliographyString{lithograph}
+\NewBibliographyString{map}
+\NewBibliographyString{lecturenotes}
+\NewBibliographyString{powerpoint}
+\NewBibliographyString{photograph}
+\NewBibliographyString{photographs}
+\NewBibliographyString{present}
+\NewBibliographyString{painting}
+\NewBibliographyString{article}
+\NewBibliographyString{unitednations}
+\NewBibliographyString{charter}
+\NewBibliographyString{ofthe}
+\NewBibliographyString{tothe}
+
+\DeclareBibliographyStrings{%
+  inherit          = {galician},
+  jourarticle      = {{artigo}{artigo}},
+%  tothe            = {{to\space the}{to\space the}},%FIXME
+%  ofthe            = {{of\space the}{of\space the}},%FIXME
+  unitednations    = {{Organizaci\'on\space das\space Naci\'ons\space Unidas}{ONU}},
+  charter          = {{carta}{carta}},
+  article          = {{artigo}{art\adddot}},
+  painting         = {{pintura}{pintura}},
+  present          = {{presente}{presente}},
+  song             = {{canci\'on}{canci\'on}},
+  album            = {{\'album}{\'album}},
+  map              = {{mapa}{mapa}},
+  photograph       = {{fotograf\'ia}{fotograf\'ia}},
+  photographs      = {{fotograf\'ias}{fotograf\'ias}},
+  powerpoint       = {{diapositivas\space de\space Powerpoint}{diapositivas\space de\space Powerpoint}},
+  lecturenotes     = {{apuntamentos}{apuntamentos}},
+  podcast          = {{podcast\space de\space audio}{podcast\space de\space audio}},
+  podcastepisode   = {{episodio\space de\space podcast\space de\space audio}{episodio\space de\space podcast\space de\space audio}},
+  interview        = {{entrevista}{entrevista}},
+  speech           = {{gravaci\'on\space de\space audio}{gravaci\'on\space de\space audio}},
+  lithograph       = {{litograf\'ia}{litogr\adddot}},
+  video            = {{v\'ideo}{v\'ideo}},
+  film             = {{filme}{filme}},
+  tvseries         = {{serie\space de\space televisi\'on}{serie\space de\space televisi\'on}},
+  tvepisode        = {{episodio\space de\space serie\space de\space televisi\'on}{episodio\space de\space serie\space de\space televisi\'on}},
+  narrator         = {{narrador}{narr\adddot}},
+  narrators        = {{narradores}{narrs\adddot}},
+  producer         = {{produtor}{produtor}},
+  producers        = {{produtores}{produtores}},
+  execproducer     = {{produtor\space executivo}{prod\adddot\space exec\adddot}},
+  execproducers    = {{produtores\space executivos}{prods\adddot\space exec\adddot}},
+  execdirector     = {{director\space executivo}{dirs\adddot\space exec\adddot}},
+  execdirectors    = {{directores\space executivos}{dirs\adddot\space exec\adddot}},
+  director         = {{director}{dir\adddot}},
+  directors        = {{directores}{dirs\adddot}},
+  writer           = {{escritor}{escritor}},
+  writers          = {{escritores}{escritores}},
+  host             = {{presentador}{presentador}},
+  hosts            = {{presentadores}{presentadores}},
+  guestexpert      = {{experto\space convidado}{experto\space convidado}},
+  guestexperts     = {{expertos\space convidados}{expertos\space convidados}},
+  with             = {{con}{con}},
+  manunpub         = {{manuscrito\space in\'edito}{manuscrito\space in\'edito}},
+  maninprep        = {{manuscrito\space en\space preparaci\'on}{manuscrito\space en\space preparaci\'on}},
+  mansub           = {{manuscrito\space enviado\space para\space publicaci\'on}{manuscrito\space enviado\space para\space publicaci\'on}},
+  supplement       = {{suplemento}{supl\adddot}},
+  part             = {{parte}{parte}},
+  january          = {{xaneiro}{xaneiro}},
+  february         = {{febreiro}{febreiro}},
+  march            = {{marzo}{marzo}},
+  april            = {{abril}{abril}},
+  may              = {{maio}{maio}},
+  june             = {{xu\~no}{xu\~no}},
+  july             = {{xullo}{xullo}},
+  august           = {{agosto}{agosto}},
+  september        = {{setembro}{setembro}},
+  october          = {{outubro}{outubro}},
+  november         = {{novembro}{novembro}},
+  december         = {{decembro}{decembro}},
+  nodate           = {{s\adddot d\adddot}{s\adddot d\adddot}},
+  mathesis         = {{tese\addabbrvspace de\addabbrvspace mestrado}{tese\addabbrvspace de\addabbrvspace mestrado}},
+  phdthesis        = {{tese\addabbrvspace de\addabbrvspace doutoramento}{tese\addabbrvspace de\addabbrvspace doutoramento}},
+  revisededition   = {{edici\'on\space revisada}{ed\adddotspace rev\adddot}},
+  commenton        = {{comentario\space sobre}{comentario\space sobre}},
+  page             = {{p\'axina}{{}p\adddot}},
+  pages            = {{p\'axinas}{{}pp\adddot}},
+  on               = {{o}{o}},
+  retrieved        = {{obtido}{obtido}},
+  available        = {{dispo\~nible}{dispo\~nible}},
+  from             = {{desde}{desde}},
+  archivedat       = {{arquivado\space en}{arquivado\space en}},
+  reviewof         = {{revisi\'on\space de}{revisi\'on\space de}},
+  paragraph        = {{par\'agrafo}{par\adddot}},
+  paragraphs       = {{par\'agrafo}{pars\adddot}},
+  origyear         = {{data\space orixinal\space de\space publicaci\'on}{data\space orixinal\space de\space publicaci\'on}},
+  typechair        = {{coordinador}{coord\adddot}},
+  typechairs       = {{coordinadores}{coords\adddot}},
+  typevolume       = {{editor\space do\space volume}{ed\adddotspace vol\adddot}},
+  typevolumes      = {{editores\space do\space volume}{eds\adddotspace vol\adddot}},
+  typeseries       = {{editor\space da\space serie}{ed\adddotspace ser\adddot}},
+  typeseriess      = {{editores\space da\space serie}{eds\adddotspace ser\adddot}},
+  typevolseries    = {{editor\space da\space serie\space e\space do\space volume}{ed\adddotspace vol\space\&\space ser\adddot}},
+  typevolseriess   = {{editores\space da\space serie\space e\space do\space volume}{eds\adddotspace vol\space\&\space ser\adddot}},
+  annodomini       = {{despois\space de\space Cristo}{d\adddot C\adddot}},
+  beforechrist     = {{antes\space de\space Cristo}{a\adddot C\adddot}},
+  commonera        = {{era\space com\'un}{e\adddot c\adddot}},
+  beforecommonera  = {{antes\space da\space era\space com\'un}{a\adddot e\adddot c\adddot}}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Drop end* when they are the same as *
+% You must use \printdate to get here otherwise it will be ignored
+
+\DeclareBibliographyExtras{%
+  \def\urldatecomma{\addcomma\addspace}%
+  \protected\def\mkbibdateapalong#1#2#3{%
+    % As per 10.1, Articles only have year
+    \ifboolexpr{ test {\ifentrytype{article}}
+                 and not test {\iffieldequalstr{entrysubtype}{nonacademic}} }
+      {\clearfield{labelmonth}%
+       \clearfield{labelday}}
+      {}%
+    \iffieldundef{#1}%
+      {}%
+      {\iffieldbibstring{#1}{\biblcstring{\thefield{#1}}}{\thefield{#1}}}%
+    \iffieldundef{#2}%
+      {}%
+      {\iffieldundef{#1}%
+        {}%
+        {\addcomma\addspace}%
+       \mkbibmonth{\thefield{#2}}}%
+    \iffieldundef{#3}%
+      {}%
+      {\iffieldundef{#2}%
+        {}%
+        {\addspace}%
+       \stripzeros{\thefield{#3}}}}%
+  \protected\def\mkbibdateapalongextra#1#2#3{%
+    % As per 10.1, Articles only have year
+    \ifboolexpr{ test {\ifentrytype{article}}
+                 and not test {\iffieldequalstr{entrysubtype}{nonacademic}} }
+      {\clearfield{labelmonth}%
+       \clearfield{labelday}}
+      {}%
+    \iffieldundef{#1}%
+      {}%
+      {\iffieldbibstring{#1}{\biblcstring{\thefield{#1}}}{\thefield{#1}}\printfield{extradate}}%
+    \iffieldundef{#2}%
+      {}%
+      {\iffieldundef{#1}%
+        {}%
+        {\addcomma\addspace}%
+    \iffieldundef{#3}%
+      {}%
+      {\iffieldundef{#2}%
+        {}%
+        {\stripzeros{\thefield{#3}}\addspace de\addspace}}%
+       \mkbibmonth{\thefield{#2}}%
+}}%
+  \protected\def\mkbibdateapalongmdy#1#2#3{%
+    % As per 10.1, Articles only have year
+    \ifboolexpr{ test {\ifentrytype{article}}
+                 and not test {\iffieldequalstr{entrysubtype}{nonacademic}} }
+      {\clearfield{labelmonth}%
+       \clearfield{labelday}}
+      {}%
+    \iffieldundef{#3}%
+      {}%
+      {el\addspace\stripzeros{\thefield{#3}}}%
+    \iffieldundef{#2}%
+      {\addspace{en}\addspace}%
+      {\iffieldundef{#3}%
+        {en\addspace}%
+        {\addspace{de}\addspace}%
+       \mkbibmonth{\thefield{#2}}{\addspace{de}\addspace}}%
+    \iffieldundef{#1}%
+      {}%
+      {\iffieldundef{#2}%
+        {}%
+        {\addspace}%
+       \thefield{#1}}}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\endinput

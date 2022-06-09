@@ -20,7 +20,6 @@
           abstract
           algorithm2e
           biblatex
-          biblatex-apa
           bigfoot
           blindtext
           catchfile

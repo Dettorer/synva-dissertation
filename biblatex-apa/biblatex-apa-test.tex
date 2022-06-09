@@ -1,0 +1,1184 @@
+\documentclass[paper=a4]{article}
+\usepackage[american]{babel}
+\usepackage{csquotes}
+\usepackage{shortvrb}
+\usepackage{ifthen}
+\usepackage{color}
+\usepackage[retainmissing]{MnSymbol}
+\usepackage[top=2.5cm]{geometry}
+
+% Unicode
+\usepackage{fontspec}
+\setmainfont[Ligatures=TeX]{TeXGyrePagella}
+\setsansfont[Ligatures=TeX]{TexGyreHeros}
+\setmonofont[Ligatures=NoCommon]{TeXGyreCursor}
+\MakeAutoQuote{«}{»}
+\maxdeadcycles=1000
+% Biblatex
+\usepackage[style=apa]{biblatex}
+
+\MakeShortVerb{\|}
+
+\newcommand\apa[2][]{\ifthenelse{\equal{#1}{}}%
+                       {\textcolor{blue}{\texttt{(APA #2)}}}%
+                       {\textcolor{blue}{\texttt{(APA #2 Example #1)}}}}
+
+\setlength{\parskip}{3ex}
+
+\makeatletter
+% This solution to detokenize leaving a space after the command and
+% arguments is due to Bruno Le Floch on T.SE
+\long\def\apaexi#1{%
+  \catcode64=11
+  \begingroup
+  % Ensure that every character is preserved by \lowercase.
+  \count@\z@
+  \loop\ifnum\count@<256
+    \lccode\count@\z@
+    \advance\count@\@ne
+  \repeat
+  % Except spaces, changed to ^^A
+  \lccode32=\@ne
+  \lowercase{%
+    \endgroup
+    \expandafter\test@\detokenize{#1}\relax%
+    \catcode64=12}}
+% Then map {^^A => space, space =>} onto the string.
+\def\test@#1{%
+  \ifx#1\relax\test@end\fi
+  \ifnum`#1=\@ne\space\else#1\fi
+  \test@}
+\def\test@end\fi#1\test@{\fi}
+
+\def\apaex#1{\hspace*{-4em}\parbox{\textwidth}{\texttt{\small\apaexi{#1}}}\\$\rcurvearrowse$ \textbf{#1}}
+\def\apaexs#1{\hbox{\texttt{\footnotesize\apaexi{#1}}} \textbf{\small #1}}
+\makeatother
+
+% This just makes it easier to find a specific (APA 7.x) example in the
+% typeset references section
+\reversemarginpar
+\renewbibmacro*{begentry}{\marginpar{\footnotesize\textcolor{blue}{\thefield{entrykey}}}%
+                          \ifkeyword{meta}{\textsuperscript{*}}{}}
+
+\usepackage[colorlinks=true]{hyperref}
+\setcounter{secnumdepth}{0}
+\setcounter{tocdepth}{3}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% END PREAMBLE %%%%%%%%%%%%%%%%%%%%%%%%%
+
+\addglobalbib{../bibtex/bib/biblatex-apa-test-references.bib}
+
+\begin{document}
+\section{APA style examples}
+This file typesets just about all useful examples from \apa{8}--\apa{10}.
+Also included are some clarifications from the APA blog
+(\url{http://blog.apastyle.org/apastyle/}). Please refer to the
+|biblatex-apa-test-references.bib| file for details on the references
+entries. The |.bib| key for each entry in the References section is listed
+for convenience in the left margin. The keys are not arbitrary and consist
+of the APA section they are taken from, followed by a colon,
+followed by the example number. This makes it easier to cross-reference the
+typeset examples with the commented |.bib| file.
+
+\tableofcontents
+\newpage
+\section{APA 8--Citations}
+\begin{refsection}[../bibtex/bib/biblatex-apa-test-citations.bib]
+\noindent Please see accompanying file |biblatex-apa-test-citations.bib|
+for the bibliographic entries which these examples use.
+
+\noindent\apa{8.6}\\
+Secondary sources. The example in APA 7th is inconsistent with other
+examples of similar format which use a semi-colon:\\
+\apaex{\parencites{8.6a}[as cited in][]{8.6b}}\\\\
+\noindent To obtain the exact format, if desired, wrap the citation in:\\
+|\DeclareDelimFormat{multicitedelim}{\addcomma\space}|\\
+|\DeclareDelimFormat{multicitedelim}{\addsemicolon\space}|\\
+\DeclareDelimFormat{multicitedelim}{\addcomma\space}\\
+\apaex{\parencites{8.6a}[as cited in][]{8.6b}}\\
+\DeclareDelimFormat{multicitedelim}{\addsemicolon\space}\\
+\noindent Primary source with no date:\\
+\apaex{Allport's diary \parencite[as cited in][]{8.6c}}
+
+\noindent\apa{8.9}\\
+Such cases are just typed out--they have no Reference section entry and
+don't therefore have a bibliography database entry.
+
+\noindent\apa{8.10}\\
+Simple cite. «Jr.» suffix is not shown (bib entry for this example has a suffix):\\
+\apaex{\textcite{8.10a}}\\
+
+\noindent Testing seasonal periodical citations--should be ignored and only
+year printed:\\
+\apaex{\textcite{8.10b}}
+
+\noindent\apa{8.11}\\
+Within a paragraph, not in the narrative sense:\\
+\apaex{\autocite{8.11a}}
+
+\noindent Within parentheses, use the |\nptextcite| command which is equivalent to
+the |\textcite| command but omits the parenthesis and uses commas instead.
+See the |biblatex-apa| docs.\\
+\apaex{(\nptextcite[see][for more detail]{8.11a})}\\
+\apaex{(e.g., falsely balanced news coverage; \nptextcite{8.11a})}\\
+\apaex{\textcite{8.11a} noted the dangers of falsely balanced news coverage.}\\
+\apaex{In \citeyear{8.11a}, \citeauthor{8.11a} noted the dangers of falsely balanced news coverage.}
+
+\noindent\apa{8.12}\\
+Citing multiple works:\\
+\apaex{\parencite{8.12a,8.12b,8.12c}}\\
+\apaex{\parencite{8.12d,8.12e,8.12f,8.12g}}\\
+\apaex{\parencite{8.12h,8.12i,8.12j,8.12k}}\\
+\apaex{\parencite{8.12l,8.12m,8.12n}}\\
+\apaex{\parencites{8.12o}[see also][]{8.12p,8.12q, 8.12r}}
+
+\noindent «in press» should have hyphen before disambiguating part of label\\
+\apaex{\parencite{8.12s,8.12t,8.12u}}
+
+\noindent\apa{8.13}\\
+Classical and part works:\\
+\apaex{\parencite[10]{8.13a}}\\
+\apaex{\parencite[Chapter 3]{8.13b}}\\
+\apaex{\parencite[3--17]{8.13c}}\\
+\apaex{\parencite[paras. 2--3]{8.13d}}\\
+\apaex{\parencite[Table 1]{8.13e}}\\
+\apaex{\parencite[Slide 7]{8.13f}}\\
+\apaex{\parencite[1:30:40]{8.13g}}\\
+\apaex{\parencite[1 Cor. 13:1]{8.13h}}\\
+\apaex{\parencite[Part IV]{8.13i}}\\
+\apaex{\parencite[\nopp 1.3.36--37]{8.13j}}\\\\
+Note the use of |\nopp| in the Shakespeare example to suppress the
+pagination prefix since the part specification is auto-detected as a range
+by |biblatex| which it then assumes is a page range. Note also the date
+format for the Aristotle example, see the reference file for the data
+format--no special formatting is required by the user as |biblatex| fully
+supports the relevant parts of the ISO 8601 specification and can
+parse/format such dates automatically.
+
+\noindent\apa{8.14}\\
+Use |SHORTTITLE| field of the entry if it exists:\\
+\apaex{\parencite{8.14a}}\\\\
+Articles use quotes instead of italics:\\
+\apaex{\parencite{8.14b}}\\\\
+Citing anonymous author:\\
+\apaex{\parencite{8.14c}}
+
+\noindent\apa{8.15}\\
+Citations with reprint/reissue dates:\\
+\apaex{\textcite{8.15a}}\\
+\apaex{\parencite{8.15b}}
+
+\noindent\apa{8.16}\\
+This is not a strict rule and so simply use the lower-level citation
+commands:\\
+\apaex{\citeauthor{8.11a}}
+
+\noindent\apa{8.17}\\
+Basic in-text citation styles:\\
+\begin{table}
+\begin{tabular}{p{0.33\textwidth}p{0.33\textwidth}p{0.33\textwidth}}
+  \textbf{Author type} & \textbf{Parenthetical citation} & \textbf{Narrative citation}\\\\
+  \hline
+  \\
+  One author & \apaexs{\parencite{8.17a}} & \apaexs{\textcite{8.17a}}\\\\
+  Two authors & \apaexs{\parencite{8.17b}} & \apaexs{\textcite{8.17b}}\\\\
+  Three or more authors & \apaexs{\parencite{8.17c}} & \apaexs{\textcite{8.17c}}\\\\
+  Group author with abbreviation & &\\
+  ~~First citation & \apaexs{\parencite{8.17d}}\citeresetapa & \apaexs{\textcite{8.17d}}\\\\
+  ~~Subsequent citations & \apaexs{\parencite{8.17d}} & \apaexs{\textcite{8.17d}}\\\\
+  Group author without abbreviation & \apaexs{\parencite{8.17e}} & \apaexs{\textcite{8.17e}}\\\\
+  \hline
+\end{tabular}
+\caption{APA Table 8.1}
+\label{tab:8.1}
+\end{table}
+
+\noindent Authors in narrative citations are separated by «and».
+However, in parenthetical cites, authors are separated by «\&»:\\
+\apaex{\parencite{8.17f}}\\
+\apaex{\textcite{8.17g}}\\
+\apaex{\parencite{8.17h}}
+
+\noindent Automatic list disambiguation for ambiguous truncations. Note
+that «et al» is plural so it will only truncate two or more names. If it
+would truncate just one name, we just give the name:\\
+\apaex{\textcite{8.18a}}\\
+\apaex{\textcite{8.18b}}\\
+\apaex{\textcite{8.18c}}\\
+\apaex{\textcite{8.18d}}
+
+\noindent Automatic list disambiguation is only for ambiguous author lists
+in the same year. This is implied in \apa{8.18} by the phrase «the same
+in-text citation form». So these are not disambiguated:\\
+\apaex{\textcite{8.18e}}\\
+\apaex{\textcite{8.18f}}
+
+\noindent\apa{8.19}\\
+Citations of works by same authors in the same year:\\
+\apaex{\parencite{8.19a}}\\
+\apaex{\textcite{8.19b}}\\
+\apaex{\parencite{8.19c,8.19d}}
+
+\noindent\apa{8.20}\\
+Citations of an entry with an author who shares a surname with another
+entry always appears with initials when primary author:\\
+\apaex{\parencite{8.20a,8.20b}}
+
+\noindent When initials are also the same, revert to standard format:\\
+\apaex{\parencite{8.20c,8.20d}}
+
+\noindent Only the primary author should have initials:\\
+\apaex{\parencite{8.20f,8.20g,8.20h,8.20i,8.20j}}\\
+
+\noindent Authors in same reference with same surname:\\
+\apaex{\parencite{8.20e}}
+
+\noindent\apa{8.21}\\
+Group author abbreviations should work between citations of different works by
+the author:\\
+\apaex{\parencite{8.21a}}\\
+\apaex{\parencite{8.21a}}\\
+\apaex{\parencite{8.21b}}
+
+\noindent Testing suffices\\
+\apaex{\textcite{stest1}}\\
+\apaex{\textcite{stest2}}
+
+\noindent Testing prefices\\
+\apaex{\textcite{pretest}}\\
+\apaex{\textcite{nopretest}}
+
+% presufftest2 and nopresufftest are the same name and so even though
+% useprefix=false nopresufftest, hashes are the same so there is an extradate
+\noindent Testing prefices plus suffices\\
+\apaex{\textcite{presufftest}}\\
+\apaex{\textcite{presufftest2}}\\
+\apaex{\textcite{nopresufftest}}
+
+\noindent Testing «and others»\\
+\apaex{\textcite{ao1}}\\
+\apaex{\textcite{ao2}}
+
+% Testing name elision in cites
+% That is, \parencite{kingetal2005a,weissetal2007a,weissetal2009a}
+% Should give:
+% (King, Weiss, & Farmer, 2005; Weiss, King, & Hopkins, 2007; Weiss et al., 2009)
+% and not
+% (King, Weiss, & Farmer, 2005; Weiss, King, & Hopkins, 2007, 2009)
+% which happens if elision is based on namehash because the mincitenames
+% truncation of the 2007 and 2009 names is the same
+\noindent{Testing name elision in cites}\\
+\apaex{\parencite{kingetal2005a,weissetal2007a,weissetal2009a}}
+
+\noindent Testing citation formats for complete dates\\
+\apaex{\textcite{Ludwig2014}}
+
+\noindent Testing month ranges with same months, different days\\
+\apaex{\textcite{daterange1}}
+
+\noindent Testing month ranges with different months\\
+\apaex{\textcite{daterange2}}
+
+\noindent Testing fullcite\\
+\apaex{\fullcite{FC1}}\\
+\apaex{\fullcitebib{FC1}}
+
+\printbibliography[title={APA 8 Citation References}]
+
+\end{refsection}
+\newpage
+\section{APA 9--General Reference List}
+
+% (APA 9.8)
+\begin{refsection}
+
+\noindent\apa{9.8}\\
+\apaex{\parencite{9.8:1}}\\
+\apaex{\parencite{9.8:2}}\\
+\apaex{\parencite{9.8:3}}\\
+\apaex{\parencite{9.8:4}}\\
+\apaex{\parencite{9.8:5}}\\
+\apaex{\parencite{9.8:6}}\\
+\apaex{\parencite{9.8:7}}\\
+\apaex{\parencite{9.8:8}}\\
+\apaex{\parencite{9.8:9}}\\
+\apaex{\parencite{9.8:10}}\\
+\apaex{\parencite{9.8:11}}
+
+\apaex{\textcite{9.8:1}}\\
+\apaex{\textcite{9.8:2}}\\
+\apaex{\textcite{9.8:3}}\\
+\apaex{\textcite{9.8:4}}\\
+\apaex{\textcite{9.8:5}}\\
+\apaex{\textcite{9.8:6}}\\
+\apaex{\textcite{9.8:7}}\\
+\apaex{\textcite{9.8:8}}\\
+\apaex{\textcite{9.8:9}}\\
+\apaex{\textcite{9.8:10}}\\
+\apaex{\textcite{9.8:11}}
+
+\printbibliography[title={APA 9.8--Format of the Author Element}]
+
+\noindent\textbf{Note:} The username feature is nicely managed by |biber|'s
+annotation feature which allows arbitrary strings to be attached to any
+list member.
+
+\end{refsection}
+\newpage
+
+% (APA 9.44)
+\begin{refsection}
+  
+\nocite{9.44:1a,9.44:1b,9.44:2a,9.44:2b,9.44:2c,9.44:3a,9.44:3b,9.44:4a,9.44:4b,%
+        9.44:5a,9.44:5b,9.44:6a,9.44:6b,9.44:7a,9.44:7b,9.44:7c,9.44:8a,9.44:8b,9.44:8c,%
+        9.44:9a,9.44:9b,9.44:10a,9.44:10b,9.44:10c,9.44:11a,9.44:11b,9.44:12a,9.44:12b}
+    
+\printbibliography[title={APA 9.44--Order of Works in a Reference List}]
+
+\noindent\textbf{Note:} The rather silly requirement for the «Santiago» examples are
+done via |SORTNAME|.
+
+\end{refsection}
+\newpage
+% (APA 9.46)
+\begin{refsection}
+  
+\nocite{9.46:1,9.46:2,9.46:3,9.46:4,9.46:5,9.46:6,9.46:7,9.46:8,9.46:9,9.46:10,%
+        9.46:11,9.46:12,9.46:13}
+
+\printbibliography[title={APA 9.46--Order of Multiple Works by the Same First Author}]
+
+\end{refsection}
+\newpage
+% (APA 9.47)
+\begin{refsection}
+
+\nocite{9.47:1,9.47:2,9.47:3,9.47:4,9.47:5,9.47:6,9.47:7,9.47:8,9.47:9,9.47:10,%
+        9.47:11,9.47:12,9.47:13}
+
+\printbibliography[title={APA 9.47--Order of Works With the Same Author and
+Same Date}]
+
+\noindent\textbf{Note:} Examples added for no dates, «in press» requirements and
+also ignoring of «The», «An» and «A» in titles for sorting purposes.
+
+\end{refsection}
+\newpage
+% (APA 9.48)
+\begin{refsection}
+
+\nocite{9.48:1,9.48:2}
+
+\printbibliography[title={APA 9.48--Order of Works by First Authors With
+  the Same Surname}]
+
+\end{refsection}
+\newpage
+% (APA 9.49)
+\begin{refsection}
+
+\nocite{9.49:1,9.49:2,9.49:3,9.49:4,9.49:5,9.49:6}
+
+\printbibliography[title={APA 9.49--Order of Works with No Author or an
+  Anonymous Author}]
+
+\noindent\textbf{Note:} Examples added for anonymous authors and numeral
+expansion/series sorting using |SORTTITLE|.
+
+\end{refsection}
+\newpage
+% (APA 9.51)
+\begin{refsection}
+
+\nocite{9.51:1,9.51:2}
+
+\printbibliography[title={APA 9.51--Annotated Bibliographies}]
+
+\end{refsection}
+\newpage
+% (APA 9.52)
+\begin{refsection}
+
+\nocite{9.52:1,9.52:2,9.52:3,9.52:4}
+
+\printbibliography[title={APA 9.52--References Included in a Meta-Analysis}]
+
+\noindent\textbf{Note:} Use the |meta| keyword in the |KEYWORDS| field to
+indicate works included in a Meta-Analysis.
+
+\end{refsection}
+\newpage
+\section{APA 10--References Examples}
+\subsection{APA 10.1--Periodicals}
+
+\begin{refsection}
+
+\noindent\apa{10.1 Example 1}\\
+\apaex{\parencite{10.1:1}}\\
+\apaex{\textcite{10.1:1}}
+
+\noindent\apa{10.1 Example 2}\\
+\apaex{\parencite{10.1:2}}\\
+\apaex{\textcite{10.1:2}}
+
+\noindent\apa{10.1 Example 3}\\
+\apaex{\parencite{10.1:3a,10.1:3b}}\\
+\apaex{\textcite{10.1:3a} and \textcite{10.1:3b}}
+
+\noindent\apa{10.1 Example 4}\\
+\apaex{\parencite{10.1:4}}\\
+\apaex{\textcite{10.1:4}}
+
+\noindent\apa{10.1 Example 5}\\
+\apaex{\parencite{10.1:5}}\\
+\apaex{\textcite{10.1:5}}
+
+\noindent\apa{10.1 Example 6}\\
+\apaex{\parencite{10.1:6}}\\
+\apaex{\textcite{10.1:6}}
+
+\noindent\apa{10.1 Example 7}\\
+\apaex{\parencite{10.1:7}}\\
+\apaex{\textcite{10.1:7}}
+
+\noindent\apa{10.1 Example 8}\\
+\apaex{\parencite{10.1:8}}\\
+\apaex{\textcite{10.1:8}}
+
+\noindent\apa{10.1 Example 9}\\
+\apaex{\parencite{10.1:9}}\\
+\apaex{\textcite{10.1:9}}
+
+\noindent\apa{10.1 Example 10}\\
+\apaex{\parencite{10.1:10}}\\
+\apaex{\textcite{10.1:10}}
+
+\noindent\apa{10.1 Example 11}\\
+\apaex{\parencite{10.1:11}}\\
+\apaex{\textcite{10.1:11}}
+
+\noindent\apa{10.1 Example 12}\\
+\apaex{\parencite{10.1:12a,10.1:12b}}\\
+\apaex{\textcite{10.1:12a} and \textcite{10.1:12b}}
+
+\noindent\apa{10.1 Example 13}\\
+\apaex{\parencite{10.1:13}}\\
+\apaex{\textcite{10.1:13}}
+
+\noindent\apa{10.1 Example 14}\\
+\apaex{\parencite{10.1:14}}\\
+\apaex{\textcite{10.1:14}}
+
+\noindent\apa{10.1 Example 15}\\
+\apaex{\parencite{10.1:15a,10.1:15b,10.1:15c}}\\
+\apaex{\textcite{10.1:15a}, \textcite{10.1:15b}, and \textcite{10.1:15c}}
+
+\noindent\apa{10.1 Example 16}\\
+\apaex{\parencite{10.1:16a,10.1:16b}}\\
+\apaex{\textcite{10.1:16a} and \textcite{10.1:16b}}
+
+\noindent\apa{10.1 Example 17}\\
+\apaex{\parencite{10.1:17}}\\
+\apaex{\textcite{10.1:17}}
+
+\noindent\apa{10.1 Example 18}\\
+\apaex{\parencite{10.1:18}}\\
+\apaex{\textcite{10.1:18}}
+
+\noindent\apa{10.1 Example 19}\\
+\apaex{\parencite{10.1:19}}\\
+\apaex{\textcite{10.1:19}}
+
+\printbibliography[title={APA 10.1 References}]
+
+\end{refsection}
+\newpage
+\subsection{APA 10.2--Books and Reference Works}
+
+\begin{refsection}
+
+\noindent\apa{10.2 Example 20}\\
+\apaex{\parencite{10.2:20}}\\
+\apaex{\textcite{10.2:20}}
+
+\noindent\apa{10.2 Example 21}\\
+\apaex{\parencite{10.2:21}}\\
+\apaex{\textcite{10.2:21}}
+
+\noindent\apa{10.2 Example 22}\\
+\apaex{\parencite{10.2:22a,10.2:22b}}\\
+\apaex{\textcite{10.2:22a} and \textcite{10.2:22b}}
+
+\noindent\apa{10.2 Example 23}\\
+\apaex{\parencite{10.2:23}}\\
+\apaex{\textcite{10.2:23}}
+
+\noindent\apa{10.2 Example 24}\\
+\apaex{\parencite{10.2:24}}\\
+\apaex{\textcite{10.2:24}}
+
+\noindent\apa{10.2 Example 25}\\
+\apaex{\parencite{10.2:25}}\\
+\apaex{\textcite{10.2:25}}
+
+\noindent\apa{10.2 Example 26}\\
+\apaex{\parencite{10.2:26}}\\
+\apaex{\textcite{10.2:26}}
+
+\noindent\apa{10.2 Example 27}\\
+\apaex{\parencite{10.2:27a,10.2:27b}}\\
+\apaex{\textcite{10.2:27a} and \textcite{10.2:27b}}
+
+\noindent\apa{10.2 Example 28}\\
+\apaex{\parencite{10.2:28}}\\
+\apaex{\textcite{10.2:28}}
+
+\noindent\apa{10.2 Example 29}\\
+\apaex{\parencite{10.2:29a,10.2:29b}}\\
+\apaex{\textcite{10.2:29a} and \textcite{10.2:29b}}
+
+\noindent\apa{10.2 Example 30}\\
+\apaex{\parencite{10.2:30a,10.2:30b}}\\
+\apaex{\textcite{10.2:30a} and \textcite{10.2:30b}}
+
+\noindent\apa{10.2 Example 31}\\
+\apaex{\parencite{10.2:31}}\\
+\apaex{\textcite{10.2:31}}
+
+\noindent\apa{10.2 Example 32}\\
+The examples for citing such manuals are a mess in the 7th edition with a
+language-dependent possessive in the narrative examples. However, these
+rules are not strict according to the comments and can be constructed with
+the help of lower-level commands:\\\\
+\apaex{\citetitle{10.2:32a} (\citefield{10.2:32a}{edition};
+  \citefield{10.2:32a}{shorthand}; \citeauthor{10.2:32a}, \citeyear{10.2:32a})}\\
+\apaex{\citetitle{10.2:32b} (\citefield{10.2:32b}{edition};
+  \citefield{10.2:32b}{shorthand}; \citeauthor{10.2:32b}, \citeyear{10.2:32b})}\\\\
+\apaex{\citeauthor{10.2:32a}'s (\citeyear{10.2:32a}) \citetitle{10.2:32a}
+  (\citefield{10.2:32a}{edition}; \citefield{10.2:32a}{shorthand})}\\
+\apaex{\citeauthor{10.2:32b}'s (\citeyear{10.2:32b}) \citetitle{10.2:32b}
+  (\citefield{10.2:32b}{edition}; \citefield{10.2:32b}{shorthand})}\\\\
+
+\noindent Then for subsequent cites, use the normal commands:\\
+\apaex{\parencite{10.2:32a,10.2:32b}}\\
+\apaex{\textcite{10.2:32a} and \textcite{10.2:32b}}
+
+\noindent\apa{10.2 Example 33}\\
+\apaex{\parencite{10.2:33a,10.2:33b,10.2:33c}}\\
+\apaex{\textcite{10.2:33a} and \textcite{10.2:33b} and \textcite{10.2:33c}}
+
+\noindent\apa{10.2 Example 34}\\
+\apaex{\parencite{10.2:34}}\\
+\apaex{\textcite{10.2:34}}
+
+\noindent\apa{10.2 Example 35}\\
+\apaex{\parencite{10.2:35a,10.2:35b,10.2:35c}}\\
+\apaex{\textcite{10.2:35a} and \textcite{10.2:35b} and \textcite{10.2:35c}}
+
+\noindent\apa{10.2 Example 36}\\
+\apaex{\parencite{10.2:36}}\\
+\apaex{\textcite{10.2:36}}
+
+\noindent\apa{10.2 Example 37}\\
+\apaex{\parencite{10.2:37}}\\
+\apaex{\textcite{10.2:37}}
+
+\printbibliography[title={APA 10.2 References}]
+
+\end{refsection}
+\newpage
+\subsection{APA 10.3--Edited Book Chapters and Entries in Reference Works}
+
+\begin{refsection}
+
+\noindent\apa{10.3 Example 38}\\
+\apaex{\parencite{10.3:38}}\\
+\apaex{\textcite{10.3:38}}
+
+\noindent\apa{10.3 Example 39}\\
+\apaex{\parencite{10.3:39}}\\
+\apaex{\textcite{10.3:39}}
+
+\noindent\apa{10.3 Example 40}\\
+\apaex{\parencite{10.3:40}}\\
+\apaex{\textcite{10.3:40}}
+
+\noindent\apa{10.3 Example 41}\\
+\apaex{\parencite{10.3:41}}\\
+\apaex{\textcite{10.3:41}}
+
+\noindent\apa{10.3 Example 42}\\
+\apaex{\parencite{10.3:42}}\\
+\apaex{\textcite{10.3:42}}
+
+\noindent\apa{10.3 Example 43}\\
+\apaex{\parencite{10.3:43}}\\
+\apaex{\textcite{10.3:43}}
+
+\noindent\apa{10.3 Example 44}\\
+\apaex{\parencite{10.3:44}}\\
+\apaex{\textcite{10.3:44}}
+
+\noindent\apa{10.3 Example 45}\\
+\apaex{\parencite{10.3:45}}\\
+\apaex{\textcite{10.3:45}}
+
+\noindent\apa{10.3 Example 46}\\
+\apaex{\parencite{10.3:46}}\\
+\apaex{\textcite{10.3:46}}
+
+\noindent\apa{10.3 Example 47}\\
+\apaex{\parencite{10.3:47a,10.3:47b}}\\
+\apaex{\textcite{10.3:47a} and \textcite{10.3:47b}}
+
+\noindent\apa{10.3 Example 48}\\
+\apaex{\parencite{10.3:48}}\\
+\apaex{\textcite{10.3:48}}
+
+\noindent\apa{10.3 Example 49}\\
+\apaex{\parencite{10.3:49}}\\
+\apaex{\textcite{10.3:49}}
+
+\printbibliography[title={APA 10.3 References}]
+
+\end{refsection}
+\newpage
+\subsection{APA 10.4--Reports and Gray Literature}
+
+\begin{refsection}
+
+\noindent\apa{10.4 Example 50}\\
+\apaex{\parencite{10.4:50a,10.4:50b,10.4:50c}}\\
+\apaex{\textcite{10.4:50a} and \textcite{10.4:50b} and \textcite{10.4:50c}}
+
+\noindent\apa{10.4 Example 51}\\
+\apaex{\parencite{10.4:51a,10.4:51b}}\\
+\apaex{\textcite{10.4:51a} and \textcite{10.4:51b}}
+
+\noindent\apa{10.4 Example 52}\\
+\apaex{\parencite{10.4:52}}\\
+\apaex{\textcite{10.4:52}}
+
+\noindent\apa{10.4 Example 53}\\
+\apaex{\parencite{10.4:53}}\\
+\apaex{\textcite{10.4:53}}
+
+\noindent\apa{10.4 Example 54}\\
+\apaex{\parencite{10.4:54}}\\
+\apaex{\textcite{10.4:54}}
+
+\noindent\apa{10.4 Example 55}\\
+\apaex{\parencite{10.4:55a,10.4:55b,10.4:55c}}\\
+\apaex{\textcite{10.4:55a} and \textcite{10.4:55b} and \textcite{10.4:55c}}
+
+\noindent\apa{10.4 Example 56}\\
+\apaex{\parencite{10.4:56}}\\
+\apaex{\textcite{10.4:56}}
+
+\noindent\apa{10.4 Example 57}\\
+\apaex{\parencite{10.4:57}}\\
+\apaex{\textcite{10.4:57}}
+
+\noindent\apa{10.4 Example 58}\\
+\apaex{\parencite{10.4:58}}\\
+\apaex{\textcite{10.4:58}}
+
+\noindent\apa{10.4 Example 59}\\
+\apaex{\parencite{10.4:59}}\\
+\apaex{\textcite{10.4:59}}
+
+\printbibliography[title={APA 10.4 References}]
+\end{refsection}
+\newpage
+\subsection{APA 10.5--Conference Sessions and Presentations}
+
+\begin{refsection}
+
+\noindent\apa{10.5 Example 60}\\
+\apaex{\parencite{10.5:60}}\\
+\apaex{\textcite{10.5:60}}
+
+\noindent\apa{10.5 Example 61}\\
+\apaex{\parencite{10.5:61}}\\
+\apaex{\textcite{10.5:61}}
+
+\noindent\apa{10.5 Example 62}\\
+\apaex{\parencite{10.5:62}}\\
+\apaex{\textcite{10.5:62}}
+
+\noindent\apa{10.5 Example 63}\\
+\apaex{\parencite{10.5:63}}\\
+\apaex{\textcite{10.5:63}}
+
+\noindent The following are proper proceedings types and are included in a web
+addendum here: \url{https://apastyle.apa.org/style-grammar-guidelines/references/examples/conference-proceeding-references}
+
+\noindent\apa{10.5 Addendum Example 1}\\
+\apaex{\parencite{10.5:A1}}\\
+\apaex{\textcite{10.5:A1}}
+
+\noindent\apa{10.5 Addendum Example 2}\\
+\apaex{\parencite{10.5:A2}}\\
+\apaex{\textcite{10.5:A2}}
+
+\noindent\apa{10.5 Addendum Example 3}\\
+\apaex{\parencite{10.5:A3}}\\
+\apaex{\textcite{10.5:A3}}
+
+\printbibliography[title={APA 10.5 References}]
+\end{refsection}
+\newpage
+\subsection{APA 10.6--Dissertations and Theses}
+
+\begin{refsection}
+
+\noindent\apa{10.6 Example 64}\\
+\apaex{\parencite{10.6:64}}\\
+\apaex{\textcite{10.6:64}}
+
+\noindent\apa{10.6 Example 65}\\
+\apaex{\parencite{10.6:65}}\\
+\apaex{\textcite{10.6:65}}
+
+\noindent\apa{10.6 Example 66}\\
+\apaex{\parencite{10.6:66}}\\
+\apaex{\textcite{10.6:66}}
+
+\printbibliography[title={APA 10.6 References}]
+\end{refsection}
+\newpage
+\subsection{APA 10.7--Reviews}
+
+\begin{refsection}
+
+\noindent\apa{10.7 Example 67}\\
+\apaex{\parencite{10.7:67}}\\
+\apaex{\textcite{10.7:67}}
+
+\noindent\apa{10.7 Example 68}\\
+\apaex{\parencite{10.7:68}}\\
+\apaex{\textcite{10.7:68}}
+
+\noindent\apa{10.7 Example 69}\\
+\apaex{\parencite{10.7:69}}\\
+\apaex{\textcite{10.7:69}}
+
+\printbibliography[title={APA 10.7 References}]
+\end{refsection}
+\newpage
+\subsection{APA 10.8--Unpublished Works and Informally Published Works}
+
+\begin{refsection}
+
+\noindent\apa{10.8 Example 70}\\
+\apaex{\parencite{10.8:70}}\\
+\apaex{\textcite{10.8:70}}
+
+\noindent\apa{10.8 Example 71}\\
+\apaex{\parencite{10.8:71}}\\
+\apaex{\textcite{10.8:71}}
+
+\noindent\apa{10.8 Example 72}\\
+\apaex{\parencite{10.8:72}}\\
+\apaex{\textcite{10.8:72}}
+
+\noindent\apa{10.8 Example 73}\\
+\apaex{\parencite{10.8:73a,10.8:73b}}\\
+\apaex{\textcite{10.8:73a} and \textcite{10.8:73b}}
+
+\noindent\apa{10.8 Example 74}\\
+\apaex{\parencite{10.8:74}}\\
+\apaex{\textcite{10.8:74}}
+
+\printbibliography[title={APA 10.8 References}]
+\end{refsection}
+\newpage
+\subsection{APA 10.9--Data Sets}
+
+\begin{refsection}
+
+\noindent\apa{10.9 Example 75}\\
+\apaex{\parencite{10.9:75a,10.9:75b,10.9:75c}}\\
+\apaex{\textcite{10.9:75a} and \textcite{10.9:75b} and \textcite{10.9:75c}}
+
+\noindent\apa{10.9 Example 76}\\
+\apaex{\parencite{10.9:76a,10.9:76b}}\\
+\apaex{\textcite{10.9:76a} and \textcite{10.9:76b}}
+
+\printbibliography[title={APA 10.9 References}]
+\end{refsection}
+\newpage
+\subsection{APA 10.10--Computer Software, Mobile Apps, Apparatuses, and Equipment}
+
+\begin{refsection}
+
+\noindent\apa{10.10 Example 77}\\
+\apaex{\parencite{10.10:77}}\\
+\apaex{\textcite{10.10:77}}
+
+\noindent\apa{10.10 Example 78}\\
+\apaex{\parencite{10.10:78a,10.10:78b}}\\
+\apaex{\textcite{10.10:78a} and \textcite{10.10:78b}}
+
+\noindent\apa{10.10 Example 79}\\
+\apaex{\parencite{10.10:79}}\\
+\apaex{\textcite{10.10:79}}
+
+\noindent\apa{10.10 Example 80}\\
+\apaex{\parencite{10.10:80}}\\
+\apaex{\textcite{10.10:80}}
+
+\printbibliography[title={APA 10.10 References}]
+\end{refsection}
+\newpage
+\subsection{APA 10.11--Tests, Scales, and Inventories}
+
+\begin{refsection}
+
+\noindent\apa{10.11 Example 81}\\
+\apaex{\parencite{10.11:81}}\\
+\apaex{\textcite{10.11:81}}
+
+\noindent\apa{10.11 Example 82}\\
+\apaex{\parencite{10.11:82}}\\
+\apaex{\textcite{10.11:82}}
+
+\noindent\apa{10.11 Example 83}\\
+\apaex{\parencite{10.11:83a,10.11:83b}}\\
+\apaex{\textcite{10.11:83a} and \textcite{10.11:83b}}
+
+\printbibliography[title={APA 10.11 References}]
+\end{refsection}
+\newpage
+\subsection{APA 10.12--Audiovisual Works}
+
+\begin{refsection}
+
+\noindent\apa{10.12 Example 84}\\
+\apaex{\parencite{10.12:84a,10.12:84b,10.12:84c}}\\
+\apaex{\textcite{10.12:84a} and \textcite{10.12:84b} and \textcite{10.12:84c}}
+
+\noindent\apa{10.12 Example 85}\\
+\apaex{\parencite{10.12:85}}\\
+\apaex{\textcite{10.12:85}}
+
+\noindent\apa{10.12 Example 86}\\
+\apaex{\parencite{10.12:86}}\\
+\apaex{\textcite{10.12:86}}
+
+\noindent\apa{10.12 Example 87}\\
+\apaex{\parencite{10.12:87a,10.12:87b}}\\
+\apaex{\textcite{10.12:87a} and \textcite{10.12:87b}}
+
+\noindent\apa{10.12 Example 88}\\
+\apaex{\parencite{10.12:88a,10.12:88b}}\\
+\apaex{\textcite{10.12:88a} and \textcite{10.12:88b}}
+
+\noindent\apa{10.12 Example 89}\\
+\apaex{\parencite{10.12:89}}\\
+\apaex{\textcite{10.12:89}}
+
+\noindent\apa{10.12 Example 90}\\
+\apaex{\parencite{10.12:90a,10.12:90b,10.12:90c}}\\
+\apaex{\textcite{10.12:90a} and \textcite{10.12:90b} and \textcite{10.12:90c}}
+
+\printbibliography[title={APA 10.12 References}]
+\end{refsection}
+\newpage
+\subsection{APA 10.13--Audio Works}
+
+\begin{refsection}
+
+\noindent\apa{10.13 Example 91}\\
+\apaex{\parencite{10.13:91a,10.13:91b}}\\
+\apaex{\textcite{10.13:91a} and \textcite{10.13:91b}}
+
+\noindent\apa{10.13 Example 92}\\
+\apaex{\parencite{10.13:92a,10.13:92b,10.13:92c,10.13:92d}}\\
+\apaex{\textcite{10.13:92a} and \textcite{10.13:92b} and
+  \textcite{10.13:92c} and \textcite{10.13:92d}}
+
+\noindent\apa{10.13 Example 93}\\
+\apaex{\parencite{10.13:93}}\\
+\apaex{\textcite{10.13:93}}
+
+\noindent\apa{10.13 Example 94}\\
+\apaex{\parencite{10.13:94}}\\
+\apaex{\textcite{10.13:94}}
+
+\noindent\apa{10.13 Example 95}\\
+\apaex{\parencite{10.13:95}}\\
+\apaex{\textcite{10.13:95}}
+
+\noindent\apa{10.13 Example 96}\\
+\apaex{\parencite{10.13:96}}\\
+\apaex{\textcite{10.13:96}}
+
+\printbibliography[title={APA 10.13 References}]
+\end{refsection}
+\newpage
+\subsection{APA 10.14--Visual Works}
+
+\begin{refsection}
+
+\noindent\apa{10.14 Example 97}\\
+\apaex{\parencite{10.14:97a,10.14:97b}}\\
+\apaex{\textcite{10.14:97a} and \textcite{10.14:97b}}
+
+\noindent\apa{10.14 Example 98}\\
+\apaex{\parencite{10.14:98}}\\
+\apaex{\textcite{10.14:98}}
+
+\noindent\apa{10.14 Example 99}\\
+\apaex{\parencite{10.14:99}}\\
+\apaex{\textcite{10.14:99}}
+
+\noindent\apa{10.14 Example 100}\\
+\apaex{\parencite{10.14:100a,10.14:100b}}\\
+\apaex{\textcite{10.14:100a} and \textcite{10.14:100b}}
+
+\noindent\apa{10.14 Example 101}\\
+\apaex{\parencite{10.14:101a,10.14:101b}}\\
+\apaex{\textcite{10.14:101a} and \textcite{10.14:101b}}
+
+\noindent\apa{10.14 Example 102}\\
+\apaex{\parencite{10.14:102a,10.14:102b,10.14:102c}}\\
+\apaex{\textcite{10.14:102a} and \textcite{10.14:102b} and \textcite{10.14:102c}}
+
+\printbibliography[title={APA 10.14 References}]
+\end{refsection}
+\newpage
+\subsection{APA 10.15--Social Media}
+
+\begin{refsection}
+
+\noindent\apa{10.15 Example 103}\\
+\apaex{\parencite{10.15:103a,10.15:103b,10.15:103c}}\\
+\apaex{\textcite{10.15:103a} and \textcite{10.15:103b} and \textcite{10.15:103c}}
+
+\noindent\apa{10.15 Example 104}\\
+\apaex{\parencite{10.15:104}}\\
+\apaex{\textcite{10.15:104}}
+
+\noindent\apa{10.15 Example 105}\\
+\apaex{\parencite{10.15:105a,10.15:105b,10.15:105c}}\\
+\apaex{\textcite{10.15:105a} and \textcite{10.15:105b} and \textcite{10.15:105c}}
+
+\noindent\apa{10.15 Example 106}\\
+\apaex{\parencite{10.15:106}}\\
+\apaex{\textcite{10.15:106}}
+
+\noindent\apa{10.15 Example 107}\\
+\apaex{\parencite{10.15:107}}\\
+\apaex{\textcite{10.15:107}}
+
+\noindent\apa{10.15 Example 108}\\
+\apaex{\parencite{10.15:108}}\\
+\apaex{\textcite{10.15:108}}
+
+\noindent\apa{10.15 Example 109}\\
+\apaex{\parencite{10.15:109}}\\
+\apaex{\textcite{10.15:109}}
+
+\printbibliography[title={APA 10.15 References}]
+\end{refsection}
+\newpage
+\subsection{APA 10.16--Webpages and Websites}
+
+\begin{refsection}
+
+\noindent\apa{10.16 Example 110}\\
+\apaex{\parencite{10.16:110a,10.16:110b}}\\
+\apaex{\textcite{10.16:110a} and \textcite{10.16:110b}}
+
+\noindent\apa{10.16 Example 111}\\
+\apaex{\parencite{10.16:111a,10.16:111b}}\\
+\apaex{\textcite{10.16:111a} and \textcite{10.16:111b}}
+
+\noindent\apa{10.16 Example 112}\\
+\apaex{\parencite{10.16:112}}\\
+\apaex{\textcite{10.16:112}}
+
+\noindent\apa{10.16 Example 113}\\
+\apaex{\parencite{10.16:113a,10.16:113b}}\\
+\apaex{\textcite{10.16:113a} and \textcite{10.16:113b}}
+
+\noindent\apa{10.16 Example 114}\\
+\apaex{\parencite{10.16:114}}\\
+\apaex{\textcite{10.16:114}}
+
+\printbibliography[title={APA 10.16 References}]
+\end{refsection}
+\newpage
+\subsection{APA 11.4--Cases or Court Decisions}
+
+\begin{refsection}
+
+\noindent\apa{11.4 Example 1}\\
+\apaex{\parencite{11.4:1}}\\
+\apaex{\textcite{11.4:1}}
+
+\noindent\apa{11.4 Example 2}\\
+\apaex{\parencite{11.4:2}}\\
+\apaex{\textcite{11.4:2}}
+
+\noindent\apa{11.4 Example 3}\\
+\apaex{\parencite{11.4:3}}\\
+\apaex{\textcite{11.4:3}}
+
+\noindent\apa{11.4 Example 4}\\
+\apaex{\parencite{11.4:4}}\\
+\apaex{\textcite{11.4:4}}
+
+\noindent\apa{11.4 Example 5}\\
+\apaex{\parencite{11.4:5}}\\
+\apaex{\textcite{11.4:5}}
+
+\noindent\apa{11.4 Example 6}\\
+\apaex{\parencite{11.4:6}}\\
+\apaex{\textcite{11.4:6}}
+
+\noindent\apa{11.4 Example 7}\\
+\apaex{\parencite{11.4:7}}\\
+\apaex{\textcite{11.4:7}}
+
+\printbibliography[title={APA 11.4 References}]
+\end{refsection}
+\newpage
+\subsection{APA 11.5--Statues (Laws and Acts)}
+
+\begin{refsection}
+
+\noindent\apa{11.5 Example 8}\\
+\apaex{\parencite{11.5:8}}\\
+\apaex{\textcite{11.5:8}}
+
+\noindent\apa{11.5 Example 9}\\
+\apaex{\parencite{11.5:9}}\\
+\apaex{\textcite{11.5:9}}
+
+\noindent\apa{11.5 Example 10}\\
+\apaex{\parencite{11.5:10}}\\
+\apaex{\textcite{11.5:10}}
+
+\noindent\apa{11.5 Example 11}\\
+\apaex{\parencite{11.5:11}}\\
+\apaex{\textcite{11.5:11}}
+
+\noindent\apa{11.5 Example 12}\\
+\apaex{\parencite{11.5:12}}\\
+\apaex{\textcite{11.5:12}}
+
+\noindent\apa{11.5 Example 13}\\
+\apaex{\parencite{11.5:13}}\\
+\apaex{\textcite{11.5:13}}
+
+\printbibliography[title={APA 11.5 References}]
+\end{refsection}
+\newpage
+\subsection{APA 11.6--Legislative Materials}
+
+\begin{refsection}
+
+\noindent\apa{11.6 Example 14}\\
+\apaex{\parencite{11.6:14}}\\
+\apaex{\textcite{11.6:14}}
+
+\noindent\apa{11.6 Example 15}\\
+\apaex{\parencite{11.6:15}}\\
+\apaex{\textcite{11.6:15}}
+
+\noindent\apa{11.6 Example 16}\\
+\apaex{\parencite{11.6:16}}\\
+\apaex{\textcite{11.6:16}}
+
+\noindent\apa{11.6 Example 17}\\
+\apaex{\parencite{11.6:17}}\\
+\apaex{\textcite{11.6:17}}
+
+\noindent\apa{11.6 Example 18}\\
+\apaex{\parencite{11.6:18}}\\
+\apaex{\textcite{11.6:18}}
+
+\printbibliography[title={APA 11.6 References}]
+\end{refsection}
+\newpage
+\subsection{APA 11.7--Administrative and Executive Materials}
+
+\begin{refsection}
+
+\noindent\apa{11.7 Example 19}\\
+\apaex{\parencite{11.7:19}}\\
+\apaex{\textcite{11.7:19}}
+
+\noindent\apa{11.7 Example 20}\\
+\apaex{\parencite{11.7:20}}\\
+\apaex{\textcite{11.7:20}}
+
+\noindent\apa{11.7 Example 21}\\
+\apaex{\parencite{11.7:21}}\\
+\apaex{\textcite{11.7:21}}
+
+
+\printbibliography[title={APA 11.7 References}]
+\end{refsection}
+\newpage
+\subsection{APA 11.8--Patents}
+
+\begin{refsection}
+
+\noindent\apa{11.8 Example 22}\\
+\apaex{\parencite{11.8:22}}\\
+\apaex{\textcite{11.8:22}}
+
+\printbibliography[title={APA 11.8 References}]
+\end{refsection}
+\newpage
+\subsection{APA 11.9--Constitutions and Charters}
+
+\begin{refsection}
+
+\noindent\apa{11.9 Example 23}\\
+\apaex{\parencite{11.9:23}}\\
+\apaex{\textcite{11.9:23}}
+
+\noindent\apa{11.9 Example 24}\\
+\apaex{\parencite{11.9:24}}\\
+\apaex{\textcite{11.9:24}}
+
+\noindent\apa{11.9 Example 25}\\
+\apaex{\parencite{11.9:25}}\\
+\apaex{\textcite{11.9:25}}
+
+\noindent\apa{11.9 Example 26}\\
+\apaex{\parencite{11.9:26}}\\
+\apaex{\textcite{11.9:26}}
+
+\noindent\apa{11.9 Example 27}\\
+\apaex{\parencite{11.9:27}}\\
+\apaex{\textcite{11.9:27}}
+
+\noindent\apa{11.9 Example 28}\\
+\apaex{\parencite{11.9:28}}\\
+\apaex{\textcite{11.9:28}}
+
+\printbibliography[title={APA 11.9 References}]
+\end{refsection}
+\newpage
+\subsection{APA 11.10--Treaties and International Conventions}
+
+\begin{refsection}
+
+\noindent\apa{11.10 Example 29}\\
+\apaex{\parencite{11.10:29}}\\
+\apaex{\textcite{11.10:29}}
+
+\printbibliography[title={APA 11.9 References}]
+\end{refsection}
+
+\end{document}
+
+
+% Local Variables:
+% TeX-engine: luatex
+% End:
