@@ -8,6 +8,10 @@
   {Unused global option} % They are, but kaobook is silently passing them to its base class
 \WarningFilter{latex}
   {Marginpar on page} % Margin stuff moved to not overlap with other stuff, this is fine
+\WarningFilter{latex}
+  {There were undefined references} % seems spurious, no undefined references are reported
+\WarningFilter{biblatex}
+  {Please (re)run Biber on the file} % linked to the previous warning
 
 \documentclass[
     a4paper,
