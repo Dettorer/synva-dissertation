@@ -35,6 +35,10 @@
 \usepackage[style=apa]{kaobiblio}
 \DefineBibliographyExtras{french}{\restorecommand\mkbibnamefamily}
 \addbibresource{references.bib}
+% Properly cite articles indirectly cited via meta-analysis, this mimics the \nocitemeta command from apacite
+\DeclareBibliographyCategory{meta}
+\renewbibmacro*{begentry}{\ifcategory{meta}{\ensuremath{{}^\ast}}{}}
+\newcommand*{\nocitemeta}[1]{\nocite{#1}\addtocategory{meta}{#1}}
 
 % Hyperref integration
 \usepackage{kaorefs}
