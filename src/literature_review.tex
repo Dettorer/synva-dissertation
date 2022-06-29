@@ -78,15 +78,16 @@ statistiquement préférées de façon inégales selon le genre : l'une, statis
 femmes, consiste à les apprendre méthodiquement en suivant des processus d'apprentissage clairs. L'autre,
 statistiquement plus probable chez les hommes, consiste à expérimenter à la manière d'un jeu avec ces
 fonctionnalités. \todo{Je dis beaucoup "les études citées par <truc>", il faudrait modifier ça pour citer les
-vrais auteurs des informations dont je parle.} Une des tendances trouvées par \textcite[p.~1008]{barriers-2018}
-est que la majorité ($58\%$) des barrières rencontrées dans leur étude sont de nature sociale
-("\en{community-oriented}") et non techniques. Concernant les aspects plus techniques, il semble que les
-outils et la documentation représentent la majorité des barrières rencontrées, alors même que ces éléments ont
-spécifiquement pour objectif d'aider les nouvelles contributions. C'est un type de barrière qui semble
-amplifié lorsque les méthodes d'apprentissage et de traitement de l'information de la personne consistent à
-rassembler le plus d'information possible avant de commencer à agir. Ces méthodes étant sur-représentées chez
-les femmes, ces barrières devient discriminantes selon le genre, et peuvent potentiellement participer à
-expliquer la sous-représentation des femmes dans les communautés de logiciel libre.
+vrais auteurs des informations dont je parle.} Une des tendances trouvées par
+\textcite[p.~1008]{barriers-2018} est que la majorité ($58\%$) des barrières rencontrées dans leur étude sont
+de nature sociale ("\en{community-oriented}") et non techniques. Concernant les aspects plus techniques, il
+semble que les outils et la documentation représentent la majorité des barrières rencontrées, alors même que
+ces éléments ont spécifiquement pour objectif d'aider les nouvelles contributions. C'est un type de barrière
+qui semble amplifié lorsque les méthodes d'apprentissage et de traitement de l'information de la personne
+consistent à rassembler le plus d'information possible avant de commencer à agir. Ces méthodes étant
+sur-représentées chez les femmes, ces barrières devient discriminantes selon le genre, et peuvent
+potentiellement participer à expliquer la sous-représentation des femmes dans les communautés de logiciel
+libre.
 
 Plus précisément concernant \sidetextcite{hadoop-dropout-2013}, les facteurs susceptibles de provoquer un
 abandon des nouveaux contributeurs semblent être les réponses inadéquates proposées aux questions de ces
@@ -101,13 +102,18 @@ femmes dans ce type d'équipe, en très forte minorité, et concluent en suggér
 supplémentaires d'inclusivité et de réduction des barrières d'entrée pour ces population en minorité
 permettraient probablement d'augmenter la valeur globale de ce type de projets.
 
-Liste de barrières d'entrée que rencontrent les nouveaux arrivants dans un projet de logiciel libre :
+D'après les articles que j'ai pu lire, les plus importantes barrières d'entrée que rencontrent les nouveaux
+arrivants dans un projet de logiciel libre sont :
 
 \begin{itemize}
-    \item l'identification d'une tâche par laquelle commencer \sideparencite{first-task-2015}. (Note : je
-        pense que ça justifie l'utilité des tags "good first issue" sur \gls{github}) ;
+    \item le manque d'interactions sociales avec les membres du projet \sideparencite{barriers-meta-2015} ;
+    \item le manque de réponse (dans un temps raisonnable) à leurs requêtes \parencite{barriers-meta-2015} ;
+    \item les connaissances techniques initiales \parencite{barriers-meta-2015} ;
+    \item l'identification d'une tâche par laquelle commencer \sideparencite{first-task-2015} ;
+        \todo[color=green]{Note : je pense que ça justifie l'utilité des tags "good first issue" sur
+        \gls{github}}
     \item la mise en place de l'environnement propre au projet abordé permettant de faire une première
-        contribution. \todo[inline]{\parencite{social-barriers-2015}, allegedly, mais je l'ai pas encore lu.}
+        contribution \sideparencite{newcomers-accessibility-2016}.
 \end{itemize}
 
 \subsection{Mesure de l'accessibilité d'un projet pour les nouveaux contributeurs}
@@ -127,9 +133,6 @@ nombre de contributeurs accumulés depuis le début de la vie du projet et jusqu
 temps, afin d'étudier la progression de ce nombre. C'est ce que font par exemple
 \sidetextcite{contributor-count-2006}, mais sans préciser la méthode de comptage plus que "en utilisant
 plusieurs outils d'édition de texte" (p. 116).
-
-\todo[inline]{Idée pour mesurer l'accessibilité : regarder la fréquence à laquelle de nouveaux auteurs de
-commit arrivent dans le git log.}
 
 \todo[inline]{TODO}
 
@@ -153,6 +156,15 @@ biaisées ?".
 \textcite[p.~1006]{barriers-2018} toujours utilisent le processus "\en{GenderMag}", un type de \en{Cognitive
 Walkthrough} pour acquérir leurs données. \todo{se renseigner sur les détails du processus,
 \textcite{barriers-2018} le survole trop vite pour que je comprenne exactement ce qui se passe.}
+
+\subsection{Sélection des projets étudiés}
+
+Dans une méta-analyse concernant l'étude des barrières d'entrée, \sidetextcite{barriers-meta-2015} remarquent
+un biais courant dans la sélection des projets de logiciel libre retenus dans les études (p. 83) : les auteurs
+ont tendance à plutôt étudier les projets importants, matures et populaires, car ils sont plus susceptible
+d'apporter un volume important de données. Bien que les résultats semblent cohérent avec les plus rares études
+sélectionnant de petits projets, ils invitent la communauté scientifique à s'y intéresser plus en profondeur
+ou à plus varier ses échantillons.
 
 \section*{TODO potentiellement à lire}
 
