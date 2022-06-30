@@ -487,6 +487,14 @@
 	}%
 }
 
+% Command to reference an hypothesis and restate it in the margin
+% First optional argument: vertical shift
+% Mandatory argument: hypothesis key
+% The use of \csname and \endcsname allows to build a command name from the arguments.
+\NewDocumentCommand\sidehyp{ o m }{%
+    \hyperref[hyp:#2]{H\ref*{hyp:#2}}\marginnote[#1]{\csname #2\endcsname*}%
+}
+
 %----------------------------------------------------------------------------------------
 %	FIGURES, TABLES, LISTINGS AND CAPTIONS
 %----------------------------------------------------------------------------------------

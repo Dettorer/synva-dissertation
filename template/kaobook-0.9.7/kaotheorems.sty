@@ -22,6 +22,7 @@
 \DeclareStringOption[\kaotheorems@defaultbg]{corollarybackground}
 \DeclareStringOption[\kaotheorems@defaultbg]{definitionbackground}
 \DeclareStringOption[\kaotheorems@defaultbg]{assumptionbackground}
+\DeclareStringOption[\kaotheorems@defaultbg]{hypothesisbackground}
 \DeclareStringOption[\kaotheorems@defaultbg]{remarkbackground}
 \DeclareStringOption[\kaotheorems@defaultbg]{examplebackground}
 \DeclareStringOption[\kaotheorems@defaultbg]{exercisebackground}
@@ -101,6 +102,17 @@
 		postheadspace={.5em plus .1em minus .1em},
 		%prefoothook={\hfill\qedsymbol}
 	]{kaoassumption}
+	\declaretheoremstyle[
+		%spaceabove=.5\thm@preskip,
+		%spacebelow=.5\thm@postskip,
+		%headfont=\normalfont\bfseries,%\scshape,
+		%notefont=\normalfont, notebraces={ (}{)},
+		bodyfont=\normalfont\itshape,
+                headformat={\NAME\space{}H\NUMBER\space\NOTE},
+		headpunct={:},
+		postheadspace={.5em plus .1em minus .1em},
+		%prefoothook={\hfill\qedsymbol}
+	]{kaohypothesis}
 	\declaretheoremstyle[
 		%spaceabove=.5\thm@preskip,
 		%spacebelow=.5\thm@postskip,
@@ -222,6 +234,20 @@
 			%frametitlebackgroundcolor=\@theorembackground,
 		},
 	]{assumption}
+
+	% Theorems using the 'kaohypothesis' style
+	\theoremstyle{kaohypothesis}
+	\declaretheorem[
+		name=Hypothèse,
+		%refname={hypothesis,hypothesis},
+		refname={Hypothèse,Hypothèses},
+		Refname={Hypothèse,Hypothèses},
+		mdframed={
+			style=mdfkao,
+			backgroundcolor=\kaotheorems@hypothesisbackground,
+			%frametitlebackgroundcolor=\@theorembackground,
+		},
+	]{hypothesis}
 
 	% Theorems using the 'kaoremark' style
 	\theoremstyle{kaoremark}
