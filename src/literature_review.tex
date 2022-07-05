@@ -31,6 +31,9 @@ négliger cet aspect communication.
 
 \section{Pédagogie de projet}
 
+\todo[inline]{TODO : supprimer cette partie ou la mentionner en intro comme application possible de ma
+problématique}
+
 La pédagogie de projet est une méthode d'enseignement qui consiste à inviter les apprenants à appliquer leurs
 connaissances et à en acquérir de nouvelles au travers d'un projet plus ou moins concret et imitant plus ou
 moins une situation réelle. Réalisé soit individuellement soit en groupe, les projets aboutissent généralement
@@ -49,6 +52,9 @@ l'avance les problèmes que les apprenants risquent de rencontrer.
 
 \section{Les projets de logiciel libre dans l'enseignement de l'informatique}
 
+\todo[inline]{TODO : supprimer cette partie ou la mentionner en intro comme application possible de ma
+problématique}
+
 Lors de leurs tentatives d'inclusion des projets de logiciel libre dans leurs cours d'informatique (voir
 chapitre \ref{chap:existing_teaching}, page \pageref{teaching:ncsu}), \sidetextcite{oss-edu-2008} ont
 initialement cherché à travailler avec un projet existant, mais n'en ont trouvé aucun satisfaisant leurs
@@ -56,8 +62,6 @@ critères. Leur solution a alors été de créer eux-mêmes quelques projets de 
 leurs étudiants, avec pour but d'imiter autant que possible le contexte d'un projet réel. Leur démarche était
 de créer une banque de projets de logiciel libre utilisables spécifiquement en éducation, mais ceux-ci
 n'existent malheureusement plus aujourd'hui.
-
-\todo[inline]{TODO : étoffer}
 
 \section{Les nouveaux contributeurs dans le logiciel libre}
 
@@ -134,18 +138,45 @@ temps, afin d'étudier la progression de ce nombre. C'est ce que font par exempl
 \sidetextcite{contributor-count-2006}, mais sans préciser la méthode de comptage plus que "en utilisant
 plusieurs outils d'édition de texte" (p. 116).
 
+\sidetextcite{signals-2019} suggèrent qu'une mesure possible de l'accessibilité pour les nouveaux
+contributeurs ("\en{newcomers openness}" dans l'article) est le pourcentage de \englpl{pull request} créées
+par des contributeurs externes. Ils définissent les "contributeurs externes" par opposition aux contributeurs
+principaux (les \en{core contributors}) qu'ils identifient, eux, comme étant les personnes auteurs de plus de
+5\% des \englpl{commit} du projet.
+
 \todo[inline]{%
-    TODO : à étoffer si possible, mais j'ai l'impression que je ne vais pas trouver grand chose de plus%
+    TODO : lire tout \textcite{signals-2019}, c'est long mais c'est en plein dans ce que je veux faire.%
 }
 
+\todo[inline]{TODO : à étoffer}
+
 \section{L'analyse automatique ("minage") de projets de logiciel libre}
+
+Sur le minage de façon générale :
+
+\begin{itemize}
+    \item \url{https://ieeexplore.ieee.org/document/4659248}
+    \item \url{https://onlinelibrary.wiley.com/doi/10.1002/smr.344}
+    \item \url{https://hal.archives-ouvertes.fr/hal-02158292}
+    \item \sidetextcite{mining-github-2014}
+\end{itemize}
 
 \subsection{L'archive de logiciels de Software Heritage}
 
 \todo[inline]{%
-    TODO : parler rapidement de la recherche qu'il y a autour de la construction du graph (et les motivations
-    derrières, par exemple), et essayer de trouver des expériences qui s'en servent%
+    TODO : parler de la recherche qu'il y a autour de la construction du graph (et les motivations derrières,
+    par exemple), et essayer de trouver des expériences qui s'en servent%
 }
+
+\begin{itemize}
+    \item \sidetextcite{swh-graph-2020} : minage à grande échelle via l'API swh-graph de Software Heritage,
+        avec un exemple de mesure sur le graph compressé pour montrer qu'on peut miner des vraies choses en un
+        temps raisonnable sur la totalité du corpus.
+    \item \url{https://dl.acm.org/doi/10.1145/3183558}, \url{https://hal.archives-ouvertes.fr/hal-01590958/}
+        et \url{https://ieeexplore.ieee.org/abstract/document/8816748} pour justifier l'usage de l'archive de
+        Software Heritage comme meilleur approximation existante de l'entiereté du code source développé
+        publiquement.
+\end{itemize}
 
 \section{Méthodologies de recherches autour de ces questions}
 
@@ -200,3 +231,7 @@ Spécifiquement autour de l'idée d'identifier les bons projets de logiciel libr
     \item \sidetextcite{code-of-conduct-2017}, n'a pas l'air très concluant, à regarder rapidement.
     \item "Terell et al. [55]" dans \textcite{barriers-2018}, cité page 1011, sur comment miner github.
 \end{itemize}
+
+Quand \sidetextcite{mining-github-2014} analysent les \en{pull requests} sur github, ils ne retiennent que les
+projets ayant au moins deux \en{commiters}, ce qu'ils considèrent comme des projets "vraiment
+collaboratifs".\todo{développer et bien intégrer au reste de la partie}

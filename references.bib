@@ -391,3 +391,35 @@
         The results are useful to researchers and OSS practitioners willing to investigate or to implement tools to support newcomers. We mapped technical and non-technical barriers that hinder newcomers’ first contributions. The most evidenced barriers are related to socialization, appearing in 75\% (15 out of 20) of the studies analyzed, with a high focus on interactions in mailing lists (receiving answers and socialization with other members). There is a lack of in-depth studies on technical issues, such as code issues. We also noticed that the majority of the studies relied on historical data gathered from software repositories and that there was a lack of experiments and qualitative studies in this area.
     }
 }
+
+@INPROCEEDINGS{swh-graph-2020,
+    author = {
+        Boldi,
+        Paolo and Pietri,
+        Antoine and Vigna,
+        Sebastiano and Zacchiroli,
+        Stefano
+    },
+    booktitle = {
+        2020 IEEE 27th International Conference on Software Analysis, Evolution and Reengineering (SANER)
+    },
+    title={Ultra-Large-Scale Repository Analysis via Graph Compression},
+    year={2020},
+    volume={},
+    number={},
+    pages={184-194},
+    abstract={
+        We consider the problem of mining the development history—as captured by modern version control systems—of ultra-large-scale software archives (e.g.,
+        tens of millions software repositories corresponding). We show that graph compression techniques can be applied to the problem,
+        dramatically reducing the hardware resources needed to mine similarly-sized corpus. As a concrete use case we compress the full Software Heritage archive,
+        consisting of 5 billion unique source code files and 1 billion unique commits,
+        harvested from more than 80 million software projects—encompassing a full mirror of GitHub. The resulting compressed graph fits in less than 100 GB of RAM,
+        corresponding to a hardware cost of less than 300 U.S. dollars. We show that the compressed in-memory representation of the full corpus can be accessed with excellent performances,
+        with edge lookup times close to memory random access. As a sample exploitation experiment we show that the compressed graph can be used to conduct clone detection at this scale,
+        benefiting from main memory access speed.
+    },
+    keywords={},
+    doi={10.1109/SANER48275.2020.9054827},
+    ISSN={1534-5351},
+    month={Feb},
+}
