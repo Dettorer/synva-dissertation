@@ -7,7 +7,7 @@
   };
 
   outputs = { self, nixpkgs, utils }:
-  (utils.lib.eachSystem utils.lib.allSystems (system:
+  (utils.lib.eachDefaultSystem (system:
     let
       pkgs = nixpkgs.legacyPackages.${system};
       texDependencies = with pkgs; [ inkscape coreutils glibcLocales ];
@@ -97,9 +97,9 @@
         '';
       };
 
-      defaultPackage = packages.dissertation;
+      packages.default = packages.dissertation;
 
-      devShell = pkgs.mkShell {
+      devShells.default = pkgs.mkShell {
         inherit FONTCONFIG_FILE;
         buildInputs = [ texDistribution pkgs.evince ] ++ texDependencies;
       };
