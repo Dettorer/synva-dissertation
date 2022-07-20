@@ -138,17 +138,21 @@ temps, afin d'étudier la progression de ce nombre. C'est ce que font par exempl
 \sidetextcite{contributor-count-2006}, mais sans préciser la méthode de comptage plus que "en utilisant
 plusieurs outils d'édition de texte" (p. 116).
 
+\sidetextcite{signals-2019} traitent d'une question très proche en essayant de déterminer quels sont les
+signaux que les potentiels nouveaux contributeurs regardent (et comment) pour choisir un projet de logiciel
+libre auquel contribuer. Ils s'intéressent pour cela spécifiquement aux projets disponibles publiquement sur
+\gls{github}, ce qui leur permet, après une approche exploratoire pour dégager des hypothèses, d'étudier
+empiriquement l'effet des signaux que la plateforme met en évidence.
+
 \sidetextcite{signals-2019} suggèrent qu'une mesure possible de l'accessibilité pour les nouveaux
 contributeurs ("\en{newcomers openness}" dans l'article) est le pourcentage de \englpl{pull request} créées
 par des contributeurs externes. Ils définissent les "contributeurs externes" par opposition aux contributeurs
 principaux (les \en{core contributors}) qu'ils identifient, eux, comme étant les personnes auteurs de plus de
-5\% des \englpl{commit} du projet.
+5\% des \englpl{commit} du projet. En réalité cependant, leur étude quantitative simplifie la mesure en ne
+retenant que la présence ou non de \engl{pull request} venant de nouveaux contributeurs (p.~16), ce qui leur
+permet de n'étudier qu'une variable binaire.
 
-\todo[inline]{%
-    TODO : lire tout \textcite{signals-2019}, c'est long mais c'est en plein dans ce que je veux faire.%
-}
-
-\todo[inline]{TODO : à étoffer}
+\todo[inline]{TODO : à étoffer.}
 
 \section{L'analyse automatique ("minage") de projets de logiciel libre}
 
@@ -160,6 +164,18 @@ Sur le minage de façon générale :
     \item \url{https://hal.archives-ouvertes.fr/hal-02158292}
     \item \sidetextcite{mining-github-2014}
 \end{itemize}
+
+Il y a toute une conférence spécifiquement sur ça : \en{Conference on Mining Software Repositories}.
+
+Pour leur analyse quantitative, \textcite{signals-2019} commencent par collecter des données sur la plateforme
+d'hébergement de code source \gls{github} via son \gls{API}. Ce choix est cohérent avec un grand nombre des
+études de ces dernières années \sideparencite{github-mapping-2017}, la plateforme est très populaire dans le
+milieu du logiciel libre et a connu une croissance très importante ces dernières années. Ces mêmes études
+notent cependant parfois que se restreindre à cette seule plateforme est une limite diminuant potentiellement
+la représentativité de l'échantillon qu'elles étudients. Les limites et erreurs courrantes liées au "minage"
+de \gls{github} font d'ailleurs l'objet d'une littérature grandissante et remettant potentiellement en
+question les résultats des études utilisant cette technique sans détailler suffisamment leur méthodologie de
+collecte des données \parencites{mining-github-2014}{penumbra-oss-2022}.
 
 \subsection{L'archive de logiciels de Software Heritage}
 
@@ -198,6 +214,11 @@ Walkthrough} pour acquérir leurs données.
     méthodologie sera complètement différente de ça).%
 }
 
+\sidetextcite[][p.~15]{signals-2019} analysent quantitativement l'influence de plusieurs variables explicative
+(avoir un fichier "\en{CONTRIBUTING.md}", être populaire, etc.) sur une seule variable expliquée binaire
+(présence ou non de nouveaux contributeurs pendant la période de référence choisie). Ils utilisent pour cela
+une régression logistique binomiale, ce qui leur permet d'éliminer les effets confusionnels\todo{creuser}.
+
 \subsection{Sélection des projets étudiés}
 
 Dans une méta-analyse concernant l'étude des barrières d'entrée, \sidetextcite{barriers-meta-2015} remarquent
@@ -229,9 +250,9 @@ Spécifiquement autour de l'idée d'identifier les bons projets de logiciel libr
     \item \sidetextcite{mining-github-2014}.
     \item \sidetextcite{signals-2019}, choisir des projets typiquement attirants peut aider.
     \item \sidetextcite{code-of-conduct-2017}, n'a pas l'air très concluant, à regarder rapidement.
-    \item "Terell et al. [55]" dans \textcite{barriers-2018}, cité page 1011, sur comment miner github.
+    \item "Terell et al. [55]" dans \textcite{barriers-2018}, cité page 1011, sur comment miner \gls{github}.
 \end{itemize}
 
-Quand \sidetextcite{mining-github-2014} analysent les \en{pull requests} sur github, ils ne retiennent que les
+Quand \sidetextcite{mining-github-2014} analysent les \englpl{pull request} sur github, ils ne retiennent que les
 projets ayant au moins deux \en{commiters}, ce qu'ils considèrent comme des projets "vraiment
 collaboratifs".\todo{développer et bien intégrer au reste de la partie}

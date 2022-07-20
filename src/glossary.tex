@@ -50,11 +50,24 @@
 }
 
 \newglossaryentry{github}{
-    name=GitHub,
+    name=\textsc{GitHub},
     description={
         \url{https://github.com/}\\
         Une plateforme d'hébergement de \glspl{dépôt} \gls{git} avec \engl{bug tracker} et autres outils
         annexes, gérée par une entreprise privée
+    },
+}
+
+\newglossaryentry{API}{
+    name=\en{API},
+    description={
+        Accronyme pour "\en{Application Programming Interface}", les \en{APIs} sont des collections d'outils
+        logiciel permettant à un programme d'interagir avec un service logiciel sans utiliser l'interface
+        utilisateur usuelle du service en question, on parle donc d'interface logicielle. Par exemple,
+        l'\en{API} du site \gls{github} (détaillée ici : \url{https://docs.github.com/en/rest}) permet aux
+        développeurs et chercheurs d'écrire des programmes collectant automatiquement des données de la
+        plateforme (comme le nom des projets hébergés, le nombre de \englpl{pull request} d'un projet
+        spécifique, les auteurs de \englpl{commit}, etc.), et cela sans utiliser de navigateur web
     },
 }
 

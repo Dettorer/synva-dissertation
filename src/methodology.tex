@@ -19,8 +19,19 @@
 \section{Hypothèses}
 
 \newhyp{contributing.md}{%
-    les projets possédant un fichier "\en{CONTRIBUTING.md}" sont plus accessibles pour les nouveaux
-    contributeurs que ceux n'en ayant pas \sideparencite[][voir][p.~11]{signals-2019}.%
+    les projets possédant des instructions de contribution (fichier type "\en{CONTRIBUTING.md}" ou section
+    type "\en{Contributing}" dans le \en{README}) sont plus accessibles pour les nouveaux contributeurs que
+    ceux n'en ayant pas \sideparencite[][voir][p.~11]{signals-2019}.%
+}
+
+\newhyp{contributorcount}{%
+    le nombre de contributeurs récents d'un projet influe sur son accessibilité pour les nouveaux
+    contributeurs \parencite[voir][p.~12-13]{signals-2019}.%
+}
+
+\newhyp{recentcommits}{%
+    le nombre de \englpl{commit} \emph{récents} au sein d'un projet influe sur son accessibilité pour les
+    nouveaux contributeurs \parencite[voir][p.~13]{signals-2019}.
 }
 
 \newhyp{readmeexists}{%
@@ -47,11 +58,6 @@
 
 \newhyp{codelength}{%
     la taille d'un projet (en ligne de code) influe sur son accessibilité pour les nouveaux contributeurs.%
-}
-
-\newhyp{contributorcount}{%
-    le nombre de contributeurs réguliers d'un projet influe sur son accessibilité pour les nouveaux
-    contributeurs.%
 }
 
 \section{Mesure de l'accessibilité choisie}
