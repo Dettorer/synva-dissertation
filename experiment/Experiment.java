@@ -75,6 +75,10 @@ public class Experiment {
             return;
         }
 
+        // Print the commit message
+        String message = new String(graph.getMessage(baseRevId));
+        System.out.println(message);
+
         // List all files in the root directory of the base revision
         long targetDirId = findDirectoryOfRevision(graph, baseRevId);
         if (targetDirId != -1) {
