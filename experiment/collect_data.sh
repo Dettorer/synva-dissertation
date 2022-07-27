@@ -12,6 +12,13 @@ if [ $# != 1 -o ! -f $1.graph ]; then
     echo "\"example-graph/compressed\" folder, you should invoke this script by doing:"
     echo
     echo "	$0 example-graph/compressed/example"
-else
-    java -cp .venv/share/swh-graph/swh-graph-1.0.1.jar Experiment.java $1
+    exit 1
 fi
+
+if [ ! -d .venv ]; then
+    echo ".venv/ does not exist, creating a virtualenv and installing the content of requirements.txt"
+    python -m venv .venv
+    ./.venv/bin/python -m pip install -r requirements.txt
+fi
+
+java -cp .venv/share/swh-graph/swh-graph-1.0.1.jar Experiment.java $1

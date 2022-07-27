@@ -83,7 +83,7 @@
         python39Packages.virtualenv
       ];
       javaDistribution = with pkgs; [
-        jdk11
+        jdk
       ];
       # for swh-perfecthash, a dependency of swh-graph
       cmph = pkgs.stdenv.mkDerivation {
