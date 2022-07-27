@@ -7,7 +7,7 @@
   };
 
   outputs = { self, nixpkgs, utils }:
-  (utils.lib.eachDefaultSystem (system:
+  (utils.lib.eachSystem utils.lib.allSystems (system:
     let
       pkgs = nixpkgs.legacyPackages.${system};
       texDependencies = with pkgs; [ inkscape coreutils glibcLocales ];
@@ -75,6 +75,29 @@
       FONTCONFIG_FILE = pkgs.makeFontsConf {
         fontDirectories = with pkgs; [ libertinus liberation_ttf ];
       };
+
+      # For the Software Heritage graph manipulation
+      pythonDistribution = with pkgs; [
+        python39
+        python39Packages.pip
+        python39Packages.virtualenv
+      ];
+      javaDistribution = with pkgs; [
+        jdk11
+      ];
+      # for swh-perfecthash, a dependency of swh-graph
+      cmph = pkgs.stdenv.mkDerivation {
+        name = "cmph-2.0.2";
+        version = "2.0.2";
+        src = pkgs.fetchurl {
+          url = "https://deac-fra.dl.sourceforge.net/project/cmph/v2.0.2/cmph-2.0.2.tar.gz";
+          sha256 = "365f1e8056400d460f1ee7bfafdbf37d5ee6c78e8f4723bf4b3c081c89733f1e";
+        };
+
+        nativeBuildInputs = [ pkgs.autoreconfHook ];
+      };
+      experimentDependencies =
+          pythonDistribution ++ javaDistribution ++ [ cmph pkgs.postgresql ];
     in
     rec {
       packages.dissertation = pkgs.stdenv.mkDerivation {
@@ -97,11 +120,15 @@
         '';
       };
 
-      packages.default = packages.dissertation;
+      defaultPackage = packages.dissertation;
 
-      devShells.default = pkgs.mkShell {
+      devShell = pkgs.mkShell {
         inherit FONTCONFIG_FILE;
-        buildInputs = [ texDistribution pkgs.evince ] ++ texDependencies;
+        buildInputs = (
+          [ texDistribution pkgs.evince ]
+          ++ texDependencies
+          ++ experimentDependencies
+        );
       };
     }
   ));
