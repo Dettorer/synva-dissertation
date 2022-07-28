@@ -87,10 +87,18 @@ public class Experiment {
     }
 
     public static void main(String[] args) {
+        String graphPath = args[1];
         SwhBidirectionalGraph graph;
+        System.out.print("Loading the graph");
         try {
-            System.out.println("Loading the graph");
-            graph = SwhBidirectionalGraph.loadLabelled(args[0]);
+            if (args[0].equals("mapped")) {
+                System.out.println(" (mapped)");
+                graph = SwhBidirectionalGraph.loadLabelledMapped(graphPath);
+            }
+            else {
+                System.out.println(" (in memory)");
+                graph = SwhBidirectionalGraph.loadLabelled(graphPath);
+            }
             graph.loadMessages();
             graph.loadCommitterTimestamps();
             graph.loadPersonIds();
