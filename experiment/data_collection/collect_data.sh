@@ -22,7 +22,7 @@ usage() {
 
 # Check loading mode
 LOAD_MODE="memory"
-if [ $1 == '-m' -o $1 == '--mapped' ]; then
+if [ x$1 == 'x-m' -o x$1 == 'x--mapped' ]; then
     LOAD_MODE="mapped"
     shift
 fi
