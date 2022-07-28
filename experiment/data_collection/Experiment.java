@@ -11,24 +11,6 @@ import it.unimi.dsi.big.webgraph.labelling.ArcLabelledNodeIterator.LabelledArcIt
 import it.unimi.dsi.fastutil.longs.LongBigArrays;
 
 public class Experiment {
-    // 
-    // Code from https://forge.softwareheritage.org/D7936 line 60
-    private static boolean isBaseRevision(SwhBidirectionalGraph graph, long node) {
-        // Is it a revision
-        if (graph.getNodeType(node) != SwhType.REV)
-            return false;
-
-        // Does it have any *revision* successor
-        final LazyLongIterator iterator = graph.successors(node);
-        long succ;
-        while ((succ = iterator.nextLong()) != -1) {
-            if (graph.getNodeType(succ) == SwhType.REV)
-                return false;
-        }
-
-        return true;
-    }
-
     // Code from https://docs.softwareheritage.org/devel/swh-graph/java-api.html
     private static long findDirectoryOfRevision(SwhBidirectionalGraph graph, long src) {
         assert graph.getNodeType(src) == SwhType.REV;
@@ -44,46 +26,55 @@ public class Experiment {
         return -1;
     }
 
-    // Code from https://docs.softwareheritage.org/devel/swh-graph/java-api.html
-    private static void printDirEntries(SwhBidirectionalGraph graph, long dirNode) {
-        assert graph.getNodeType(dirNode) == SwhType.DIR;
-
-        LabelledArcIterator it = graph.labelledSuccessors(dirNode);
-        for (long dst; (dst = it.nextLong()) >= 0;) {
-            DirEntry[] labels = (DirEntry[]) it.label().get();
-            for (DirEntry label : labels) {
-                System.out.format(
-                    "%s %s %d\n",
-                    graph.getSWHID(dst),
-                    new String(graph.getLabelName(label.filenameId)),
-                    label.permission
-                );
-            }
-        }
+    private static Date getCommitDate(SwhBidirectionalGraph graph, long src) {
+            long timestamp = graph.getCommitterTimestamp(src);
+            return new Date(timestamp * 1000);
     }
 
-    // TODO
-    private static void analyzeProject(SwhBidirectionalGraph graph, long baseRevId) {
-        assert graph.getNodeType(baseRevId) == SwhType.REV;
+    private static long printSnapshots(SwhBidirectionalGraph graph, long origin) {
+        assert graph.getNodeType(origin) == SwhType.ORI;
+
+        LazyLongIterator snps = graph.successors(origin);
+        for (long snp; (snp = snps.nextLong()) != -1;) {
+            if (graph.getNodeType(snp) == SwhType.SNP) {
+                System.out.print("SNP: ");
+                // show the successors
+                LabelledArcIterator revs = graph.labelledSuccessors(snp);
+                for (long rev; (rev = revs.nextLong()) != -1;) {
+                    System.out.print(graph.getNodeType(rev) + "(");
+                    // print labels
+                    DirEntry[] labels = (DirEntry[]) revs.label().get();
+                    for (DirEntry label: labels) {
+                        String branch_name = new String(graph.getLabelName(label.filenameId));
+                        // TODO: maybe keep select only projects where we can
+                        // find a branch named "main" or "master" or "dev" ?
+                        System.out.print(branch_name);
+                    }
+                    System.out.print(") ");
+                }
+                System.out.println("");
+            }
+            else {
+                System.out.println("skiped a " + graph.getNodeType(snp));
+            }
+        }
+
+        return -1;
+    }
+
+    private static void analyzeProject(SwhBidirectionalGraph graph, long origin) {
+        assert graph.getNodeType(origin) == SwhType.ORI;
 
         try {
-            long timestamp = graph.getCommitterTimestamp(baseRevId);
-            Date initialCommitDate = new Date(timestamp * 1000);
-            System.out.println(initialCommitDate);
+            System.out.print(getCommitDate(graph, origin)+ ": ");
         }
-        catch (java.lang.NullPointerException e) {
-            return;
-        }
+        catch (java.lang.NullPointerException e) {}
 
-        // Print the commit message
-        String message = new String(graph.getMessage(baseRevId));
-        System.out.println(message);
+        // Print the origin url
+        String url = new String(graph.getMessage(origin));
+        System.out.println(url);
 
-        // List all files in the root directory of the base revision
-        long targetDirId = findDirectoryOfRevision(graph, baseRevId);
-        if (targetDirId != -1) {
-            printDirEntries(graph, targetDirId);
-        }
+        printSnapshots(graph, origin);
     }
 
     public static void main(String[] args) {
@@ -103,6 +94,7 @@ public class Experiment {
             graph.loadCommitterTimestamps();
             graph.loadPersonIds();
             graph.loadLabelNames();
+            graph.loadTagNames();
         } catch(Exception e) {
             System.out.println(e.getMessage());
             return;
@@ -111,8 +103,13 @@ public class Experiment {
         long projectCount = 0;
         System.out.format("Starting traversal of %d nodes\n", graph.numNodes());
         for (long node = 0; node < graph.numNodes(); node++) {
-            if (isBaseRevision(graph, node)) {
+            if (graph.getNodeType(node) == SwhType.ORI) {
+                // TODO: find other origins that are forks using
+                // https://docs.softwareheritage.org/devel/swh-graph/java-api.html#example-find-all-the-shared-commit-forks-of-a-given-origin
+                // and select only a representative origin
+                System.out.format("Analyzing %s\n", graph.getSWHID(node));
                 analyzeProject(graph, node);
+                System.out.println("----------------------- next project ----------------");
                 projectCount++;
             }
         }
