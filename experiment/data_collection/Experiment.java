@@ -1,5 +1,6 @@
 import java.util.Date;
 
+import org.softwareheritage.graph.SWHID;
 import org.softwareheritage.graph.SwhBidirectionalGraph;
 import org.softwareheritage.graph.SwhType;
 import org.softwareheritage.graph.labels.DirEntry;
@@ -12,7 +13,9 @@ import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongStack;
 
 public class Experiment {
+    // The set of ORI objects visited during the initial discovery
     private static LongOpenHashSet discoveredOrigins = new LongOpenHashSet();
+    // The set of SNP objects selected as the entry points for project analysis
     private static LongOpenHashSet selectedProjects = new LongOpenHashSet();
 
     // Code from https://docs.softwareheritage.org/devel/swh-graph/java-api.html
@@ -41,16 +44,34 @@ public class Experiment {
         }
     }
 
-    // Code from https://docs.softwareheritage.org/devel/swh-graph/java-api.html#example-find-all-the-shared-commit-forks-of-a-given-origin
+    private static long getOriginOfSnapshot(SwhBidirectionalGraph graph, long snapshot) {
+        LazyLongIterator it = graph.predecessors(snapshot);
+        for (long succ; (succ = it.nextLong()) != -1;) {
+            if (graph.getNodeType(succ) == SwhType.ORI) {
+                return succ;
+            }
+        }
+
+        // No origin found for that snapshot, this should not happen
+        return -1;
+    }
+
+    // Code from
+    // https://docs.softwareheritage.org/devel/swh-graph/java-api.html#example-find-all-the-shared-commit-forks-of-a-given-origin
     // 
     // Adapted to mark fork origins as discovered in discoveredOrigins and to
-    // return the origin that has the longest chain of revisions to any root
+    // return the snapshot that has the longest chain of revisions to any root
     // revision.
+    //
+    // Unfortunately this approach means that if multiple meaningfully different
+    // projects share even only one commit somewhere (e.g. they all started as a
+    // fork of a common small "template" project) in their history, we will
+    // consider them forks of the same project and select only one of them for
+    // analysis, ignoring all the others.
     public static long findLongestFork(SwhBidirectionalGraph graph, long srcOrigin) {
         LongStack forwardStack = new LongArrayList();
         LongOpenHashSet forwardVisited = new LongOpenHashSet();
         LongArrayList backwardStack = new LongArrayList();
-        LongOpenHashSet backwardVisited = new LongOpenHashSet();
 
         // First traversal (forward graph): find all the root revisions of the
         // origin
@@ -73,22 +94,11 @@ public class Experiment {
             if (graph.getNodeType(curr) == SwhType.REV && isRootRevision) {
                 // Found a root revision, add it to the second stack
                 backwardStack.push(curr);
-                backwardVisited.add(curr);
             }
-            else {
-            }
-        }
-
-        if (backwardStack.isEmpty()) {
-            // TODO: no root revision found, something went wrong, ignore this
-            // origin for now
-            // j'ai l'impression qu'il ne remonte pas les merge commit
-            return -1;
         }
 
         // Second traversal (backward graph): find all the origins containing
-        // any of these root revisions and print them. Also remember the origin
-        // that is the farthest from any root revision.
+        // any of these root revisions and keep the farthest one.
         long farthestOrigin = -1;
         long largestDistance = -1;
 
@@ -96,13 +106,14 @@ public class Experiment {
             // BFS to find origins while making sure the last one we see is the
             // farthest from `rootRevision`
             LongArrayFIFOQueue queue = new LongArrayFIFOQueue();
+            LongOpenHashSet visited = new LongOpenHashSet();
             queue.enqueue(rootRevision);
             queue.enqueue(-1); // level marker
             long currentDistance = 0;
             while (!queue.isEmpty()) {
                 long curr = queue.dequeueLong();
                 if (curr == -1) {
-                    // level marker
+                    // new level
                     if (!queue.isEmpty()) {
                         queue.enqueue(-1);
                     }
@@ -112,22 +123,18 @@ public class Experiment {
 
                 LazyLongIterator it = graph.predecessors(curr);
                 for (long succ; (succ = it.nextLong()) != -1;) {
-                    if (!backwardVisited.contains(succ)) {
+                    if (!visited.contains(succ)) {
                         queue.enqueue(succ);
-                        backwardVisited.add(succ);
-                        if (graph.getNodeType(succ) == SwhType.ORI) {
-                            // Found a fork origin
-                            discoveredOrigins.add(succ);
+                        visited.add(succ);
+                        if (graph.getNodeType(succ) == SwhType.SNP) {
+                            // Found a snapshot, mark its origin as discovered
+                            long origin;
+                            if ((origin = getOriginOfSnapshot(graph, succ)) != -1) {
+                                discoveredOrigins.add(origin);
+                            }
+                            // and compare its distance to the farthest snapshot
+                            // we found
                             if (currentDistance > largestDistance) {
-                                if (farthestOrigin != -1) {
-                                    System.out.format(
-                                        "> (%d > %d) %s is farther than %s\n",
-                                        currentDistance,
-                                        largestDistance,
-                                        getOriginUrl(graph, succ),
-                                        getOriginUrl(graph, farthestOrigin)
-                                    );
-                                }
                                 farthestOrigin = succ;
                                 largestDistance = currentDistance;
                             }
@@ -137,7 +144,6 @@ public class Experiment {
             }
         }
 
-        assert farthestOrigin != -1;
         return farthestOrigin;
     }
 
@@ -145,7 +151,6 @@ public class Experiment {
         assert graph.getNodeType(origin) == SwhType.ORI;
         return new String(graph.getMessage(origin));
     }
-
 
     // If the given origin wasn't already discovered, find all the origins that
     // have some revisions in common with this one (forks) and select one
@@ -155,19 +160,13 @@ public class Experiment {
             return;
         }
         discoveredOrigins.add(origin);
-        long longestFork = findLongestFork(graph, origin);
-        if (longestFork == -1) {
-            // buggy origin (see todo in findLongestFork)
-            return;
-        }
-        if (longestFork != origin) {
-            System.out.format(
-                ">>>>> %s (%d) longest fork is %s (%d)\n",
-                getOriginUrl(graph, origin),
-                origin,
-                getOriginUrl(graph, longestFork),
-                longestFork
-            );
+
+        long bestSnapshot = findLongestFork(graph, origin);
+        if (bestSnapshot != -1) {
+            // ignore buggy origins (softwareheritage sometimes have origin
+            // objects that aren't actually archived, findLongestFork will
+            // return -1 for such buggy origins)
+            selectedProjects.add(bestSnapshot);
         }
     }
 
@@ -176,6 +175,7 @@ public class Experiment {
             return new Date(timestamp * 1000);
     }
 
+    // experimentation with labelled arcs
     private static long printSnapshots(SwhBidirectionalGraph graph, long origin) {
         assert graph.getNodeType(origin) == SwhType.ORI;
 
@@ -191,8 +191,6 @@ public class Experiment {
                     DirEntry[] labels = (DirEntry[]) revs.label().get();
                     for (DirEntry label: labels) {
                         String branch_name = new String(graph.getLabelName(label.filenameId));
-                        // TODO: maybe keep select only projects where we can
-                        // find a branch named "main" or "master" or "dev" ?
                         System.out.print(branch_name);
                     }
                     System.out.print(") ");
@@ -208,17 +206,11 @@ public class Experiment {
     }
 
     private static void analyzeProject(SwhBidirectionalGraph graph, long origin) {
-        assert graph.getNodeType(origin) == SwhType.ORI;
+        assert graph.getNodeType(origin) == SwhType.SNP;
+        // TODO: find the best branch (branch names are in the label of the arcs
+        // to revisions)
 
-        try {
-            System.out.print(getCommitDate(graph, origin)+ ": ");
-        }
-        catch (java.lang.NullPointerException e) {}
-
-        // Print the origin url
-        System.out.println(getOriginUrl(graph, origin));
-
-        printSnapshots(graph, origin);
+        // TODO: extract research variables
     }
 
     public static void main(String[] args) {
@@ -248,9 +240,6 @@ public class Experiment {
         System.out.format("Starting traversal of %d nodes\n", graph.numNodes());
         for (long node = 0; node < graph.numNodes(); node++) {
             if (graph.getNodeType(node) == SwhType.ORI) {
-                // TODO: find other origins that are forks using
-                // https://docs.softwareheritage.org/devel/swh-graph/java-api.html#example-find-all-the-shared-commit-forks-of-a-given-origin
-                // and select only a representative origin
                 discoverNewOrigin(graph, node);
             }
         }
@@ -258,8 +247,11 @@ public class Experiment {
         for (long project : selectedProjects) {
             System.out.format("Analyzing %s\n", graph.getSWHID(project));
             analyzeProject(graph, project);
-            System.out.println("----------------------- next project ----------------");
         }
-        System.out.format("Analyzed %d projects\n", selectedProjects.size());
+        System.out.format(
+            "Analyzed %d projects (for %d different origins in the graph)\n",
+            selectedProjects.size(),
+            discoveredOrigins.size()
+        );
     }
 }
