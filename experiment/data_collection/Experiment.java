@@ -1,6 +1,6 @@
 import java.util.Date;
+import java.util.HashMap;
 
-import org.softwareheritage.graph.SWHID;
 import org.softwareheritage.graph.SwhBidirectionalGraph;
 import org.softwareheritage.graph.SwhType;
 import org.softwareheritage.graph.labels.DirEntry;
@@ -205,10 +205,69 @@ public class Experiment {
         return -1;
     }
 
-    private static void analyzeProject(SwhBidirectionalGraph graph, long origin) {
-        assert graph.getNodeType(origin) == SwhType.SNP;
-        // TODO: find the best branch (branch names are in the label of the arcs
-        // to revisions)
+    private static HashMap<String, Long> mainBranchScore = new HashMap<String, Long>() {{
+        put("main", 100l);
+        put("trunk", 100l);
+        put("master", 90l);
+        put("default", 80l);
+        put("develop", 70l);
+        put("dev", 70l);
+        put("development", 70l);
+    }};
+
+    private static long findBestBranch(SwhBidirectionalGraph graph, long snapshot) {
+        assert graph.getNodeType(snapshot) == SwhType.SNP;
+        String bestBranchName = "";
+        long bestBranchScore = -1;
+        long bestBranch = -1;
+
+        LabelledArcIterator it = graph.labelledSuccessors(snapshot);
+        for (long succ; (succ = it.nextLong()) != -1;) {
+            if (graph.getNodeType(succ) != SwhType.REV) {
+                // not a branch
+                continue;
+            }
+
+            DirEntry[] labels = (DirEntry[]) it.label().get();
+            if (labels.length == 0) {
+                // unnamed branch
+                if (bestBranch == -1) {
+                    // if no branch were found yet, use this one but keep the -1
+                    // score so that it's replaced by any named branch we may
+                    // find later
+                    bestBranch = succ;
+                }
+            }
+            String fullBranchName = new String(graph.getLabelName(labels[0].filenameId));
+            String[] branchNameComponents = fullBranchName.split("/");
+            String branchName = branchNameComponents[branchNameComponents.length - 1];
+
+            long branchScore = mainBranchScore.getOrDefault(branchName.toLowerCase(), 0l);
+            if (
+                branchScore > bestBranchScore
+                // if the current best branch has an unscored name, compare them
+                // lexicographically (it may be a version number specification)
+                || bestBranchScore <= 0 &&  branchName.compareTo(bestBranchName) > 0
+            ) {
+                bestBranchScore = branchScore;
+                bestBranchName = branchName;
+                bestBranch = succ;
+            }
+        }
+
+        String origName = "<no origin>";
+        long origin = getOriginOfSnapshot(graph, snapshot);
+        if (origin != -1) {
+            origName = getOriginUrl(graph, origin);
+        }
+        System.out.format("> best branch for %s is %s\n", origName, bestBranchName);
+
+        return bestBranch;
+    }
+
+    private static void analyzeProject(SwhBidirectionalGraph graph, long snapshot) {
+        assert graph.getNodeType(snapshot) == SwhType.SNP;
+        long branch = findBestBranch(graph, snapshot);
 
         // TODO: extract research variables
     }
@@ -245,9 +304,9 @@ public class Experiment {
         }
 
         for (long project : selectedProjects) {
-            System.out.format("Analyzing %s\n", graph.getSWHID(project));
             analyzeProject(graph, project);
         }
+
         System.out.format(
             "Analyzed %d projects (for %d different origins in the graph)\n",
             selectedProjects.size(),
