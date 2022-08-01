@@ -10,7 +10,15 @@
   (utils.lib.eachDefaultSystem (system:
     let
       pkgs = nixpkgs.legacyPackages.${system};
-      texDependencies = with pkgs; [ inkscape coreutils glibcLocales ];
+      texDependencies = with pkgs; [
+        coreutils
+        glibcLocales
+        inkscape
+
+        # for minted
+        (python39.withPackages (ps: [ ps.pygments ]))
+        which
+      ];
       texDistribution = pkgs.texlive.combine {
         inherit (pkgs.texlive)
           # base scheme
@@ -34,6 +42,8 @@
           floatrow
           footmisc
           footnotebackref
+          framed
+          fvextra
           glossaries
           hyphenat
           ifmtarg
@@ -43,6 +53,7 @@
           marginnote
           mdframed
           mfirstuc
+          minted
           morewrites
           multirow
           needspace
