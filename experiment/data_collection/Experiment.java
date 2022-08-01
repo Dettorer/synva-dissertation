@@ -1,4 +1,6 @@
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 
 import org.softwareheritage.graph.SwhBidirectionalGraph;
@@ -7,13 +9,15 @@ import org.softwareheritage.graph.labels.DirEntry;
 
 import it.unimi.dsi.big.webgraph.LazyLongIterator;
 import it.unimi.dsi.big.webgraph.labelling.ArcLabelledNodeIterator.LabelledArcIterator;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.LongArrayFIFOQueue;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongStack;
 
 public class Experiment {
-    static class Contributor {
+    static class ContributorData {
         long committerId;
         long firstContributionNode;
         Date firstContributionDate;
@@ -21,10 +25,36 @@ public class Experiment {
         boolean coreContributor = false;
     };
 
+    static class ProjectData {
+        long mainBranchNodeId;
+        long bestSnapshot;
+        long commitCount;
+        HashMap<Long, ContributorData> committers;
+        boolean activeDuringStudiedTime;
+
+        public ProjectData() {
+            mainBranchNodeId = -1;
+            bestSnapshot = -1;
+            commitCount = 0;
+            committers = new HashMap<Long, ContributorData>();
+            activeDuringStudiedTime = false;
+        }
+
+        public ProjectData(long branch, long snapshot) {
+            this();
+            mainBranchNodeId = branch;
+            bestSnapshot = snapshot;
+        }
+    }
+
+    // TODO: fix the year
+    static Calendar studiedTimeStart = new GregorianCalendar(2018, Calendar.JANUARY, 1);
+    static Calendar studiedTimeEnd = new GregorianCalendar(2018, Calendar.JUNE, 1);
+
     // The set of ORI objects visited during the initial discovery
     private static LongOpenHashSet discoveredOrigins = new LongOpenHashSet();
     // The set of SNP objects selected as the entry points for project analysis
-    private static LongOpenHashSet selectedProjects = new LongOpenHashSet();
+    private static Long2ObjectOpenHashMap<ProjectData> selectedProjects = new Long2ObjectOpenHashMap<ProjectData>();
 
     // Code from https://docs.softwareheritage.org/devel/swh-graph/java-api.html
     private static long findDirectoryOfRevision(SwhBidirectionalGraph graph, long src) {
@@ -141,7 +171,7 @@ public class Experiment {
                                 discoveredOrigins.add(origin);
                             }
                             // and compare its distance to the farthest snapshot
-                            // we found
+                            // we found so far
                             if (currentDistance > largestDistance) {
                                 farthestOrigin = succ;
                                 largestDistance = currentDistance;
@@ -178,7 +208,11 @@ public class Experiment {
             // ignore buggy origins (softwareheritage sometimes have origin
             // objects that aren't actually archived, findLongestFork will
             // return -1 for such buggy origins)
-            selectedProjects.add(bestSnapshot);
+            long bestBranch = findBestBranch(graph, bestSnapshot);
+            if (bestBranch != -1) {
+                ProjectData p = new ProjectData(bestBranch, bestSnapshot);
+                selectedProjects.put(bestBranch, p);
+            }
         }
     }
 
@@ -272,18 +306,14 @@ public class Experiment {
         return bestBranch;
     }
 
-    private static HashMap<Long, Contributor> discoverContributors(SwhBidirectionalGraph graph, long branch) {
-        assert graph.getNodeType(branch) == SwhType.REV;
-        HashMap<Long, Contributor> committers = new HashMap<Long, Contributor>();
-        long commitCount = 0;
-
+    private static void mineCommitMetadata(SwhBidirectionalGraph graph, ProjectData project) {
         // BFS to explore the given branch
         LongArrayFIFOQueue queue = new LongArrayFIFOQueue();
         LongOpenHashSet visited = new LongOpenHashSet();
-        queue.enqueue(branch);
+        queue.enqueue(project.mainBranchNodeId);
         while (!queue.isEmpty()) {
             long curr = queue.dequeueLong();
-            commitCount++;
+            project.commitCount++;
 
             LazyLongIterator it = graph.successors(curr);
             for (long succ; (succ = it.nextLong()) != -1;) {
@@ -295,10 +325,18 @@ public class Experiment {
                         if (committerId != null) {
                             // XXX: this ignores commits with an empty committer
                             // committer is valid, check the commit date
-                            Contributor knownData = committers.get(committerId);
+                            ContributorData knownData = project.committers.get(committerId);
                             Date thisContributionDate = getCommitDate(graph, succ);
 
-                            Contributor newData = new Contributor();
+                            // check project activity in studied time
+                            if (
+                                thisContributionDate.after(studiedTimeStart.getTime())
+                                && thisContributionDate.before(studiedTimeEnd.getTime())
+                            ) {
+                                project.activeDuringStudiedTime = true;
+                            }
+
+                            ContributorData newData = new ContributorData();
                             newData.committerId = committerId;
                             if (knownData == null) {
                                 // first time we see that committer
@@ -321,7 +359,7 @@ public class Experiment {
                                     newData.firstContributionNode = knownData.firstContributionNode;
                                 }
                             }
-                            committers.put(committerId, newData);
+                            project.committers.put(committerId, newData);
                         }
                     }
                 }
@@ -329,43 +367,40 @@ public class Experiment {
         }
 
         // Identify core contributors
-        for (var committer: committers.entrySet()) {
-            if (committer.getValue().commitCount >= commitCount * 0.05) {
+        for (var committer: project.committers.entrySet()) {
+            if (committer.getValue().commitCount >= project.commitCount * 0.05) {
                 committer.getValue().coreContributor = true;
             }
         }
-
-        return committers;
     }
 
-    private static void analyzeProject(SwhBidirectionalGraph graph, long snapshot) {
-        assert graph.getNodeType(snapshot) == SwhType.SNP;
-        long branch = findBestBranch(graph, snapshot);
-        if (branch == -1) {
-            return;
-        }
-
-        var uniqueCommitters = discoverContributors(graph, branch);
+    private static void analyzeProject(SwhBidirectionalGraph graph, ProjectData project) {
+        mineCommitMetadata(graph, project);
         long coreCommitters = 0;
-        for (var committer: uniqueCommitters.entrySet()) {
+        for (var committer: project.committers.entrySet()) {
             if (committer.getValue().coreContributor) {
                 coreCommitters++;
             }
         }
-        System.out.format(
-            "%-6d unique committers, %-6d core in %s\n",
-            uniqueCommitters.size(),
-            coreCommitters,
-            getOriginUrl(graph, getOriginOfSnapshot(graph, snapshot))
-        );
+
+        if (project.activeDuringStudiedTime) {
+            System.out.format(
+                "%-4d unique committers, %-3d core in %s\n",
+                project.committers.size(),
+                coreCommitters,
+                getOriginUrl(graph, getOriginOfSnapshot(graph, project.bestSnapshot))
+            );
+        }
         // TODO: extract research variables
     }
 
-    public static void main(String[] args) {
-        String graphPath = args[1];
-        SwhBidirectionalGraph graph;
-        System.out.print("Loading the graph");
+    public static void main(String[] args) throws Exception {
+        // TODO: have a progress bar
         try {
+            // graph loading
+            String graphPath = args[1];
+            SwhBidirectionalGraph graph;
+            System.out.print("Loading the graph");
             if (args[0].equals("mapped")) {
                 System.out.println(" (mapped)");
                 graph = SwhBidirectionalGraph.loadLabelledMapped(graphPath);
@@ -379,27 +414,31 @@ public class Experiment {
             graph.loadPersonIds();
             graph.loadLabelNames();
             graph.loadTagNames();
-        } catch(Exception e) {
-            System.out.println(e.getMessage());
-            return;
-        }
 
-        // Select projects
-        System.out.format("Starting traversal of %d nodes\n", graph.numNodes());
-        for (long node = 0; node < graph.numNodes(); node++) {
-            if (graph.getNodeType(node) == SwhType.ORI) {
-                discoverNewOrigin(graph, node);
+            // Project discovery and selection
+            System.out.format("Starting traversal of %d nodes\n", graph.numNodes());
+            for (long node = 0; node < graph.numNodes(); node++) {
+                if (graph.getNodeType(node) == SwhType.ORI) {
+                    discoverNewOrigin(graph, node);
+                }
             }
-        }
 
-        for (long project : selectedProjects) {
-            analyzeProject(graph, project);
-        }
+            // Project mining
+            for (var entry: selectedProjects.long2ObjectEntrySet()) {
+                analyzeProject(graph, entry.getValue());
+            }
 
-        System.out.format(
-            "Analyzed %d projects (for %d different origins in the graph)\n",
-            selectedProjects.size(),
-            discoveredOrigins.size()
-        );
+            System.out.format(
+                "Analyzed %d projects (for %d different origins in the graph)\n",
+                selectedProjects.size(),
+                discoveredOrigins.size()
+            );
+        } catch(Exception e) {
+            System.out.println("!!! Exception: " + e.getMessage());
+            throw e;
+        } catch(AssertionError e) {
+            System.out.println("!!! AssertionError: " + e.getMessage());
+            throw e;
+        }
     }
 }
