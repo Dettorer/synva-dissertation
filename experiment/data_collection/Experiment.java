@@ -13,6 +13,14 @@ import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongStack;
 
 public class Experiment {
+    static class Contributor {
+        long committerId;
+        long firstContributionNode;
+        Date firstContributionDate;
+        long commitCount;
+        boolean coreContributor = false;
+    };
+
     // The set of ORI objects visited during the initial discovery
     private static LongOpenHashSet discoveredOrigins = new LongOpenHashSet();
     // The set of SNP objects selected as the entry points for project analysis
@@ -148,8 +156,12 @@ public class Experiment {
     }
 
     private static String getOriginUrl(SwhBidirectionalGraph graph, long origin) {
-        assert graph.getNodeType(origin) == SwhType.ORI;
-        return new String(graph.getMessage(origin));
+        if (origin == -1) {
+            return "<no origin>";
+        } else {
+            assert graph.getNodeType(origin) == SwhType.ORI;
+            return new String(graph.getMessage(origin));
+        }
     }
 
     // If the given origin wasn't already discovered, find all the origins that
@@ -171,8 +183,9 @@ public class Experiment {
     }
 
     private static Date getCommitDate(SwhBidirectionalGraph graph, long src) {
-            long timestamp = graph.getCommitterTimestamp(src);
-            return new Date(timestamp * 1000);
+        assert graph.getNodeType(src) == SwhType.REV;
+        long timestamp = graph.getCommitterTimestamp(src);
+        return new Date(timestamp * 1000);
     }
 
     // experimentation with labelled arcs
@@ -236,6 +249,7 @@ public class Experiment {
                     // score so that it's replaced by any named branch we may
                     // find later
                     bestBranch = succ;
+                    continue;
                 }
             }
             String fullBranchName = new String(graph.getLabelName(labels[0].filenameId));
@@ -255,20 +269,95 @@ public class Experiment {
             }
         }
 
-        String origName = "<no origin>";
-        long origin = getOriginOfSnapshot(graph, snapshot);
-        if (origin != -1) {
-            origName = getOriginUrl(graph, origin);
-        }
-        System.out.format("> best branch for %s is %s\n", origName, bestBranchName);
-
         return bestBranch;
+    }
+
+    private static HashMap<Long, Contributor> discoverContributors(SwhBidirectionalGraph graph, long branch) {
+        assert graph.getNodeType(branch) == SwhType.REV;
+        HashMap<Long, Contributor> committers = new HashMap<Long, Contributor>();
+        long commitCount = 0;
+
+        // BFS to explore the given branch
+        LongArrayFIFOQueue queue = new LongArrayFIFOQueue();
+        LongOpenHashSet visited = new LongOpenHashSet();
+        queue.enqueue(branch);
+        while (!queue.isEmpty()) {
+            long curr = queue.dequeueLong();
+            commitCount++;
+
+            LazyLongIterator it = graph.successors(curr);
+            for (long succ; (succ = it.nextLong()) != -1;) {
+                if (!visited.contains(succ)) {
+                    if (graph.getNodeType(succ) == SwhType.REV) {
+                        queue.enqueue(succ);
+                        visited.add(succ);
+                        Long committerId = graph.getCommitterId(succ);
+                        if (committerId != null) {
+                            // XXX: this ignores commits with an empty committer
+                            // committer is valid, check the commit date
+                            Contributor knownData = committers.get(committerId);
+                            Date thisContributionDate = getCommitDate(graph, succ);
+
+                            Contributor newData = new Contributor();
+                            newData.committerId = committerId;
+                            if (knownData == null) {
+                                // first time we see that committer
+                                newData.commitCount = 1;
+                                newData.firstContributionDate = thisContributionDate;
+                                newData.firstContributionNode = succ;
+                            } else {
+                                // commit from a committer we already saw
+                                newData.commitCount = knownData.commitCount + 1;
+                                if (thisContributionDate.before(knownData.firstContributionDate)) {
+                                    // this commit is the oldest we've seen from
+                                    // that committer
+                                    newData.firstContributionDate = thisContributionDate;
+                                    newData.firstContributionNode = succ;
+                                }
+                                else {
+                                    // not an older commit, don't update firt
+                                    // contribution
+                                    newData.firstContributionDate = knownData.firstContributionDate;
+                                    newData.firstContributionNode = knownData.firstContributionNode;
+                                }
+                            }
+                            committers.put(committerId, newData);
+                        }
+                    }
+                }
+            }
+        }
+
+        // Identify core contributors
+        for (var committer: committers.entrySet()) {
+            if (committer.getValue().commitCount >= commitCount * 0.05) {
+                committer.getValue().coreContributor = true;
+            }
+        }
+
+        return committers;
     }
 
     private static void analyzeProject(SwhBidirectionalGraph graph, long snapshot) {
         assert graph.getNodeType(snapshot) == SwhType.SNP;
         long branch = findBestBranch(graph, snapshot);
+        if (branch == -1) {
+            return;
+        }
 
+        var uniqueCommitters = discoverContributors(graph, branch);
+        long coreCommitters = 0;
+        for (var committer: uniqueCommitters.entrySet()) {
+            if (committer.getValue().coreContributor) {
+                coreCommitters++;
+            }
+        }
+        System.out.format(
+            "%-6d unique committers, %-6d core in %s\n",
+            uniqueCommitters.size(),
+            coreCommitters,
+            getOriginUrl(graph, getOriginOfSnapshot(graph, snapshot))
+        );
         // TODO: extract research variables
     }
 
