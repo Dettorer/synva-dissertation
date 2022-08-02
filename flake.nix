@@ -74,6 +74,7 @@
           xifthen
           xpatch
           xstring
+          xurl
           zref
 
           # utilities

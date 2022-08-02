@@ -47,6 +47,7 @@
 
 % Hyperref integration
 \usepackage{kaorefs}
+\usepackage[nobiblatex]{xurl}
 
 % For typesetting hypothesis
 \usepackage[framed=true, hypothesisbackground=gray!20!white]{kaotheorems}
@@ -74,6 +75,9 @@
     \oldaddpart{#1}
     \pagelayout{margin} % restore the margin
 }
+
+% Hyphenation
+\hyphenation{Git-Hub}
 
 \begin{document}
     \input{document}
