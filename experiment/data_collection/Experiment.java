@@ -47,9 +47,8 @@ public class Experiment {
         }
     }
 
-    // TODO: fix the year
-    static Calendar studiedTimeStart = new GregorianCalendar(2018, Calendar.JANUARY, 1);
-    static Calendar studiedTimeEnd = new GregorianCalendar(2018, Calendar.JUNE, 1);
+    static Calendar studiedTimeStart = new GregorianCalendar(2019, Calendar.JANUARY, 1);
+    static Calendar studiedTimeEnd = new GregorianCalendar(2019, Calendar.JUNE, 1);
 
     // The set of ORI objects visited during the initial discovery
     private static LongOpenHashSet discoveredOrigins = new LongOpenHashSet();
