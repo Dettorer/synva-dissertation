@@ -10,7 +10,6 @@ import org.softwareheritage.graph.labels.DirEntry;
 
 import it.unimi.dsi.big.webgraph.LazyLongIterator;
 import it.unimi.dsi.big.webgraph.labelling.ArcLabelledNodeIterator.LabelledArcIterator;
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.LongArrayFIFOQueue;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
@@ -239,9 +238,6 @@ public class Experiment {
 
     // The set of ORI objects visited during the initial discovery
     private static LongOpenHashSet discoveredOrigins = new LongOpenHashSet();
-    // The set of SNP objects selected as the entry points for project analysis
-    private static Long2ObjectOpenHashMap<ProjectData> selectedProjects =
-        new Long2ObjectOpenHashMap<ProjectData>();
 
     private static long getOriginOfSnapshot(SwhBidirectionalGraph graph, long snapshot) {
         LazyLongIterator it = graph.predecessors(snapshot);
@@ -370,7 +366,7 @@ public class Experiment {
             long bestBranch = findBestBranch(graph, bestSnapshot);
             if (bestBranch != -1) {
                 ProjectData p = new ProjectData(graph, bestBranch, bestSnapshot);
-                selectedProjects.put(bestBranch, p);
+                p.analyze();
             }
         }
     }
@@ -513,15 +509,8 @@ public class Experiment {
             graph.loadContentLength();
             graph.loadContentIsSkipped();
 
-            // Project discovery and selection
+            // Project discovery, selection and analysis
             System.err.format("Starting traversal of %d nodes\n", graph.numNodes());
-            for (long node = 0; node < graph.numNodes(); node++) {
-                if (graph.getNodeType(node) == SwhType.ORI) {
-                    discoverNewOrigin(graph, node);
-                }
-            }
-
-            // Project mining
             System.out.println(
                 "projectMainBranch,"
                 + "newContributorCount,"
@@ -531,15 +520,11 @@ public class Experiment {
                 + "recentCommitCount,"
                 + "originUrl"
             );
-            for (var entry: selectedProjects.long2ObjectEntrySet()) {
-                entry.getValue().analyze();
+            for (long node = 0; node < graph.numNodes(); node++) {
+                if (graph.getNodeType(node) == SwhType.ORI) {
+                    discoverNewOrigin(graph, node);
+                }
             }
-
-            System.err.format(
-                "Analyzed %d projects (for %d different origins in the graph)\n",
-                selectedProjects.size(),
-                discoveredOrigins.size()
-            );
         } catch(Exception e) {
             System.err.println("!!! Exception: " + e.getMessage());
             throw e;
