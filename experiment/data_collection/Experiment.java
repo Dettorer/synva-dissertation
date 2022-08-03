@@ -247,7 +247,6 @@ public class Experiment {
             }
         }
 
-        System.err.format("no origin found for snapshot %d\n", snapshot);
         return -1;
     }
 
