@@ -2,6 +2,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import org.softwareheritage.graph.SwhBidirectionalGraph;
 import org.softwareheritage.graph.SwhType;
@@ -9,7 +10,6 @@ import org.softwareheritage.graph.labels.DirEntry;
 
 import it.unimi.dsi.big.webgraph.LazyLongIterator;
 import it.unimi.dsi.big.webgraph.labelling.ArcLabelledNodeIterator.LabelledArcIterator;
-import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.LongArrayFIFOQueue;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
@@ -26,14 +26,33 @@ public class Experiment {
     };
 
     static class ProjectData {
-        long mainBranchNodeId;
+        enum HasContributingStatus {
+            // we are sure there are contributing guidelines
+            TRUE,
+
+            // we are sure there are NO contributing guidelines
+            FALSE,
+
+            // we didn't find a specific file for contributing guidelines but we
+            // found a README, its content (identified by the url in
+            // readmeContentUrl) must be check to know if there are contributing
+            // guidelines in the project
+            CHECKREADMECONTENT
+        };
+
+        long mainBranchNode;
         long bestSnapshot;
         long commitCount;
         HashMap<Long, ContributorData> committers;
         boolean activeDuringStudiedTime;
 
+        // research variables
+        HasContributingStatus hasContributing = HasContributingStatus.FALSE;
+        String readmeContentUrl = null;
+
+        // constructors
         public ProjectData() {
-            mainBranchNodeId = -1;
+            mainBranchNode = -1;
             bestSnapshot = -1;
             commitCount = 0;
             committers = new HashMap<Long, ContributorData>();
@@ -42,9 +61,24 @@ public class Experiment {
 
         public ProjectData(long branch, long snapshot) {
             this();
-            mainBranchNodeId = branch;
+            mainBranchNode = branch;
             bestSnapshot = snapshot;
         }
+    }
+
+    // code from
+    // https://docs.softwareheritage.org/devel/swh-graph/java-api.html#example-find-the-target-directory-of-a-revision
+    private static long findDirectoryOfRevision(SwhBidirectionalGraph graph, long revNode) {
+        assert graph.getNodeType(revNode) == SwhType.REV;
+
+        LazyLongIterator it = graph.successors(revNode);
+        for (long dst; (dst = it.nextLong()) != -1;) {
+            if (graph.getNodeType(dst) == SwhType.DIR) {
+                return dst;
+            }
+        }
+
+        return -1;
     }
 
     static Calendar studiedTimeStart = new GregorianCalendar(2019, Calendar.JANUARY, 1);
@@ -55,32 +89,6 @@ public class Experiment {
     // The set of SNP objects selected as the entry points for project analysis
     private static Long2ObjectOpenHashMap<ProjectData> selectedProjects = new Long2ObjectOpenHashMap<ProjectData>();
 
-    // Code from https://docs.softwareheritage.org/devel/swh-graph/java-api.html
-    private static long findDirectoryOfRevision(SwhBidirectionalGraph graph, long src) {
-        assert graph.getNodeType(src) == SwhType.REV;
-
-        // return the first successor that is a DIR
-        LazyLongIterator it = graph.successors(src);
-        for (long dst; (dst = it.nextLong()) != -1;) {
-            if (graph.getNodeType(dst) == SwhType.DIR) {
-                return dst;
-            }
-        }
-
-        return -1;
-    }
-
-    private static String getCommitMessage(SwhBidirectionalGraph graph, long node) {
-        assert graph.getNodeType(node) == SwhType.REV;
-        byte[] message = graph.getMessage(node);
-        if (message != null) {
-            return new String(graph.getMessage(node));
-        }
-        else {
-            return new String("");
-        }
-    }
-
     private static long getOriginOfSnapshot(SwhBidirectionalGraph graph, long snapshot) {
         LazyLongIterator it = graph.predecessors(snapshot);
         for (long succ; (succ = it.nextLong()) != -1;) {
@@ -89,7 +97,7 @@ public class Experiment {
             }
         }
 
-        // No origin found for that snapshot, this should not happen
+        System.err.format("no origin found for snapshot %d\n", snapshot);
         return -1;
     }
 
@@ -221,34 +229,134 @@ public class Experiment {
         return new Date(timestamp * 1000);
     }
 
-    // experimentation with labelled arcs
-    private static long printSnapshots(SwhBidirectionalGraph graph, long origin) {
-        assert graph.getNodeType(origin) == SwhType.ORI;
+    // possible forms of a "contributing" file name or section name (in a
+    // readme), lowercase and without extension. To compare with an observed
+    // file name, first remove the extension, change to lowercase, then use
+    // .contains().
+    private static HashSet<String> contributingForms = new HashSet<String>() {{
+        add("contributing");
+        add("contribution");
+        add("contribute");
+        add("contrib");
+    }};
 
-        LazyLongIterator snps = graph.successors(origin);
-        for (long snp; (snp = snps.nextLong()) != -1;) {
-            if (graph.getNodeType(snp) == SwhType.SNP) {
-                System.out.print("SNP: ");
-                // show the successors
-                LabelledArcIterator revs = graph.labelledSuccessors(snp);
-                for (long rev; (rev = revs.nextLong()) != -1;) {
-                    System.out.print(graph.getNodeType(rev) + "(");
-                    // print labels
-                    DirEntry[] labels = (DirEntry[]) revs.label().get();
-                    for (DirEntry label: labels) {
-                        String branch_name = new String(graph.getLabelName(label.filenameId));
-                        System.out.print(branch_name);
-                    }
-                    System.out.print(") ");
+    // check that the given file:
+    // - has a name that is a variant of "CONTRIBUTING.md"
+    // - is non-empty
+    private static boolean isValidContributingFile(SwhBidirectionalGraph graph, long node, String fileName) {
+        String extensionLess = fileName.split("\\.")[0];
+        Long contentLength = graph.getContentLength(node);
+        return
+            contributingForms.contains(extensionLess.toLowerCase())
+            && contentLength != null && contentLength > 0;
+    }
+
+    // check that the given file:
+    // - has a name that is a variant of "README.md"
+    // - is non-empty
+    // - has archived content that we can query later
+    private static boolean isValidReadmeFile(SwhBidirectionalGraph graph, long node, String fileName) {
+        String extensionLess = fileName.trim().split("\\.")[0];
+        Long contentLength = graph.getContentLength(node);
+
+        // if (extensionLess.toLowerCase().equals("readme")) {
+            // if (contentLength == null) {
+                // System.err.println(">>> content length is null");
+            // } else {
+                // System.err.println(">>> empty file");
+            // }
+
+            // if (graph.isContentSkipped(node)) {
+                // System.err.println(">>> content skipped");
+            // }
+        // }
+
+        return
+            extensionLess.toLowerCase().equals("readme")
+            && contentLength != null && contentLength > 0
+            && !graph.isContentSkipped(node);
+    }
+
+    private static void checkProjectHasContributing(SwhBidirectionalGraph graph, ProjectData project) {
+        long rootDir = findDirectoryOfRevision(graph, project.mainBranchNode);
+        if (rootDir == -1) {
+            // didn't even find a root directory, project is empty?
+            System.err.format("Could not find a root directory for revision %d\n", project.mainBranchNode);
+            project.hasContributing = ProjectData.HasContributingStatus.FALSE;
+            return;
+        }
+
+        // DFS
+        // - if we find a file whose name is a variant of "CONTRIBUTING.md", we
+        // consider the project has contributing guidelines;
+        // - else, if we find a file whose name is a variant of "README.md", we
+        // build and save an url that can fetch the content of that file (we
+        // will need to query that later to check if the readme contains
+        // contributing guidelines);
+        // - else, we consider the project doesn't have contributing guidelines.
+        long firstReadmeFileFound = -1;
+        LongArrayFIFOQueue queue = new LongArrayFIFOQueue();
+        LongOpenHashSet visited = new LongOpenHashSet();
+        queue.enqueue(rootDir);
+        visited.add(rootDir);
+        while (!queue.isEmpty()) {
+            long dir = queue.dequeueLong();
+
+            // iterate over top-level entries in that directory
+            LabelledArcIterator it = graph.labelledSuccessors(dir);
+            for (long child; (child = it.nextLong()) != -1;) {
+                if (visited.contains(child)) {
+                    continue;
                 }
-                System.out.println("");
-            }
-            else {
-                System.out.println("skiped a " + graph.getNodeType(snp));
+
+                if (graph.getNodeType(child) == SwhType.DIR) {
+                    queue.enqueue(child);
+                    visited.add(child);
+                    continue;
+                } else if (graph.getNodeType(child) != SwhType.CNT) {
+                    // this may be a REV node representing a git submodule,
+                    // ignore
+                    continue;
+                }
+
+                // Regular file, check its name
+                DirEntry[] labels = (DirEntry[]) it.label().get();
+                // multiple labels for the same CNT node means multiple files with
+                // identical content (multiple empty files for example)
+                for (DirEntry label: labels) {
+                    String fileName = new String(graph.getLabelName(label.filenameId));
+                    if (isValidContributingFile(graph, child, fileName)) {
+                        // bingo, we found explicit contributing guidelines
+                        project.hasContributing = ProjectData.HasContributingStatus.TRUE;
+                        return;
+                    } else if (
+                        firstReadmeFileFound == -1
+                        && isValidReadmeFile(graph, child, fileName)
+                    ) {
+                        // this is the first usable README file we find, save
+                        // its node in case we need to query it later (should we
+                        // not find a CONTRIBUTING-style file)
+                        firstReadmeFileFound = child;
+                    }
+                }
             }
         }
 
-        return -1;
+        // If get this far, this means we found no valid CONTRIBUTING-style file,
+        // handle the possible README or conclude that there is not contributing
+        // guidelines in this project
+        if (firstReadmeFileFound != -1) {
+            project.readmeContentUrl = getFileContentQueryUrl(graph, firstReadmeFileFound);
+            project.hasContributing = ProjectData.HasContributingStatus.CHECKREADMECONTENT;
+        } else {
+            project.hasContributing = ProjectData.HasContributingStatus.FALSE;
+        }
+    }
+
+    private static String getFileContentQueryUrl(SwhBidirectionalGraph graph, long cntNode) {
+        assert graph.getNodeType(cntNode) == SwhType.CNT;
+        String hash = graph.getSWHID(cntNode).toString().split(":")[3];
+        return String.format("https://archive.softwareheritage.org/api/1/content/sha1_git:%s/raw/", hash);
     }
 
     private static HashMap<String, Long> mainBranchScore = new HashMap<String, Long>() {{
@@ -309,7 +417,7 @@ public class Experiment {
         // BFS to explore the given branch
         LongArrayFIFOQueue queue = new LongArrayFIFOQueue();
         LongOpenHashSet visited = new LongOpenHashSet();
-        queue.enqueue(project.mainBranchNodeId);
+        queue.enqueue(project.mainBranchNode);
         while (!queue.isEmpty()) {
             long curr = queue.dequeueLong();
             project.commitCount++;
@@ -383,10 +491,11 @@ public class Experiment {
         }
 
         if (project.activeDuringStudiedTime) {
+            checkProjectHasContributing(graph, project);
             System.out.format(
-                "%-4d unique committers, %-3d core in %s\n",
-                project.committers.size(),
-                coreCommitters,
+                "%-5s, %s (%s)\n",
+                project.hasContributing.toString(),
+                project.readmeContentUrl,
                 getOriginUrl(graph, getOriginOfSnapshot(graph, project.bestSnapshot))
             );
         }
@@ -399,23 +508,24 @@ public class Experiment {
             // graph loading
             String graphPath = args[1];
             SwhBidirectionalGraph graph;
-            System.out.print("Loading the graph");
+            System.err.print("Loading the graph");
             if (args[0].equals("mapped")) {
-                System.out.println(" (mapped)");
+                System.err.println(" (mapped)");
                 graph = SwhBidirectionalGraph.loadLabelledMapped(graphPath);
             }
             else {
-                System.out.println(" (in memory)");
+                System.err.println(" (in memory)");
                 graph = SwhBidirectionalGraph.loadLabelled(graphPath);
             }
             graph.loadMessages();
             graph.loadCommitterTimestamps();
             graph.loadPersonIds();
             graph.loadLabelNames();
-            graph.loadTagNames();
+            graph.loadContentLength();
+            graph.loadContentIsSkipped();
 
             // Project discovery and selection
-            System.out.format("Starting traversal of %d nodes\n", graph.numNodes());
+            System.err.format("Starting traversal of %d nodes\n", graph.numNodes());
             for (long node = 0; node < graph.numNodes(); node++) {
                 if (graph.getNodeType(node) == SwhType.ORI) {
                     discoverNewOrigin(graph, node);
@@ -427,16 +537,16 @@ public class Experiment {
                 analyzeProject(graph, entry.getValue());
             }
 
-            System.out.format(
+            System.err.format(
                 "Analyzed %d projects (for %d different origins in the graph)\n",
                 selectedProjects.size(),
                 discoveredOrigins.size()
             );
         } catch(Exception e) {
-            System.out.println("!!! Exception: " + e.getMessage());
+            System.err.println("!!! Exception: " + e.getMessage());
             throw e;
         } catch(AssertionError e) {
-            System.out.println("!!! AssertionError: " + e.getMessage());
+            System.err.println("!!! AssertionError: " + e.getMessage());
             throw e;
         }
     }
