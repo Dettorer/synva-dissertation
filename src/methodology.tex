@@ -7,15 +7,6 @@
     \end{restatable}%
 }
 
-\todo[inline, color=yellow]{%
-    Mon intuition est de trouver une ou plusieurs métriques dans les projets de logiciel libre pouvant être
-    prédictives de leur tendance à bien accueillir les nouveaux contributeurs (que l'on pourrait par exemple
-    mesurer en regardant la régularité avec laquelle de nouveaux noms apparaissent dans le git log). De tels
-    facteurs pourraient servir lors de la préparation de cours consistant à participer à un projet de logiciel
-    libre, l'enseignant·e pourrait identifier les projets les plus susceptible de convenablement accueillir
-    ses étudiant·es.%
-}
-
 \section{Hypothèses}
 
 \newhyp{contributing.md}{%
@@ -25,28 +16,21 @@
 }
 
 \newhyp{contributorcount}{%
-    le nombre de contributeurs récents d'un projet influe sur son accessibilité pour les nouveaux
-    contributeurs \parencite[voir][p.~12-13]{signals-2019}.%
+    le nombre de contributeurs uniques récents (du premier janvier 2019 au premier juin 2019) d'un projet
+    influe sur son accessibilité pour les nouveaux contributeurs \parencite[voir][p.~12-13,16]{signals-2019}.%
 }
 
-\newhyp{recentcommits}{%
-    le nombre de \englpl{commit} \emph{récents} au sein d'un projet influe sur son accessibilité pour les
-    nouveaux contributeurs \parencite[voir][p.~13]{signals-2019}.
+\newhyp{recentcommitcount}{%
+    le nombre de \englpl{commit} récents (du premier janvier 2019 au premier juin 2019) au sein d'un projet
+    influe sur son accessibilité pour les nouveaux contributeurs \parencite[voir][p.~13,16]{signals-2019}.
 }
 
 \section{Mesure de l'accessibilité choisie}
 
-\todo[inline]{%
-    TODO : méthode choisie pour mesurer à quel point un projet est accessible pour les nouveaux
-    contributeurs.%
-}
-
-\todo[inline, color=yellow]{%
-    Idée : regarder chaque mois (ou trimestre ? ou année ?) le pourcentage de contributeurs (auteurs uniques
-    de \engl{commit}) qui contribue dans ce projet pour la première fois. Malheureusement pour l'instant je
-    n'ai vu personne essayer de mesurer ce genre de chose donc il n'y a que mon intuition pour me dire que
-    c'est une mesure correcte de l'accessibilité pour les nouveaux contributeurs.%
-}
+La variable mesurée pour représenter l'accessibilité d'un projet pour les nouveaux contributeurs est le nombre
+de contributeurs ayant fait leur toute première contribution au projet entre le premier juin 2019 et le
+premier septembre 2019. (voir section \ref{sec:accessibility-measure} p.~\pageref{sec:accessibility-measure},
+ainsi que \textcite[][p.~13,16]{signals-2019})
 
 \section{Constitution de l'échantillon}
 
@@ -59,7 +43,7 @@ appliqués :
         celui qui a reçu le plus d'activité (mesuré en regardant le nombre de
         \englpl{commit} entre le premier et le dernier) a été retenu ;
     \item les projets n'ayant enregistré aucune activité (aucun commit) entre le
-        1er janvier 2019 et le 1er juin 2019 n'ont pas été retenus ;
+        1er juin 2019 et le 1er septembre 2019 n'ont pas été retenus ;
 \end{itemize}
 
 \section{Collecte des données}

@@ -17,14 +17,6 @@ import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongStack;
 
 public class Experiment {
-    static class ContributorData {
-        long committerId;
-        long firstContributionNode;
-        Date firstContributionDate;
-        long commitCount;
-        boolean coreContributor = false;
-    };
-
     static class ProjectData {
         enum HasContributingStatus {
             // we are sure there are contributing guidelines
@@ -40,27 +32,25 @@ public class Experiment {
             CHECKREADMECONTENT
         };
 
-        long mainBranchNode;
-        long bestSnapshot;
-        long commitCount;
-        HashMap<Long, ContributorData> committers;
-        boolean activeDuringStudiedTime;
+        long mainBranchNode = -1;
+        long bestSnapshot = -1;
+        boolean activeDuringStudiedTime = false;
 
-        // research variables
+        // people who contributed before the studied time (recently or not,
+        // overlaps with recentContributors)
+        HashSet<Long> oldContributors = new HashSet<Long>();
+        // people who contributed *recently* before the studied time
+        HashSet<Long> recentContributors = new HashSet<Long>();
+        // people who contributed during the studied time
+        HashSet<Long> studiedTimeContributors = new HashSet<Long>();
+
         HasContributingStatus hasContrib = HasContributingStatus.FALSE;
         String readmeContentUrl = null;
+        long recentCommitCount = 0;
+        long newContributorCount = 0;
 
-        // constructors
-        public ProjectData() {
-            mainBranchNode = -1;
-            bestSnapshot = -1;
-            commitCount = 0;
-            committers = new HashMap<Long, ContributorData>();
-            activeDuringStudiedTime = false;
-        }
-
+        // constructor
         public ProjectData(long branch, long snapshot) {
-            this();
             mainBranchNode = branch;
             bestSnapshot = snapshot;
         }
@@ -81,8 +71,14 @@ public class Experiment {
         return -1;
     }
 
-    static Calendar studiedTimeStart = new GregorianCalendar(2019, Calendar.JANUARY, 1);
-    static Calendar studiedTimeEnd = new GregorianCalendar(2019, Calendar.JUNE, 1);
+    // The studied time period, during which we evaluate the number of new
+    // contributors
+    static Calendar recentReferenceTimeStart = new GregorianCalendar(2019, Calendar.JANUARY, 1);
+
+    // The "recent" time period relative to the studied period, during which we
+    // measure the number of "recent" commits and unique contributors
+    static Calendar studiedTimeStart = new GregorianCalendar(2019, Calendar.JUNE, 1);
+    static Calendar studiedTimeEnd = new GregorianCalendar(2019, Calendar.SEPTEMBER, 1);
 
     // The set of ORI objects visited during the initial discovery
     private static LongOpenHashSet discoveredOrigins = new LongOpenHashSet();
@@ -259,18 +255,6 @@ public class Experiment {
         String extensionLess = fileName.trim().split("\\.")[0];
         Long contentLength = graph.getContentLength(node);
 
-        // if (extensionLess.toLowerCase().equals("readme")) {
-            // if (contentLength == null) {
-                // System.err.println(">>> content length is null");
-            // } else {
-                // System.err.println(">>> empty file");
-            // }
-
-            // if (graph.isContentSkipped(node)) {
-                // System.err.println(">>> content skipped");
-            // }
-        // }
-
         return
             extensionLess.toLowerCase().equals("readme")
             && contentLength != null && contentLength > 0
@@ -413,93 +397,73 @@ public class Experiment {
         return bestBranch;
     }
 
-    private static void mineCommitMetadata(SwhBidirectionalGraph graph, ProjectData project) {
+    private static void mineCommitHistory(SwhBidirectionalGraph graph, ProjectData project) {
         // BFS to explore the given branch
         LongArrayFIFOQueue queue = new LongArrayFIFOQueue();
         LongOpenHashSet visited = new LongOpenHashSet();
         queue.enqueue(project.mainBranchNode);
         while (!queue.isEmpty()) {
-            long curr = queue.dequeueLong();
-            project.commitCount++;
+            long currentRevision = queue.dequeueLong();
 
-            LazyLongIterator it = graph.successors(curr);
+            // process commit metadata
+            Long committerId = graph.getCommitterId(currentRevision);
+            if (committerId != null) {
+                // XXX: we ignore commits with an empty committer (but still
+                // enqueue their parent commits)
+                Date contributionDate = getCommitDate(graph, currentRevision);
+                if (contributionDate.after(studiedTimeEnd.getTime())) {
+                    // too recent, ignore but enqueue parent commits
+                }
+                else if (contributionDate.after(studiedTimeStart.getTime())) {
+                    // committed during the studied period
+                    project.activeDuringStudiedTime = true;
+                    project.studiedTimeContributors.add(committerId);
+                } else if (contributionDate.after(recentReferenceTimeStart.getTime())) {
+                    // committed in the recent period, count this contribution
+                    // in the recent commit count and in the recent and old
+                    // unique contributor count
+                    project.oldContributors.add(committerId);
+                    project.recentContributors.add(committerId);
+                    project.recentCommitCount++;
+                } else {
+                    // older contribution, only save to make sure we don't count
+                    // this contributor as a *new* contributor during the
+                    // studied period
+                    project.oldContributors.add(committerId);
+                }
+            }
+
+            // enqueue parent commits
+            LazyLongIterator it = graph.successors(currentRevision);
             for (long succ; (succ = it.nextLong()) != -1;) {
                 if (!visited.contains(succ)) {
                     if (graph.getNodeType(succ) == SwhType.REV) {
                         queue.enqueue(succ);
                         visited.add(succ);
-                        Long committerId = graph.getCommitterId(succ);
-                        if (committerId != null) {
-                            // XXX: this ignores commits with an empty committer
-                            // committer is valid, check the commit date
-                            ContributorData knownData = project.committers.get(committerId);
-                            Date thisContributionDate = getCommitDate(graph, succ);
-
-                            // check project activity in studied time
-                            if (
-                                thisContributionDate.after(studiedTimeStart.getTime())
-                                && thisContributionDate.before(studiedTimeEnd.getTime())
-                            ) {
-                                project.activeDuringStudiedTime = true;
-                            }
-
-                            ContributorData newData = new ContributorData();
-                            newData.committerId = committerId;
-                            if (knownData == null) {
-                                // first time we see that committer
-                                newData.commitCount = 1;
-                                newData.firstContributionDate = thisContributionDate;
-                                newData.firstContributionNode = succ;
-                            } else {
-                                // commit from a committer we already saw
-                                newData.commitCount = knownData.commitCount + 1;
-                                if (thisContributionDate.before(knownData.firstContributionDate)) {
-                                    // this commit is the oldest we've seen from
-                                    // that committer
-                                    newData.firstContributionDate = thisContributionDate;
-                                    newData.firstContributionNode = succ;
-                                }
-                                else {
-                                    // not an older commit, don't update firt
-                                    // contribution
-                                    newData.firstContributionDate = knownData.firstContributionDate;
-                                    newData.firstContributionNode = knownData.firstContributionNode;
-                                }
-                            }
-                            project.committers.put(committerId, newData);
-                        }
                     }
                 }
             }
         }
 
-        // Identify core contributors
-        for (var committer: project.committers.entrySet()) {
-            if (committer.getValue().commitCount >= project.commitCount * 0.05) {
-                committer.getValue().coreContributor = true;
-            }
-        }
+        // wrap-up: count the new contributors during the studied time
+        HashSet<Long> newContributors = new HashSet<Long>(project.studiedTimeContributors);
+        newContributors.removeAll(project.oldContributors);
+        project.newContributorCount = newContributors.size();
     }
 
     private static void analyzeProject(SwhBidirectionalGraph graph, ProjectData project) {
-        mineCommitMetadata(graph, project);
-        long coreCommitters = 0;
-        for (var committer: project.committers.entrySet()) {
-            if (committer.getValue().coreContributor) {
-                coreCommitters++;
-            }
-        }
+        mineCommitHistory(graph, project);
 
         if (project.activeDuringStudiedTime) {
             checkProjectHasContributing(graph, project);
             System.out.format(
                 "%d,%d,%s,%s,%d,%d,%s\n",
                 project.mainBranchNode,
-                -1, // TODO: new contributor measure
+                project.newContributorCount,
                 project.hasContrib.toString(),
                 project.readmeContentUrl,
-                -1, // TODO: recent contributor count
-                -1, // TODO: recent commit count
+                project.recentContributors.size(),
+                project.recentCommitCount,
                 getOriginUrl(graph, getOriginOfSnapshot(graph, project.bestSnapshot))
             );
         }
@@ -536,7 +500,7 @@ public class Experiment {
             }
 
             // Project mining
-            System.out.println("project_id,new_contributors,has_contrib,readme_url,contributor_count,commit_count,origin_url");
+            System.out.println("projectMainBranch,newContributorCount,hasContrib,readmeUrl,recentContributorCount,recentCommitCount,originUrl");
             for (var entry: selectedProjects.long2ObjectEntrySet()) {
                 analyzeProject(graph, entry.getValue());
             }
