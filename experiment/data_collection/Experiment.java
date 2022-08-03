@@ -47,7 +47,7 @@ public class Experiment {
         boolean activeDuringStudiedTime;
 
         // research variables
-        HasContributingStatus hasContributing = HasContributingStatus.FALSE;
+        HasContributingStatus hasContrib = HasContributingStatus.FALSE;
         String readmeContentUrl = null;
 
         // constructors
@@ -282,7 +282,7 @@ public class Experiment {
         if (rootDir == -1) {
             // didn't even find a root directory, project is empty?
             System.err.format("Could not find a root directory for revision %d\n", project.mainBranchNode);
-            project.hasContributing = ProjectData.HasContributingStatus.FALSE;
+            project.hasContrib = ProjectData.HasContributingStatus.FALSE;
             return;
         }
 
@@ -327,7 +327,7 @@ public class Experiment {
                     String fileName = new String(graph.getLabelName(label.filenameId));
                     if (isValidContributingFile(graph, child, fileName)) {
                         // bingo, we found explicit contributing guidelines
-                        project.hasContributing = ProjectData.HasContributingStatus.TRUE;
+                        project.hasContrib = ProjectData.HasContributingStatus.TRUE;
                         return;
                     } else if (
                         firstReadmeFileFound == -1
@@ -347,9 +347,9 @@ public class Experiment {
         // guidelines in this project
         if (firstReadmeFileFound != -1) {
             project.readmeContentUrl = getFileContentQueryUrl(graph, firstReadmeFileFound);
-            project.hasContributing = ProjectData.HasContributingStatus.CHECKREADMECONTENT;
+            project.hasContrib = ProjectData.HasContributingStatus.CHECKREADMECONTENT;
         } else {
-            project.hasContributing = ProjectData.HasContributingStatus.FALSE;
+            project.hasContrib = ProjectData.HasContributingStatus.FALSE;
         }
     }
 
@@ -493,13 +493,16 @@ public class Experiment {
         if (project.activeDuringStudiedTime) {
             checkProjectHasContributing(graph, project);
             System.out.format(
-                "%-5s, %s (%s)\n",
-                project.hasContributing.toString(),
+                "%d,%d,%s,%s,%d,%d,%s\n",
+                project.mainBranchNode,
+                -1, // TODO: new contributor measure
+                project.hasContrib.toString(),
                 project.readmeContentUrl,
+                -1, // TODO: recent contributor count
+                -1, // TODO: recent commit count
                 getOriginUrl(graph, getOriginOfSnapshot(graph, project.bestSnapshot))
             );
         }
-        // TODO: extract research variables
     }
 
     public static void main(String[] args) throws Exception {
@@ -533,6 +536,7 @@ public class Experiment {
             }
 
             // Project mining
+            System.out.println("project_id,new_contributors,has_contrib,readme_url,contributor_count,commit_count,origin_url");
             for (var entry: selectedProjects.long2ObjectEntrySet()) {
                 analyzeProject(graph, entry.getValue());
             }
