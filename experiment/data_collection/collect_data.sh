@@ -47,4 +47,4 @@ if [ ! -d .venv ]; then
     ./.venv/bin/python -m pip install -r requirements.txt
 fi
 
-java -ea -cp .venv/share/swh-graph/swh-graph-1.0.1.jar Experiment.java $LOAD_MODE $GRAPH_PATH
+java -ea -cp .venv/share/swh-graph/swh-graph-1.0.1.jar -Dlogback.configurationFile=$PWD/logback.xml Experiment.java $LOAD_MODE $GRAPH_PATH

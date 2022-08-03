@@ -3,7 +3,11 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.concurrent.TimeUnit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.impl.SimpleLogger;
 import org.softwareheritage.graph.SwhBidirectionalGraph;
 import org.softwareheritage.graph.SwhType;
 import org.softwareheritage.graph.labels.DirEntry;
@@ -14,8 +18,11 @@ import it.unimi.dsi.fastutil.longs.LongArrayFIFOQueue;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongStack;
+import it.unimi.dsi.logging.ProgressLogger;
 
 public class Experiment {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
+
     static class ProjectData {
         enum HasContributingStatus {
             // we are sure there are contributing guidelines
@@ -111,7 +118,7 @@ public class Experiment {
             long rootDir = findDirectoryOfRevision(this.graph, this.mainBranchNode);
             if (rootDir == -1) {
                 // didn't even find a root directory, project is empty?
-                System.err.format(
+                LOGGER.warn(
                     "Could not find a root directory for revision %d\n",
                     this.mainBranchNode
                 );
@@ -487,20 +494,20 @@ public class Experiment {
     }
 
     public static void main(String[] args) throws Exception {
-        // TODO: have a progress bar
         try {
+            ProgressLogger pl = new ProgressLogger(LOGGER, 1, TimeUnit.SECONDS, "nodes");
+
             // graph loading
             String graphPath = args[1];
             SwhBidirectionalGraph graph;
-            System.err.print("Loading the graph");
+            LOGGER.info("Loading the graph");
             if (args[0].equals("mapped")) {
-                System.err.println(" (mapped)");
-                graph = SwhBidirectionalGraph.loadLabelledMapped(graphPath);
+                graph = SwhBidirectionalGraph.loadLabelledMapped(graphPath, pl);
             }
             else {
-                System.err.println(" (in memory)");
-                graph = SwhBidirectionalGraph.loadLabelled(graphPath);
+                graph = SwhBidirectionalGraph.loadLabelled(graphPath, pl);
             }
+            
             graph.loadMessages();
             graph.loadCommitterTimestamps();
             graph.loadPersonIds();
@@ -509,7 +516,6 @@ public class Experiment {
             graph.loadContentIsSkipped();
 
             // Project discovery, selection and analysis
-            System.err.format("Starting traversal of %d nodes\n", graph.numNodes());
             System.out.println(
                 "projectMainBranch,"
                 + "newContributorCount,"
@@ -519,16 +525,21 @@ public class Experiment {
                 + "recentCommitCount,"
                 + "originUrl"
             );
-            for (long node = 0; node < graph.numNodes(); node++) {
+            long numNodes = graph.numNodes();
+            pl.expectedUpdates = numNodes;
+            pl.start("Mining projects");
+            for (long node = 0; node < numNodes; node++) {
                 if (graph.getNodeType(node) == SwhType.ORI) {
                     discoverNewOrigin(graph, node);
                 }
+                pl.lightUpdate();
             }
+            pl.done();
         } catch(Exception e) {
-            System.err.println("!!! Exception: " + e.getMessage());
+            LOGGER.error("Exception: %s", e.getMessage());
             throw e;
         } catch(AssertionError e) {
-            System.err.println("!!! AssertionError: " + e.getMessage());
+            LOGGER.error("AssertionError: %s", e.getMessage());
             throw e;
         }
     }
