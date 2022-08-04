@@ -401,12 +401,17 @@ public class Experiment {
         long node,
         String fileName
     ) {
-        String extensionLess = fileName.split("\\.")[0];
+        String[] splitted = fileName.trim().split("\\.");
+        if (splitted.length <= 0) {
+            return false;
+        }
+
+        String extensionLess = splitted[0];
         Long contentLength = graph.getContentLength(node);
         return
-            contributingForms.contains(extensionLess.toLowerCase())
-            && contentLength != null
-            && contentLength > 0;
+            contentLength != null
+            && contentLength > 0
+            && contributingForms.contains(extensionLess.toLowerCase());
     }
 
     // check that the given file:
@@ -418,12 +423,17 @@ public class Experiment {
         long node,
         String fileName
     ) {
-        String extensionLess = fileName.trim().split("\\.")[0];
-        Long contentLength = graph.getContentLength(node);
+        String[] splitted = fileName.trim().split("\\.");
+        if (splitted.length <= 0) {
+            return false;
+        }
 
+        String extensionLess = splitted[0];
+        Long contentLength = graph.getContentLength(node);
         return
-            extensionLess.toLowerCase().equals("readme")
-            && contentLength != null && contentLength > 0
+            contentLength != null
+            && contentLength > 0
+            && extensionLess.toLowerCase().equals("readme")
             && !graph.isContentSkipped(node);
     }
 
