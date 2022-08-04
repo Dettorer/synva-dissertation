@@ -23,6 +23,23 @@ import it.unimi.dsi.logging.ProgressLogger;
 public class Experiment {
     private static final Logger LOGGER = LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
 
+    // The set of ORI objects visited during the initial discovery
+    private static final LongOpenHashSet discoveredOrigins = new LongOpenHashSet();
+    // The set of project (represented by the node of their best snapshot) selected for data
+    // collection
+    private static final LongOpenHashSet selectedProjects = new LongOpenHashSet();
+
+    // The studied time period, during which we evaluate the number of new contributors
+    private static final Calendar recentReferenceTimeStart =
+        new GregorianCalendar( 2019, Calendar.JANUARY, 1);
+
+    // The "recent" time period relative to the studied period, during which we measure the
+    // number of "recent" commits and unique contributors
+    private static final Calendar studiedTimeStart =
+        new GregorianCalendar(2019, Calendar.JUNE, 1);
+    private static final Calendar studiedTimeEnd =
+        new GregorianCalendar(2019, Calendar.SEPTEMBER, 1);
+
     static class ProjectData {
         enum HasContributingStatus {
             // we are sure there are contributing guidelines
@@ -234,18 +251,6 @@ public class Experiment {
         return -1;
     }
 
-    // The studied time period, during which we evaluate the number of new contributors
-    static Calendar recentReferenceTimeStart =
-        new GregorianCalendar( 2019, Calendar.JANUARY, 1);
-
-    // The "recent" time period relative to the studied period, during which we measure the
-    // number of "recent" commits and unique contributors
-    static Calendar studiedTimeStart = new GregorianCalendar(2019, Calendar.JUNE, 1);
-    static Calendar studiedTimeEnd = new GregorianCalendar(2019, Calendar.SEPTEMBER, 1);
-
-    // The set of ORI objects visited during the initial discovery
-    private static LongOpenHashSet discoveredOrigins = new LongOpenHashSet();
-
     private static long getOriginOfSnapshot(SwhBidirectionalGraph graph, long snapshot) {
         LazyLongIterator it = graph.predecessors(snapshot);
         for (long succ; (succ = it.nextLong()) != -1;) {
@@ -358,7 +363,9 @@ public class Experiment {
     // If the given origin wasn't already discovered, find all the origins that have some
     // revisions in common with this one (forks) and select one representative among them
     // for later analysis.
-    private static void discoverNewOrigin(SwhBidirectionalGraph graph, long origin) {
+    private static void discoverProject(SwhBidirectionalGraph graph, long origin) {
+        assert graph.getNodeType(origin) == SwhType.ORI;
+
         if (discoveredOrigins.contains(origin)) {
             return;
         }
@@ -369,11 +376,17 @@ public class Experiment {
             // ignore buggy origins (softwareheritage sometimes have origin objects that
             // aren't actually archived, findLongestFork will return -1 for such buggy
             // origins)
-            long bestBranch = findBestBranch(graph, bestSnapshot);
-            if (bestBranch != -1) {
-                ProjectData p = new ProjectData(graph, bestBranch, bestSnapshot);
-                p.analyze();
-            }
+            selectedProjects.add(bestSnapshot);
+        }
+    }
+
+    private static void collectProject(SwhBidirectionalGraph graph, long snapshot) {
+        assert graph.getNodeType(snapshot) == SwhType.SNP;
+
+        long bestBranch = findBestBranch(graph, snapshot);
+        if (bestBranch != -1) {
+            ProjectData p = new ProjectData(graph, bestBranch, snapshot);
+            p.analyze();
         }
     }
 
@@ -550,7 +563,19 @@ public class Experiment {
             graph.loadContentLength();
             graph.loadContentIsSkipped();
 
-            // Project discovery, selection and analysis
+            // Project discovery and selection
+            long numNodes = graph.numNodes();
+            pl.expectedUpdates = numNodes;
+            pl.start("Discovering projects");
+            for (long node = 0; node < numNodes; node++) {
+                if (graph.getNodeType(node) == SwhType.ORI) {
+                    discoverProject(graph, node);
+                }
+                pl.lightUpdate();
+            }
+            pl.done();
+
+            // Project analysis
             System.out.println(
                 "projectMainBranch,"
                 + "newContributorCount,"
@@ -560,13 +585,10 @@ public class Experiment {
                 + "recentCommitCount,"
                 + "originUrl"
             );
-            long numNodes = graph.numNodes();
-            pl.expectedUpdates = numNodes;
-            pl.start("Mining projects");
-            for (long node = 0; node < numNodes; node++) {
-                if (graph.getNodeType(node) == SwhType.ORI) {
-                    discoverNewOrigin(graph, node);
-                }
+            pl.expectedUpdates = selectedProjects.size();
+            pl.start("Collecting project data");
+            for (long projectSnapshot: selectedProjects) {
+                collectProject(graph, projectSnapshot);
                 pl.lightUpdate();
             }
             pl.done();
