@@ -507,11 +507,36 @@ public class Experiment {
         try {
             ProgressLogger pl = new ProgressLogger(LOGGER, 1, TimeUnit.SECONDS, "nodes");
 
-            // graph loading
+            // argument "parsing"
+            if (args.length < 2 || args.length > 3) {
+                System.err.format(
+                    "usage: java [java options] %s.java"
+                        + " memory|mapped <graph path> [thread count]\n",
+                    Experiment.class.getName()
+                );
+                System.exit(1);
+            }
+            String loadMode = args[0];
             String graphPath = args[1];
+            int threadCount = Runtime.getRuntime().availableProcessors(); // default
+            if (args.length == 3) {
+                // a non-default thread count was given
+                try {
+                    threadCount = Integer.parseInt(args[2]);
+                } catch (NumberFormatException e) {
+                    LOGGER.error("Invalid number for thread count \"{}\"", args[2]);
+                    System.exit(1);
+                }
+            }
+            else {
+                LOGGER.info("Using the default thread count of {}", threadCount);
+            }
+
+
+            // graph loading
             SwhBidirectionalGraph graph;
             LOGGER.info("Loading the graph");
-            if (args[0].equals("mapped")) {
+            if (loadMode.equals("mapped")) {
                 graph = SwhBidirectionalGraph.loadLabelledMapped(graphPath, pl);
             }
             else {
