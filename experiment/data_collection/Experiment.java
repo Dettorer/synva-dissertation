@@ -9,7 +9,6 @@ import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.softwareheritage.graph.SWHID;
 import org.softwareheritage.graph.SwhBidirectionalGraph;
 import org.softwareheritage.graph.SwhType;
 import org.softwareheritage.graph.labels.DirEntry;
@@ -36,15 +35,6 @@ public class Experiment {
     // The studied time period, during which we evaluate the number of new contributors
     private static final Calendar recentReferenceTimeStart =
         new GregorianCalendar( 2019, Calendar.JANUARY, 1);
-
-    // Locks for thread-unsafe swh-graph methods
-    private static final Object getCommitterIdLock = new Object();
-    private static final Object getCommitterTimestampLock = new Object();
-    private static final Object getContentLengthLock = new Object();
-    private static final Object getLabelLock = new Object();
-    private static final Object getMessageLock = new Object();
-    private static final Object getSWHIDLock = new Object();
-    private static final Object isContentSkippedLock = new Object();
 
     // possible forms of a "contributing" file name or section name (in a readme), lowercase
     // and without extension. To compare with an observed file name, first remove the
@@ -111,10 +101,7 @@ public class Experiment {
                 long currentRevision = queue.dequeueLong();
 
                 // process commit metadata
-                Long committerId;
-                synchronized (getCommitterIdLock) {
-                    committerId = this.graph.getCommitterId(currentRevision);
-                }
+                Long committerId = this.graph.getCommitterId(currentRevision);
                 if (committerId != null) {
                     // XXX: we ignore commits with an empty committer (but still enqueue
                     // their parent commits)
@@ -207,12 +194,9 @@ public class Experiment {
                     // multiple labels for the same CNT node means multiple files with
                     // identical content (multiple empty files for example)
                     for (DirEntry label: labels) {
-                        String fileName;
-                        synchronized (getLabelLock) {
-                            fileName = new String(
-                                this.graph.getLabelName(label.filenameId)
-                            );
-                        }
+                        String fileName = new String(
+                            this.graph.getLabelName(label.filenameId)
+                        );
                         if (isValidContributingFile(this.graph, child, fileName)) {
                             // bingo, we found explicit contributing guidelines
                             this.hasContrib = HasContributingStatus.TRUE;
@@ -397,11 +381,7 @@ public class Experiment {
             return "<no origin>";
         } else {
             assert graph.getNodeType(origin) == SwhType.ORI;
-            String url;
-            synchronized (getMessageLock) {
-                url = new String(graph.getMessage(origin));
-            }
-            return url;
+            return new String(graph.getMessage(origin));
         }
     }
 
@@ -434,10 +414,7 @@ public class Experiment {
 
     private static Date getCommitDate(SwhBidirectionalGraph graph, long src) {
         assert graph.getNodeType(src) == SwhType.REV;
-        long timestamp;
-        synchronized (getCommitterTimestampLock) {
-            timestamp = graph.getCommitterTimestamp(src);
-        }
+        long timestamp = graph.getCommitterTimestamp(src);
         return new Date(timestamp * 1000);
     }
 
@@ -455,10 +432,7 @@ public class Experiment {
         }
 
         String extensionLess = splitted[0];
-        Long contentLength;
-        synchronized (getContentLengthLock) {
-            contentLength = graph.getContentLength(node);
-        }
+        Long contentLength = graph.getContentLength(node);
         return
             contentLength != null
             && contentLength > 0
@@ -480,19 +454,12 @@ public class Experiment {
         }
 
         String extensionLess = splitted[0];
-        Long contentLength;
-        synchronized (getContentLengthLock) {
-            contentLength = graph.getContentLength(node);
-        }
-        boolean contentSkipped;
-        synchronized (isContentSkippedLock) {
-            contentSkipped = graph.isContentSkipped(node);
-        }
+        Long contentLength = graph.getContentLength(node);
         return
             contentLength != null
             && contentLength > 0
             && extensionLess.toLowerCase().equals("readme")
-            && !contentSkipped;
+            && !graph.isContentSkipped(node);
     }
 
     private static String getFileContentQueryUrl(
@@ -500,11 +467,7 @@ public class Experiment {
         long cntNode
     ) {
         assert graph.getNodeType(cntNode) == SwhType.CNT;
-        SWHID swhid;
-        synchronized (getSWHIDLock) {
-            swhid = graph.getSWHID(cntNode);
-        }
-        String hash = swhid.toString().split(":")[3];
+        String hash = graph.getSWHID(cntNode).toString().split(":")[3];
         return String.format(
             "https://archive.softwareheritage.org/api/1/content/sha1_git:%s/raw/",
             hash
@@ -544,10 +507,7 @@ public class Experiment {
                     continue;
                 }
             }
-            String fullBranchName;
-            synchronized (getLabelLock) {
-                fullBranchName = new String(graph.getLabelName(labels[0].filenameId));
-            }
+            String fullBranchName = new String(graph.getLabelName(labels[0].filenameId));
             String[] branchNameComponents = fullBranchName.split("/");
             String branchName = branchNameComponents[branchNameComponents.length - 1];
 
