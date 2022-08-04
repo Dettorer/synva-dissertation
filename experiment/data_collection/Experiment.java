@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,15 +14,18 @@ import org.softwareheritage.graph.SwhBidirectionalGraph;
 import org.softwareheritage.graph.SwhType;
 import org.softwareheritage.graph.labels.DirEntry;
 
+import it.unimi.dsi.Util;
 import it.unimi.dsi.big.webgraph.LazyLongIterator;
 import it.unimi.dsi.big.webgraph.labelling.ArcLabelledNodeIterator.LabelledArcIterator;
 import it.unimi.dsi.fastutil.BigArrays;
 import it.unimi.dsi.fastutil.longs.LongArrayFIFOQueue;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
+import it.unimi.dsi.fastutil.longs.LongBigArrays;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongStack;
 import it.unimi.dsi.fastutil.shorts.ShortBigArrays;
 import it.unimi.dsi.logging.ProgressLogger;
+import it.unimi.dsi.util.XoRoShiRo128PlusRandom;
 
 public class Experiment {
     private static final Logger LOGGER = LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
@@ -31,6 +35,7 @@ public class Experiment {
     // The set of project (represented by the node of their best snapshot) selected for data
     // collection
     private static final LongOpenHashSet selectedProjects = new LongOpenHashSet();
+    private static final LongArrayList selectedProjectsList = new LongArrayList();
 
     // The studied time period, during which we evaluate the number of new contributors
     private static final Calendar recentReferenceTimeStart =
@@ -397,7 +402,9 @@ public class Experiment {
             // aren't actually archived, findLongestFork will return -1 for such buggy
             // origins)
             synchronized (selectedProjects) {
-                selectedProjects.add(bestSnapshot);
+                if (selectedProjects.add(bestSnapshot)) {
+                    selectedProjectsList.add(bestSnapshot);
+                }
             }
         }
     }
@@ -574,32 +581,61 @@ public class Experiment {
             graph.loadLabelNames();
             graph.loadContentLength();
             graph.loadContentIsSkipped();
+            long numNodes = graph.numNodes();
 
+            // randomize the order in which we will test each node
+            long[][] permutation = LongBigArrays.newBigArray(numNodes);
+            Util.identity(permutation);
+            LongBigArrays.shuffle(permutation, new XoRoShiRo128PlusRandom());
+            // FIXME: we skip projects if the division truncates
+            long nodesPerThread = numNodes / threadCount;
 
             final ExecutorService discoveryService
                 = Executors.newFixedThreadPool(threadCount);
 
+            AtomicInteger discoveryNextThreadId = new AtomicInteger(0);
+            ThreadLocal<Integer> discoveryThreadLocalId =
+                ThreadLocal.withInitial(discoveryNextThreadId::getAndIncrement);
+
             // Project discovery and selection
-            long numNodes = graph.numNodes();
             discoveredOrigins = ShortBigArrays.newBigArray(numNodes);
             pl.itemsName = "ORI nodes";
             pl.expectedUpdates = numNodes / 144; // an estimated 0.7% of nodes are ORI
             pl.start("Discovering projects");
-            for (long node = 0; node < numNodes; node++) {
-                if (graph.getNodeType(node) == SwhType.ORI) {
-                    if (originIsDiscovered(node)) {
-                        continue;
-                    }
-                    markOriginAsDiscovered(node);
-                    final long oriNode = node;
-                    discoveryService.submit(() -> {
+            for (int i = 0; i < threadCount; ++i) {
+                discoveryService.submit(() -> {
+                    try {
+                        int threadId = discoveryThreadLocalId.get();
                         SwhBidirectionalGraph g = graph.copy();
-                        discoverProject(g, oriNode);
-                        synchronized (pl) {
-                            pl.update();
+                        for (
+                            long n = nodesPerThread * threadId;
+                            n < Math.min(nodesPerThread * (threadId + 1), numNodes);
+                            n++
+                        ) {
+                                long node = BigArrays.get(permutation, n);
+                                if (
+                                    g.getNodeType(node) == SwhType.ORI
+                                    && !originIsDiscovered(node)
+                                ) {
+                                    markOriginAsDiscovered(node);
+                                    discoverProject(g, node);
+                                    synchronized (pl) {
+                                        pl.update();
+                                    }
+                                }
                         }
-                    });
-                }
+                    } catch(Exception e) {
+                        synchronized (LOGGER) {
+                            LOGGER.error("exception: {}", e.getMessage());
+                            e.printStackTrace();
+                        }
+                    } catch(AssertionError e) {
+                        synchronized (LOGGER) {
+                            LOGGER.error("assertion error: {}", e.getMessage());
+                            e.printStackTrace();
+                        }
+                    }
+                });
             }
 
             discoveryService.shutdown();
@@ -607,6 +643,13 @@ public class Experiment {
             pl.done();
 
             // Project analysis
+            int projectCount = selectedProjects.size();
+            // FIXME: we skip projects if the division truncates
+            int projectPerThread = projectCount / threadCount;
+            AtomicInteger collectionNextThreadId = new AtomicInteger(0);
+            ThreadLocal<Integer> collectionThreadLocalId =
+                ThreadLocal.withInitial(collectionNextThreadId::getAndIncrement);
+
             System.out.println(
                 "projectMainBranch,"
                 + "newContributorCount,"
@@ -621,12 +664,31 @@ public class Experiment {
             pl.itemsName = "projects";
             pl.expectedUpdates = selectedProjects.size();
             pl.start("Collecting project data");
-            for (long projectSnapshot: selectedProjects) {
+            for (int i = 0; i < threadCount; ++i) {
                 collectionService.submit(() -> {
-                    SwhBidirectionalGraph g = graph.copy();
-                    collectProject(g, projectSnapshot);
-                    synchronized (pl) {
-                        pl.update();
+                    try {
+                        int threadId = collectionThreadLocalId.get();
+                        SwhBidirectionalGraph g = graph.copy();
+                        for (
+                            int n = projectPerThread * threadId;
+                            n < Math.min(projectPerThread * (threadId + 1), projectCount);
+                            n++
+                        ) {
+                            collectProject(g, selectedProjectsList.getLong(n));
+                            synchronized (pl) {
+                                pl.update();
+                            }
+                        }
+                    } catch(Exception e) {
+                        synchronized (LOGGER) {
+                            LOGGER.error("exception: {}", e.getMessage());
+                            e.printStackTrace();
+                        }
+                    } catch(AssertionError e) {
+                        synchronized (LOGGER) {
+                            LOGGER.error("assertion error: {}", e.getMessage());
+                            e.printStackTrace();
+                        }
                     }
                 });
             }
