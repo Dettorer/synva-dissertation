@@ -363,9 +363,9 @@ public class Experiment {
                         visited.add(succ);
                         if (graph.getNodeType(succ) == SwhType.SNP) {
                             // Found a snapshot, mark its origin as discovered
-                            long origin;
-                            if ((origin = getOriginOfSnapshot(graph, succ)) != -1) {
-                                synchronized (discoveredOrigins) {
+                            long origin = getOriginOfSnapshot(graph, succ);
+                            synchronized (discoveredOrigins) {
+                                if (origin != -1 && !discoveredOrigins.contains(origin)) {
                                     discoveredOrigins.add(origin);
                                 }
                             }
@@ -402,13 +402,6 @@ public class Experiment {
     // for later analysis.
     private static void discoverProject(SwhBidirectionalGraph graph, long origin) {
         assert graph.getNodeType(origin) == SwhType.ORI;
-
-        if (discoveredOrigins.contains(origin)) {
-            return;
-        }
-        synchronized (discoveredOrigins) {
-            discoveredOrigins.add(origin);
-        }
 
         long bestSnapshot = findLongestFork(graph, origin);
         if (bestSnapshot != -1) {
@@ -624,6 +617,12 @@ public class Experiment {
             pl.start("Discovering projects");
             for (long node = 0; node < numNodes; node++) {
                 if (graph.getNodeType(node) == SwhType.ORI) {
+                    synchronized (discoveredOrigins) {
+                        if (discoveredOrigins.contains(node)) {
+                            continue;
+                        }
+                        discoveredOrigins.add(node);
+                    }
                     final long oriNode = node;
                     discoveryService.submit(() -> {
                         SwhBidirectionalGraph g = graph.copy();
