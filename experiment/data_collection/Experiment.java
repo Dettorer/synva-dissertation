@@ -16,17 +16,19 @@ import org.softwareheritage.graph.labels.DirEntry;
 
 import it.unimi.dsi.big.webgraph.LazyLongIterator;
 import it.unimi.dsi.big.webgraph.labelling.ArcLabelledNodeIterator.LabelledArcIterator;
+import it.unimi.dsi.fastutil.BigArrays;
 import it.unimi.dsi.fastutil.longs.LongArrayFIFOQueue;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongStack;
+import it.unimi.dsi.fastutil.shorts.ShortBigArrays;
 import it.unimi.dsi.logging.ProgressLogger;
 
 public class Experiment {
     private static final Logger LOGGER = LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
 
     // The set of ORI objects visited during the initial discovery
-    private static final LongOpenHashSet discoveredOrigins = new LongOpenHashSet();
+    private static short[][] discoveredOrigins;
     // The set of project (represented by the node of their best snapshot) selected for data
     // collection
     private static final LongOpenHashSet selectedProjects = new LongOpenHashSet();
@@ -267,6 +269,14 @@ public class Experiment {
         }
     }
 
+    private static boolean originIsDiscovered(long oriNode) {
+        return BigArrays.get(discoveredOrigins, oriNode) == 1;
+    }
+
+    private static void markOriginAsDiscovered(long oriNode) {
+        BigArrays.set(discoveredOrigins, oriNode, (short)1);
+    }
+
     // code from
     // https://docs.softwareheritage.org/devel/swh-graph/java-api.html#example-find-the-target-directory-of-a-revision
     private static long findDirectoryOfRevision(SwhBidirectionalGraph graph, long revNode) {
@@ -364,10 +374,8 @@ public class Experiment {
                         if (graph.getNodeType(succ) == SwhType.SNP) {
                             // Found a snapshot, mark its origin as discovered
                             long origin = getOriginOfSnapshot(graph, succ);
-                            synchronized (discoveredOrigins) {
-                                if (origin != -1 && !discoveredOrigins.contains(origin)) {
-                                    discoveredOrigins.add(origin);
-                                }
+                            if (origin != -1) {
+                                markOriginAsDiscovered(origin);
                             }
                             // and compare its distance to the farthest snapshot we found so
                             // far
@@ -607,22 +615,22 @@ public class Experiment {
             graph.loadContentLength();
             graph.loadContentIsSkipped();
 
+
             final ExecutorService discoveryService
                 = Executors.newFixedThreadPool(threadCount);
 
             // Project discovery and selection
             long numNodes = graph.numNodes();
+            discoveredOrigins = ShortBigArrays.newBigArray(numNodes);
             pl.itemsName = "ORI nodes";
             pl.expectedUpdates = numNodes / 144; // an estimated 0.7% of nodes are ORI
             pl.start("Discovering projects");
             for (long node = 0; node < numNodes; node++) {
                 if (graph.getNodeType(node) == SwhType.ORI) {
-                    synchronized (discoveredOrigins) {
-                        if (discoveredOrigins.contains(node)) {
-                            continue;
-                        }
-                        discoveredOrigins.add(node);
+                    if (originIsDiscovered(node)) {
+                        continue;
                     }
+                    markOriginAsDiscovered(node);
                     final long oriNode = node;
                     discoveryService.submit(() -> {
                         SwhBidirectionalGraph g = graph.copy();
