@@ -3,11 +3,12 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.impl.SimpleLogger;
 import org.softwareheritage.graph.SwhBidirectionalGraph;
 import org.softwareheritage.graph.SwhType;
 import org.softwareheritage.graph.labels.DirEntry;
@@ -32,6 +33,18 @@ public class Experiment {
     // The studied time period, during which we evaluate the number of new contributors
     private static final Calendar recentReferenceTimeStart =
         new GregorianCalendar( 2019, Calendar.JANUARY, 1);
+
+    private static final Object getLabelLock = new Object();
+
+    // possible forms of a "contributing" file name or section name (in a readme), lowercase
+    // and without extension. To compare with an observed file name, first remove the
+    // extension, change to lowercase, then use `.contains()`.
+    private static HashSet<String> contributingForms = new HashSet<String>() {{
+        add("contributing");
+        add("contribution");
+        add("contribute");
+        add("contrib");
+    }};
 
     // The "recent" time period relative to the studied period, during which we measure the
     // number of "recent" commits and unique contributors
@@ -135,10 +148,12 @@ public class Experiment {
             long rootDir = findDirectoryOfRevision(this.graph, this.mainBranchNode);
             if (rootDir == -1) {
                 // didn't even find a root directory, project is empty?
-                LOGGER.warn(
-                    "Could not find a root directory for revision %d\n",
-                    this.mainBranchNode
-                );
+                synchronized (LOGGER) {
+                    LOGGER.warn(
+                        "Could not find a root directory for revision %d\n",
+                        this.mainBranchNode
+                    );
+                }
                 this.hasContrib = HasContributingStatus.FALSE;
                 return;
             }
@@ -179,9 +194,12 @@ public class Experiment {
                     // multiple labels for the same CNT node means multiple files with
                     // identical content (multiple empty files for example)
                     for (DirEntry label: labels) {
-                        String fileName = new String(
-                            this.graph.getLabelName(label.filenameId)
-                        );
+                        String fileName;
+                        synchronized (getLabelLock) {
+                            fileName = new String(
+                                this.graph.getLabelName(label.filenameId)
+                            );
+                        }
                         if (isValidContributingFile(this.graph, child, fileName)) {
                             // bingo, we found explicit contributing guidelines
                             this.hasContrib = HasContributingStatus.TRUE;
@@ -219,19 +237,21 @@ public class Experiment {
             if (this.activeDuringStudiedTime) {
                 this.checkHasContributing();
 
-                System.out.format(
-                    "%d,%d,%s,%s,%d,%d,%s\n",
-                    this.mainBranchNode,
-                    this.newContributorCount,
-                    this.hasContrib.toString(),
-                    this.readmeContentUrl,
-                    this.recentContributors.size(),
-                    this.recentCommitCount,
-                    getOriginUrl(
-                        this.graph,
-                        getOriginOfSnapshot(this.graph, this.bestSnapshot)
-                    )
-                );
+                synchronized (System.out) {
+                    System.out.format(
+                        "%d,%d,%s,%s,%d,%d,%s\n",
+                        this.mainBranchNode,
+                        this.newContributorCount,
+                        this.hasContrib.toString(),
+                        this.readmeContentUrl,
+                        this.recentContributors.size(),
+                        this.recentCommitCount,
+                        getOriginUrl(
+                            this.graph,
+                            getOriginOfSnapshot(this.graph, this.bestSnapshot)
+                        )
+                    );
+                }
             }
         }
     }
@@ -334,7 +354,9 @@ public class Experiment {
                             // Found a snapshot, mark its origin as discovered
                             long origin;
                             if ((origin = getOriginOfSnapshot(graph, succ)) != -1) {
-                                discoveredOrigins.add(origin);
+                                synchronized (discoveredOrigins) {
+                                    discoveredOrigins.add(origin);
+                                }
                             }
                             // and compare its distance to the farthest snapshot we found so
                             // far
@@ -369,14 +391,18 @@ public class Experiment {
         if (discoveredOrigins.contains(origin)) {
             return;
         }
-        discoveredOrigins.add(origin);
+        synchronized (discoveredOrigins) {
+            discoveredOrigins.add(origin);
+        }
 
         long bestSnapshot = findLongestFork(graph, origin);
         if (bestSnapshot != -1) {
             // ignore buggy origins (softwareheritage sometimes have origin objects that
             // aren't actually archived, findLongestFork will return -1 for such buggy
             // origins)
-            selectedProjects.add(bestSnapshot);
+            synchronized (selectedProjects) {
+                selectedProjects.add(bestSnapshot);
+            }
         }
     }
 
@@ -395,16 +421,6 @@ public class Experiment {
         long timestamp = graph.getCommitterTimestamp(src);
         return new Date(timestamp * 1000);
     }
-
-    // possible forms of a "contributing" file name or section name (in a readme), lowercase
-    // and without extension. To compare with an observed file name, first remove the
-    // extension, change to lowercase, then use `.contains()`.
-    private static HashSet<String> contributingForms = new HashSet<String>() {{
-        add("contributing");
-        add("contribution");
-        add("contribute");
-        add("contrib");
-    }};
 
     // check that the given file:
     // - has a name that is a variant of "CONTRIBUTING.md"
@@ -495,7 +511,10 @@ public class Experiment {
                     continue;
                 }
             }
-            String fullBranchName = new String(graph.getLabelName(labels[0].filenameId));
+            String fullBranchName;
+            synchronized (getLabelLock) {
+                fullBranchName = new String(graph.getLabelName(labels[0].filenameId));
+            }
             String[] branchNameComponents = fullBranchName.split("/");
             String branchName = branchNameComponents[branchNameComponents.length - 1];
 
@@ -563,16 +582,26 @@ public class Experiment {
             graph.loadContentLength();
             graph.loadContentIsSkipped();
 
+            final ExecutorService discoveryService
+                = Executors.newFixedThreadPool(threadCount);
+
             // Project discovery and selection
             long numNodes = graph.numNodes();
             pl.expectedUpdates = numNodes;
             pl.start("Discovering projects");
             for (long node = 0; node < numNodes; node++) {
                 if (graph.getNodeType(node) == SwhType.ORI) {
-                    discoverProject(graph, node);
+                    final long oriNode = node;
+                    discoveryService.submit(() -> {
+                        SwhBidirectionalGraph g = graph.copy();
+                        discoverProject(g, oriNode);
+                    });
                 }
                 pl.lightUpdate();
             }
+
+            discoveryService.shutdown();
+            discoveryService.awaitTermination(365, TimeUnit.DAYS);
             pl.done();
 
             // Project analysis
@@ -585,18 +614,27 @@ public class Experiment {
                 + "recentCommitCount,"
                 + "originUrl"
             );
+            final ExecutorService collectionService
+                = Executors.newFixedThreadPool(threadCount);
             pl.expectedUpdates = selectedProjects.size();
             pl.start("Collecting project data");
             for (long projectSnapshot: selectedProjects) {
-                collectProject(graph, projectSnapshot);
-                pl.lightUpdate();
+                collectionService.submit(() -> {
+                    SwhBidirectionalGraph g = graph.copy();
+                    collectProject(g, projectSnapshot);
+                    synchronized (pl) {
+                        pl.lightUpdate();
+                    }
+                });
             }
+            collectionService.shutdown();
+            collectionService.awaitTermination(365, TimeUnit.DAYS);
             pl.done();
         } catch(Exception e) {
-            LOGGER.error("Exception: %s", e.getMessage());
+            LOGGER.error("Exception: {}", e.getMessage());
             throw e;
         } catch(AssertionError e) {
-            LOGGER.error("AssertionError: %s", e.getMessage());
+            LOGGER.error("AssertionError: {}", e.getMessage());
             throw e;
         }
     }
