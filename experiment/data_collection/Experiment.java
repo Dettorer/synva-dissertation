@@ -587,7 +587,8 @@ public class Experiment {
 
             // Project discovery and selection
             long numNodes = graph.numNodes();
-            pl.expectedUpdates = numNodes;
+            pl.itemsName = "ORI nodes";
+            pl.expectedUpdates = numNodes / 144; // an estimated 0.7% of nodes are ORI
             pl.start("Discovering projects");
             for (long node = 0; node < numNodes; node++) {
                 if (graph.getNodeType(node) == SwhType.ORI) {
@@ -595,9 +596,11 @@ public class Experiment {
                     discoveryService.submit(() -> {
                         SwhBidirectionalGraph g = graph.copy();
                         discoverProject(g, oriNode);
+                        synchronized (pl) {
+                            pl.update();
+                        }
                     });
                 }
-                pl.lightUpdate();
             }
 
             discoveryService.shutdown();
@@ -616,6 +619,7 @@ public class Experiment {
             );
             final ExecutorService collectionService
                 = Executors.newFixedThreadPool(threadCount);
+            pl.itemsName = "projects";
             pl.expectedUpdates = selectedProjects.size();
             pl.start("Collecting project data");
             for (long projectSnapshot: selectedProjects) {
@@ -623,7 +627,7 @@ public class Experiment {
                     SwhBidirectionalGraph g = graph.copy();
                     collectProject(g, projectSnapshot);
                     synchronized (pl) {
-                        pl.lightUpdate();
+                        pl.update();
                     }
                 });
             }
