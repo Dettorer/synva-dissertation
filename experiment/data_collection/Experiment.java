@@ -618,7 +618,7 @@ public class Experiment {
                                     markOriginAsDiscovered(node);
                                     discoverProject(g, node);
                                     synchronized (pl) {
-                                        pl.update();
+                                        pl.lightUpdate();
                                     }
                                 }
                         }
@@ -670,7 +670,7 @@ public class Experiment {
                         ) {
                             collectProject(g, selectedProjectsList.getLong(n));
                             synchronized (pl) {
-                                pl.update();
+                                pl.lightUpdate();
                             }
                         }
                     } catch(Exception e) {
