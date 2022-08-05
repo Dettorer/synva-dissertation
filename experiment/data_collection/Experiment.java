@@ -715,8 +715,12 @@ public class Experiment {
             // randomize the order in which we will test each node
             LinearFeedbackShiftRegister permutation =
                 new LinearFeedbackShiftRegister(numNodes, 1);
-            // FIXME: we skip projects if the division truncates
-            long nodesPerThread = numNodes / threadCount;
+            // the +1 makes sure we test every node even if the number of nodes isn't a
+            // multiple of the thread count. To avoid overrun, each thread then needs to
+            // stop either if they tested nodesPerThread nodes OR if they reached numNodes.
+            // The only consequence is that the last thread will stop a few steps before
+            // nodesPerThread iterations
+            long nodesPerThread = numNodes / threadCount + 1;
 
             final ExecutorService discoveryService
                 = Executors.newFixedThreadPool(threadCount);
@@ -778,8 +782,12 @@ public class Experiment {
 
             // Project analysis
             int projectCount = selectedProjects.size();
-            // FIXME: we skip projects if the division truncates
-            int projectPerThread = projectCount / threadCount;
+            // the +1 makes sure we collect every project even if the number of projects
+            // isn't a multiple of the thread count. To avoid overrun, each thread then
+            // needs to stop either if they collected projectPerThread projects OR if they
+            // reached projectCount. The only consequence is that the last thread will stop
+            // a few steps before projectPerThread iterations
+            int projectPerThread = projectCount / threadCount + 1;
             AtomicInteger collectionNextThreadId = new AtomicInteger(0);
             ThreadLocal<Integer> collectionThreadLocalId =
                 ThreadLocal.withInitial(collectionNextThreadId::getAndIncrement);

@@ -2,6 +2,7 @@ projectMainBranch,newContributorCount,hasContrib,readmeUrl,recentContributorCoun
 31170806,0,TRUE,null,7,217,https://github.com/qtile/qtile
 35765213,1,TRUE,null,4,19,https://github.com/dabeaz/curio
 35814110,0,TRUE,null,9,389,https://github.com/boto/boto3
+36067034,24,TRUE,null,89,2875,https://github.com/sympy/sympy
 36096020,2,TRUE,null,13,187,https://github.com/Yorko/mlcourse.ai
 36443957,0,CHECKREADMECONTENT,https://archive.softwareheritage.org/api/1/content/sha1_git:bd77cf9b86cec90df599b45ab796f15eba0bda75/raw/,7,124,https://gitlab.com/elixire/elixire.git
 36621506,3,TRUE,null,15,843,https://github.com/pandas-dev/pandas
@@ -266,6 +267,7 @@ projectMainBranch,newContributorCount,hasContrib,readmeUrl,recentContributorCoun
 45552821,2,CHECKREADMECONTENT,https://archive.softwareheritage.org/api/1/content/sha1_git:a24b7cf9e2684d40c4a147beb11f1a4a3df1b8b1/raw/,4,65,https://github.com/dbader/schedule
 45556374,0,CHECKREADMECONTENT,https://archive.softwareheritage.org/api/1/content/sha1_git:12ee1876b145039ffa7baf594f78ae64bbf25162/raw/,1,1,https://github.com/Dod-o/Statistical-Learning-Method_Code
 45569825,0,CHECKREADMECONTENT,https://archive.softwareheritage.org/api/1/content/sha1_git:f8da6511e3fb9bf67dc7b6680f28d04512c31698/raw/,1,7,https://github.com/LazoCoder/Pokemon-Terminal
+45571546,1,TRUE,null,0,0,deb://Debian/packages/python-cliff
 45572677,1,CHECKREADMECONTENT,https://archive.softwareheritage.org/api/1/content/sha1_git:81088328a05153f341b403a0a4fc187f42005898/raw/,0,0,deb://Debian/packages/python-geojson
 45575183,2,TRUE,null,3,668,https://github.com/PySimpleGUI/PySimpleGUI
 45578246,0,TRUE,null,2,7,https://github.com/deanishe/alfred-workflow
@@ -310,6 +312,7 @@ projectMainBranch,newContributorCount,hasContrib,readmeUrl,recentContributorCoun
 45666599,1,TRUE,null,0,0,https://pypi.org/project/ipywidgets/
 45670057,3,TRUE,null,9,149,https://github.com/praw-dev/praw
 45671040,1,CHECKREADMECONTENT,https://archive.softwareheritage.org/api/1/content/sha1_git:bfb7d3d8e50c066cae55c76033441ab993e7a6ef/raw/,0,0,deb://Debian/packages/nfoview
+45673716,1,CHECKREADMECONTENT,https://archive.softwareheritage.org/api/1/content/sha1_git:b35e4eb99571284e04447e76f88512c7e3cf9b22/raw/,0,0,deb://Debian/packages/tryton-modules-stock-supply-forecast
 45675540,1,CHECKREADMECONTENT,https://archive.softwareheritage.org/api/1/content/sha1_git:bf4cb6867b82e0cb087a68af1cf36f60caa1f196/raw/,0,0,https://gitlab.com/diegogangl/IOR_reference.git
 45676449,1,CHECKREADMECONTENT,https://archive.softwareheritage.org/api/1/content/sha1_git:373c8dfe63ae79749476a8f337f82834cdab7637/raw/,0,0,https://pypi.org/project/snowballstemmer/
 45678152,1,CHECKREADMECONTENT,https://archive.softwareheritage.org/api/1/content/sha1_git:5459529d4231854dab7ba282ae786995da8f327b/raw/,0,0,deb://Debian/packages/pyosmium
