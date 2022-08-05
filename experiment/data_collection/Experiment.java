@@ -485,7 +485,6 @@ public class Experiment {
                 LazyLongIterator it = graph.predecessors(curr);
                 for (long succ; (succ = it.nextLong()) != -1;) {
                     if (!visited.contains(succ)) {
-                        queue.enqueue(succ);
                         visited.add(succ);
                         if (graph.getNodeType(succ) == SwhType.SNP) {
                             // Found a snapshot, mark its origin as discovered
@@ -499,6 +498,9 @@ public class Experiment {
                                 farthestOrigin = succ;
                                 largestDistance = currentDistance;
                             }
+                        } else if (graph.getNodeType(succ) == SwhType.REV) {
+                            // do not enqueue anything else than REV nodes
+                            queue.enqueue(succ);
                         }
                     }
                 }
