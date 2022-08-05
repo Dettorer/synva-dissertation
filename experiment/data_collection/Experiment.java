@@ -153,12 +153,10 @@ public class Experiment {
             long rootDir = findDirectoryOfRevision(this.graph, this.mainBranchNode);
             if (rootDir == -1) {
                 // didn't even find a root directory, project is empty?
-                synchronized (LOGGER) {
-                    LOGGER.warn(
-                        "Could not find a root directory for revision %d\n",
-                        this.mainBranchNode
-                    );
-                }
+                LOGGER.warn(
+                    "Could not find a root directory for revision %d\n",
+                    this.mainBranchNode
+                );
                 this.hasContrib = HasContributingStatus.FALSE;
                 return;
             }
@@ -625,15 +623,11 @@ public class Experiment {
                                 }
                         }
                     } catch(Exception e) {
-                        synchronized (LOGGER) {
-                            LOGGER.error("exception: {}", e.getMessage());
-                            e.printStackTrace();
-                        }
+                        LOGGER.error("exception: {}", e.getMessage());
+                        e.printStackTrace();
                     } catch(AssertionError e) {
-                        synchronized (LOGGER) {
-                            LOGGER.error("assertion error: {}", e.getMessage());
-                            e.printStackTrace();
-                        }
+                        LOGGER.error("assertion error: {}", e.getMessage());
+                        e.printStackTrace();
                     }
                 });
             }
@@ -680,15 +674,11 @@ public class Experiment {
                             }
                         }
                     } catch(Exception e) {
-                        synchronized (LOGGER) {
-                            LOGGER.error("exception: {}", e.getMessage());
-                            e.printStackTrace();
-                        }
+                        LOGGER.error("exception: {}", e.getMessage());
+                        e.printStackTrace();
                     } catch(AssertionError e) {
-                        synchronized (LOGGER) {
-                            LOGGER.error("assertion error: {}", e.getMessage());
-                            e.printStackTrace();
-                        }
+                        LOGGER.error("assertion error: {}", e.getMessage());
+                        e.printStackTrace();
                     }
                 });
             }
