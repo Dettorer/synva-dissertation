@@ -16,7 +16,8 @@
         inkscape
 
         # for minted
-        (python39.withPackages (ps: [ ps.pygments ]))
+        python39
+        python39Packages.pygments
         which
       ];
       texDistribution = pkgs.texlive.combine {
@@ -103,8 +104,16 @@
 
         nativeBuildInputs = [ pkgs.autoreconfHook ];
       };
+      # for the README content checking script
+      pythonDistribution = with pkgs; [
+        python39
+        python39Packages.boto3 # aws s3 querying
+        python39Packages.charset-normalizer # encoding detection
+        python39Packages.mypy-boto3-s3 # type hints for boto3
+        python39Packages.requests # http querying
+      ];
       experimentDependencies =
-          javaDistribution ++ [ cmph pkgs.postgresql ];
+        pythonDistribution ++ javaDistribution ++ [ cmph pkgs.postgresql ];
     in
     rec {
       packages.dissertation = pkgs.stdenv.mkDerivation {
