@@ -689,10 +689,7 @@ public class Experiment {
                     System.exit(1);
                 }
             }
-            else {
-                LOGGER.info("Using the default thread count of {}", threadCount);
-            }
-
+            LOGGER.info("Using {} threads", threadCount);
 
             // graph loading
             SwhBidirectionalGraph graph;
