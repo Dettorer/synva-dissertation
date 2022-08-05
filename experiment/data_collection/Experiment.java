@@ -3,6 +3,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -14,18 +15,15 @@ import org.softwareheritage.graph.SwhBidirectionalGraph;
 import org.softwareheritage.graph.SwhType;
 import org.softwareheritage.graph.labels.DirEntry;
 
-import it.unimi.dsi.Util;
 import it.unimi.dsi.big.webgraph.LazyLongIterator;
 import it.unimi.dsi.big.webgraph.labelling.ArcLabelledNodeIterator.LabelledArcIterator;
 import it.unimi.dsi.fastutil.BigArrays;
 import it.unimi.dsi.fastutil.longs.LongArrayFIFOQueue;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
-import it.unimi.dsi.fastutil.longs.LongBigArrays;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongStack;
 import it.unimi.dsi.fastutil.shorts.ShortBigArrays;
 import it.unimi.dsi.logging.ProgressLogger;
-import it.unimi.dsi.util.XoRoShiRo128PlusRandom;
 
 public class Experiment {
     private static final Logger LOGGER = LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
@@ -57,6 +55,137 @@ public class Experiment {
         new GregorianCalendar(2019, Calendar.JUNE, 1);
     private static final Calendar studiedTimeEnd =
         new GregorianCalendar(2019, Calendar.SEPTEMBER, 1);
+
+    /** A Linear Feedback Shift Register
+     *
+     * Generates a random uniform permutation of [0, n] as a *stream* that takes O(1) space.
+     * Because the entire state is a single long integer, the order for a given number of bits is deterministic.
+     *
+     * https://en.wikipedia.org/wiki/Linear-feedback_shift_register
+     * https://stackoverflow.com/a/32193751
+     * https://www.uobabylon.edu.iq/eprints/paper_1_17528_649.pdf
+     * http://users.ece.cmu.edu/~koopman/lfsr/
+     * https://docs.xilinx.com/v/u/en-US/xapp052
+     */
+    public static class LinearFeedbackShiftRegister implements LazyLongIterator {
+        private final long n;
+        private long state;
+        private final int numBits;
+
+        public LinearFeedbackShiftRegister(long n, long seed) {
+            if (n <= 0) {
+                throw new IllegalArgumentException("n must be >= 0");
+            }
+            this.n = n;
+            this.state = (seed % n) + 1;
+            this.numBits = ((int) (Math.log(n) / Math.log(2))) + 1;
+        }
+
+        public LinearFeedbackShiftRegister(long n) {
+            this(n, (new Random()).nextLong());
+        }
+
+        @Override
+        public long nextLong() {
+            do {
+                long bits = state;
+                for (int s : SHIFT_AMT[numBits]) {
+                    bits ^= (state >> s);
+                }
+                state = ((state >> 1) | ((bits & 1) << (numBits - 1)));
+            } while (state > n);
+            return state - 1;
+        }
+
+        @Override
+        public long skip(long l) {
+            long i = 0;
+            while (i < l && nextLong() != -1)
+                i++;
+            return i;
+        }
+
+        /** Maximal Length LFSR Feedback Terms (coefficients of primitive polynomials) for
+         * each bit length
+         */
+        private static final int[][] SHIFT_AMT = new int[][] {
+            // Taps taken from https://docs.xilinx.com/v/u/en-US/xapp052
+            // For each k, numBits - k is the coefficient of the primitive polynomial.
+            // numBits is also a coefficient.
+            // Example: for numBits = 16, the array contains 1, 3, 12, which means the
+            // coefficients are:
+            // {16, 16 - 1, 16 - 3, 16 - 12} = {16, 15, 13, 4}
+            //
+            // p = [l.strip().split() for l in open('lol').readlines()]
+            // p = [(int(l[0]), list(map(int, l[1].split(',')))) for l in p]
+            // p = [[l[0] - x for x in l[1]] for l in p]
+            new int[]{},
+            new int[]{1},
+            new int[]{1},
+            new int[]{1},
+            new int[]{1},
+            new int[]{2},
+            new int[]{1},
+            new int[]{1},
+            new int[]{2, 3, 4},
+            new int[]{4},
+            new int[]{3},
+            new int[]{2},
+            new int[]{6, 8, 11},
+            new int[]{9, 10, 12},
+            new int[]{9, 11, 13},
+            new int[]{1},
+            new int[]{1, 3, 12},
+            new int[]{3},
+            new int[]{7},
+            new int[]{13, 17, 18},
+            new int[]{3},
+            new int[]{2},
+            new int[]{1},
+            new int[]{5},
+            new int[]{1, 2, 7},
+            new int[]{3},
+            new int[]{20, 24, 25},
+            new int[]{22, 25, 26},
+            new int[]{3},
+            new int[]{2},
+            new int[]{24, 26, 29},
+            new int[]{3},
+            new int[]{10, 30, 31},
+            new int[]{13},
+            new int[]{7, 32, 33},
+            new int[]{2},
+            new int[]{11},
+            new int[]{32, 33, 34, 35, 36},
+            new int[]{32, 33, 37},
+            new int[]{4},
+            new int[]{2, 19, 21},
+            new int[]{3},
+            new int[]{1, 22, 23},
+            new int[]{1, 5, 6},
+            new int[]{1, 26, 27},
+            new int[]{1, 3, 4},
+            new int[]{1, 20, 21},
+            new int[]{5},
+            new int[]{1, 27, 28},
+            new int[]{9},
+            new int[]{1, 26, 27},
+            new int[]{1, 15, 16},
+            new int[]{3},
+            new int[]{1, 15, 16},
+            new int[]{1, 36, 37},
+            new int[]{24},
+            new int[]{1, 21, 22},
+            new int[]{7},
+            new int[]{19},
+            new int[]{1, 21, 22},
+            new int[]{1},
+            new int[]{1, 15, 16},
+            new int[]{1, 56, 57},
+            new int[]{1},
+            new int[]{1, 3, 4},
+        };
+    }
 
     static class ProjectData {
         enum HasContributingStatus {
@@ -582,9 +711,8 @@ public class Experiment {
             long numNodes = graph.numNodes();
 
             // randomize the order in which we will test each node
-            long[][] permutation = LongBigArrays.newBigArray(numNodes);
-            Util.identity(permutation);
-            LongBigArrays.shuffle(permutation, new XoRoShiRo128PlusRandom());
+            LinearFeedbackShiftRegister permutation =
+                new LinearFeedbackShiftRegister(numNodes, 1);
             // FIXME: we skip projects if the division truncates
             long nodesPerThread = numNodes / threadCount;
 
@@ -610,8 +738,18 @@ public class Experiment {
                             n < Math.min(nodesPerThread * (threadId + 1), numNodes);
                             n++
                         ) {
-                                long node = BigArrays.get(permutation, n);
-                                if (
+                                long node;
+                                synchronized (permutation) {
+                                    node = permutation.nextLong();
+                                }
+                                if (node < 0 || node >= numNodes) {
+                                    LOGGER.error(
+                                        "invalid node {} given by the shift register",
+                                        node
+                                    );
+                                    assert false;
+                                }
+                                else if (
                                     g.getNodeType(node) == SwhType.ORI
                                     && !originIsDiscovered(node)
                                 ) {
