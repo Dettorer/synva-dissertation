@@ -679,16 +679,17 @@ public class Experiment {
             }
             String loadMode = args[0];
             String graphPath = args[1];
-            int threadCount = Runtime.getRuntime().availableProcessors(); // default
+            int t = Runtime.getRuntime().availableProcessors(); // default thread count
             if (args.length == 3) {
                 // a non-default thread count was given
                 try {
-                    threadCount = Integer.parseInt(args[2]);
+                    t = Integer.parseInt(args[2]);
                 } catch (NumberFormatException e) {
                     LOGGER.error("Invalid number for thread count \"{}\"", args[2]);
                     System.exit(1);
                 }
             }
+            final int threadCount = t;
             LOGGER.info("Using {} threads", threadCount);
 
             // graph loading
@@ -731,6 +732,7 @@ public class Experiment {
             pl.itemsName = "ORI nodes";
             pl.expectedUpdates = numNodes / 144; // an estimated 0.7% of nodes are ORI
             pl.start("Discovering projects");
+            AtomicInteger runningTasks = new AtomicInteger(threadCount);
             for (int i = 0; i < threadCount; ++i) {
                 discoveryService.submit(() -> {
                     try {
@@ -757,9 +759,25 @@ public class Experiment {
                                     && !originIsDiscovered(node)
                                 ) {
                                     markOriginAsDiscovered(node);
-                                    discoverProject(g, node);
-                                    synchronized (pl) {
-                                        pl.lightUpdate();
+                                    if (runningTasks.incrementAndGet() < threadCount) {
+                                        // a thread is available, make it start a discovery
+                                        discoveryService.submit(() -> {
+                                            SwhBidirectionalGraph gg = g.copy();
+                                            discoverProject(gg, node);
+                                            synchronized (pl) {
+                                                pl.lightUpdate();
+                                            }
+                                            runningTasks.decrementAndGet();
+                                        });
+                                    } else {
+                                        // no thread is available, undo the previous
+                                        // increment and do the discovery in the current
+                                        // thread
+                                        runningTasks.decrementAndGet();
+                                        discoverProject(g, node);
+                                        synchronized (pl) {
+                                            pl.lightUpdate();
+                                        }
                                     }
                                 }
                         }
@@ -769,10 +787,16 @@ public class Experiment {
                     } catch(AssertionError e) {
                         LOGGER.error("assertion error: {}", e.getMessage());
                         e.printStackTrace();
+                    } finally {
+                        // The current thread is now available
+                        runningTasks.decrementAndGet();
                     }
                 });
             }
 
+            while (runningTasks.get() > 0) {
+                Thread.sleep(1000);
+            }
             discoveryService.shutdown();
             discoveryService.awaitTermination(365, TimeUnit.DAYS);
             pl.done();
