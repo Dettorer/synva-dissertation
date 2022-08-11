@@ -28,13 +28,6 @@ import it.unimi.dsi.logging.ProgressLogger;
 public class Experiment {
     private static final Logger LOGGER = LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
 
-    // The set of ORI objects visited during the initial discovery
-    private static short[][] discoveredOrigins;
-    // The set of project (represented by the node of their best snapshot) selected for data
-    // collection
-    private static final LongOpenHashSet selectedProjects = new LongOpenHashSet();
-    private static final LongArrayList selectedProjectsList = new LongArrayList();
-
     // The studied time period, during which we evaluate the number of new contributors
     private static final Calendar recentReferenceTimeStart =
         new GregorianCalendar( 2019, Calendar.JANUARY, 1);
@@ -219,6 +212,8 @@ public class Experiment {
         long recentCommitCount = 0;
         long newContributorCount = 0;
 
+        long totalCommitCount = 0;
+
         // constructor
         public ProjectData(SwhBidirectionalGraph graph, long branch, long snapshot) {
             this.graph = graph;
@@ -226,13 +221,14 @@ public class Experiment {
             this.bestSnapshot = snapshot;
         }
 
-        private void mineCommitHistory() {
+        private boolean mineCommitHistory() {
             // BFS to explore the given branch
             LongArrayFIFOQueue queue = new LongArrayFIFOQueue();
             LongOpenHashSet visited = new LongOpenHashSet();
             queue.enqueue(this.mainBranchNode);
             while (!queue.isEmpty()) {
                 long currentRevision = queue.dequeueLong();
+                this.totalCommitCount++;
 
                 // process commit metadata
                 Long committerId = this.graph.getCommitterId(currentRevision);
@@ -276,6 +272,7 @@ public class Experiment {
             HashSet<Long> newContributors = new HashSet<Long>(this.studiedTimeContributors);
             newContributors.removeAll(this.oldContributors);
             this.newContributorCount = newContributors.size();
+            return true; // TODO: return false if already visited through another origin
         }
 
         private void checkHasContributing() {
@@ -360,37 +357,32 @@ public class Experiment {
             }
         }
 
-        public void analyze() {
-            this.mineCommitHistory();
-
-            if (this.activeDuringStudiedTime) {
-                this.checkHasContributing();
-
-                synchronized (System.out) {
-                    System.out.format(
-                        "%d,%d,%s,%s,%d,%d,%s\n",
-                        this.mainBranchNode,
-                        this.newContributorCount,
-                        this.hasContrib.toString(),
-                        this.readmeContentUrl,
-                        this.recentContributors.size(),
-                        this.recentCommitCount,
-                        getOriginUrl(
-                            this.graph,
-                            getOriginOfSnapshot(this.graph, this.bestSnapshot)
-                        )
-                    );
-                }
+        public void printData() {
+            synchronized (System.out) {
+                System.out.format(
+                    "%d,%d,%s,%s,%d,%d,%s\n",
+                    this.mainBranchNode,
+                    this.newContributorCount,
+                    this.hasContrib.toString(),
+                    this.readmeContentUrl,
+                    this.recentContributors.size(),
+                    this.recentCommitCount,
+                    getOriginUrl(
+                        this.graph,
+                        getOriginOfSnapshot(this.graph, this.bestSnapshot)
+                    )
+                );
             }
         }
-    }
 
-    private static boolean originIsDiscovered(long oriNode) {
-        return BigArrays.get(discoveredOrigins, oriNode) == 1;
-    }
-
-    private static void markOriginAsDiscovered(long oriNode) {
-        BigArrays.set(discoveredOrigins, oriNode, (short)1);
+        // return false if the project is invalid and should be ignored from the study
+        public boolean analyze() {
+            boolean miningOk = this.mineCommitHistory();
+            if (miningOk && this.activeDuringStudiedTime) {
+                this.checkHasContributing();
+            }
+            return miningOk && this.activeDuringStudiedTime;
+        }
     }
 
     // code from
@@ -419,97 +411,6 @@ public class Experiment {
         return -1;
     }
 
-    // Code from
-    // https://docs.softwareheritage.org/devel/swh-graph/java-api.html#example-find-all-the-shared-commit-forks-of-a-given-origin
-    // 
-    // Adapted to mark fork origins as discovered in discoveredOrigins and to return the
-    // snapshot that has the longest chain of revisions to any root revision.
-    //
-    // Unfortunately this approach means that if multiple meaningfully different projects
-    // share even only one commit somewhere (e.g. they all started as a fork of a common
-    // small "template" project) in their history, we will consider them forks of the same
-    // project and select only one of them for analysis, ignoring all the others.
-    public static long findLongestFork(SwhBidirectionalGraph graph, long srcOrigin) {
-        LongStack forwardStack = new LongArrayList();
-        LongOpenHashSet forwardVisited = new LongOpenHashSet();
-        LongArrayList backwardStack = new LongArrayList();
-
-        // First traversal (forward graph): find all the root revisions of the
-        // origin
-        forwardStack.push(srcOrigin);
-        forwardVisited.add(srcOrigin);
-        while (!forwardStack.isEmpty()) {
-            long curr = forwardStack.popLong();
-            LazyLongIterator it = graph.successors(curr);
-            boolean isRootRevision = true;
-            for (long succ; (succ = it.nextLong()) != -1;) {
-                SwhType nt = graph.getNodeType(succ);
-                if (nt != SwhType.DIR && nt != SwhType.CNT) {
-                    isRootRevision = false;
-                    if (!forwardVisited.contains(succ)) {
-                        forwardStack.push(succ);
-                        forwardVisited.add(succ);
-                    }
-                }
-            }
-            if (graph.getNodeType(curr) == SwhType.REV && isRootRevision) {
-                // Found a root revision, add it to the second stack
-                backwardStack.push(curr);
-            }
-        }
-
-        // Second traversal (backward graph): find all the origins containing any of these
-        // root revisions and keep the farthest one.
-        long farthestOrigin = -1;
-        long largestDistance = -1;
-
-        for (long rootRevision: backwardStack) {
-            // BFS to find origins while making sure the last one we see is the farthest
-            // from `rootRevision`
-            LongArrayFIFOQueue queue = new LongArrayFIFOQueue();
-            LongOpenHashSet visited = new LongOpenHashSet();
-            queue.enqueue(rootRevision);
-            queue.enqueue(-1); // level marker
-            long currentDistance = 0;
-            while (!queue.isEmpty()) {
-                long curr = queue.dequeueLong();
-                if (curr == -1) {
-                    // new level
-                    if (!queue.isEmpty()) {
-                        queue.enqueue(-1);
-                    }
-                    currentDistance++;
-                    continue;
-                }
-
-                LazyLongIterator it = graph.predecessors(curr);
-                for (long succ; (succ = it.nextLong()) != -1;) {
-                    if (!visited.contains(succ)) {
-                        visited.add(succ);
-                        if (graph.getNodeType(succ) == SwhType.SNP) {
-                            // Found a snapshot, mark its origin as discovered
-                            long origin = getOriginOfSnapshot(graph, succ);
-                            if (origin != -1) {
-                                markOriginAsDiscovered(origin);
-                            }
-                            // and compare its distance to the farthest snapshot we found so
-                            // far
-                            if (currentDistance > largestDistance) {
-                                farthestOrigin = succ;
-                                largestDistance = currentDistance;
-                            }
-                        } else if (graph.getNodeType(succ) == SwhType.REV) {
-                            // do not enqueue anything else than REV nodes
-                            queue.enqueue(succ);
-                        }
-                    }
-                }
-            }
-        }
-
-        return farthestOrigin;
-    }
-
     private static String getOriginUrl(SwhBidirectionalGraph graph, long origin) {
         if (origin == -1) {
             return "<no origin>";
@@ -519,38 +420,36 @@ public class Experiment {
         }
     }
 
-    // If the given origin wasn't already discovered, find all the origins that have some
-    // revisions in common with this one (forks) and select one representative among them
-    // for later analysis.
-    private static void discoverProject(SwhBidirectionalGraph graph, long origin) {
+    private static void collectProject(SwhBidirectionalGraph graph, long origin) {
         assert graph.getNodeType(origin) == SwhType.ORI;
 
-        long bestSnapshot = findLongestFork(graph, origin);
-        if (bestSnapshot != -1) {
-            // ignore buggy origins (softwareheritage sometimes have origin objects that
-            // aren't actually archived, findLongestFork will return -1 for such buggy
-            // origins)
-            synchronized (selectedProjects) {
-                if (selectedProjects.add(bestSnapshot)) {
-                    selectedProjectsList.add(bestSnapshot);
+        ProjectData bestData = null;
+        LazyLongIterator it = graph.successors(origin);
+        for (long snp; (snp = it.nextLong()) != -1;) {
+            if (graph.getNodeType(snp) == SwhType.SNP) {
+                long bestBranch = findBestBranch(graph, snp);
+                if (bestBranch != -1) {
+                    ProjectData p = new ProjectData(graph, bestBranch, snp);
+                    p.analyze();
+                    if (
+                        bestData == null
+                        || p.totalCommitCount > bestData.totalCommitCount
+                    ) {
+                        bestData = p;
+                    }
                 }
             }
         }
-    }
 
-    private static void collectProject(SwhBidirectionalGraph graph, long snapshot) {
-        assert graph.getNodeType(snapshot) == SwhType.SNP;
-
-        long bestBranch = findBestBranch(graph, snapshot);
-        if (bestBranch != -1) {
-            ProjectData p = new ProjectData(graph, bestBranch, snapshot);
-            p.analyze();
+        if (bestData != null) {
+            bestData.printData();
         }
     }
 
     private static Date getCommitDate(SwhBidirectionalGraph graph, long src) {
-        assert graph.getNodeType(src) == SwhType.REV;
-        long timestamp = graph.getCommitterTimestamp(src);
+        // assert graph.getNodeType(src) == SwhType.REV;
+        Long timestampLong = graph.getCommitterTimestamp(src);
+        long timestamp = timestampLong == null ? 0 : timestampLong;
         return new Date(timestamp * 1000);
     }
 
@@ -727,10 +626,18 @@ public class Experiment {
                 ThreadLocal.withInitial(discoveryNextThreadId::getAndIncrement);
 
             // Project discovery and selection
-            discoveredOrigins = ShortBigArrays.newBigArray(numNodes);
             pl.itemsName = "ORI nodes";
             pl.expectedUpdates = numNodes / 144; // an estimated 0.7% of nodes are ORI
             pl.start("Discovering projects");
+            System.out.println(
+                "projectMainBranch,"
+                + "newContributorCount,"
+                + "hasContrib,"
+                + "readmeUrl,"
+                + "recentContributorCount,"
+                + "recentCommitCount,"
+                + "originUrl"
+            );
             for (int i = 0; i < threadCount; ++i) {
                 discoveryService.submit(() -> {
                     try {
@@ -741,27 +648,23 @@ public class Experiment {
                             n < Math.min(nodesPerThread * (threadId + 1), numNodes);
                             n++
                         ) {
-                                long node;
-                                synchronized (permutation) {
-                                    node = permutation.nextLong();
+                            long node;
+                            synchronized (permutation) {
+                                node = permutation.nextLong();
+                            }
+                            if (node < 0 || node >= numNodes) {
+                                LOGGER.error(
+                                    "invalid node {} given by the shift register",
+                                    node
+                                );
+                                assert false;
+                            }
+                            else if (g.getNodeType(node) == SwhType.ORI) {
+                                collectProject(g, node);
+                                synchronized (pl) {
+                                    pl.lightUpdate();
                                 }
-                                if (node < 0 || node >= numNodes) {
-                                    LOGGER.error(
-                                        "invalid node {} given by the shift register",
-                                        node
-                                    );
-                                    assert false;
-                                }
-                                else if (
-                                    g.getNodeType(node) == SwhType.ORI
-                                    && !originIsDiscovered(node)
-                                ) {
-                                    markOriginAsDiscovered(node);
-                                    discoverProject(g, node);
-                                    synchronized (pl) {
-                                        pl.lightUpdate();
-                                    }
-                                }
+                            }
                         }
                     } catch(Exception e) {
                         LOGGER.error("exception: {}", e.getMessage());
@@ -775,60 +678,6 @@ public class Experiment {
 
             discoveryService.shutdown();
             discoveryService.awaitTermination(365, TimeUnit.DAYS);
-            pl.done();
-
-            // Project analysis
-            int projectCount = selectedProjects.size();
-            // the +1 makes sure we collect every project even if the number of projects
-            // isn't a multiple of the thread count. To avoid overrun, each thread then
-            // needs to stop either if they collected projectPerThread projects OR if they
-            // reached projectCount. The only consequence is that the last thread will stop
-            // a few steps before projectPerThread iterations
-            int projectPerThread = projectCount / threadCount + 1;
-            AtomicInteger collectionNextThreadId = new AtomicInteger(0);
-            ThreadLocal<Integer> collectionThreadLocalId =
-                ThreadLocal.withInitial(collectionNextThreadId::getAndIncrement);
-
-            System.out.println(
-                "projectMainBranch,"
-                + "newContributorCount,"
-                + "hasContrib,"
-                + "readmeUrl,"
-                + "recentContributorCount,"
-                + "recentCommitCount,"
-                + "originUrl"
-            );
-            final ExecutorService collectionService
-                = Executors.newFixedThreadPool(threadCount);
-            pl.itemsName = "projects";
-            pl.expectedUpdates = selectedProjects.size();
-            pl.start("Collecting project data");
-            for (int i = 0; i < threadCount; ++i) {
-                collectionService.submit(() -> {
-                    try {
-                        int threadId = collectionThreadLocalId.get();
-                        SwhBidirectionalGraph g = graph.copy();
-                        for (
-                            int n = projectPerThread * threadId;
-                            n < Math.min(projectPerThread * (threadId + 1), projectCount);
-                            n++
-                        ) {
-                            collectProject(g, selectedProjectsList.getLong(n));
-                            synchronized (pl) {
-                                pl.lightUpdate();
-                            }
-                        }
-                    } catch(Exception e) {
-                        LOGGER.error("exception: {}", e.getMessage());
-                        e.printStackTrace();
-                    } catch(AssertionError e) {
-                        LOGGER.error("assertion error: {}", e.getMessage());
-                        e.printStackTrace();
-                    }
-                });
-            }
-            collectionService.shutdown();
-            collectionService.awaitTermination(365, TimeUnit.DAYS);
             pl.done();
         } catch(Exception e) {
             LOGGER.error("Exception: {}", e.getMessage());
