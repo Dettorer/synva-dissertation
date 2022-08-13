@@ -240,23 +240,28 @@ public class Experiment {
                     // XXX: we ignore commits with an empty committer (but still enqueue
                     // their parent commits)
                     Date contributionDate = getCommitDate(this.graph, currentRevision);
-                    if (contributionDate.after(studiedTimeEnd.getTime())) {
-                        // too recent, ignore but enqueue parent commits
-                    }
-                    else if (contributionDate.after(studiedTimeStart.getTime())) {
-                        // committed during the studied period
-                        this.activeDuringStudiedTime = true;
-                        this.studiedTimeContributors.add(committerId);
-                    } else if (contributionDate.after(recentReferenceTimeStart.getTime())) {
-                        // committed in the recent period, count contribution in the recent
-                        // commit count and in the recent and old unique contributor count
-                        this.oldContributors.add(committerId);
-                        this.recentContributors.add(committerId);
-                        this.recentCommitCount++;
-                    } else {
-                        // older contribution, only save to make sure we don't count
-                        // contributor as a *new* contributor during the studied period
-                        this.oldContributors.add(committerId);
+                    if (contributionDate != null) {
+                        if (contributionDate.after(studiedTimeEnd.getTime())) {
+                            // too recent, ignore but enqueue parent commits
+                        }
+                        else if (contributionDate.after(studiedTimeStart.getTime())) {
+                            // committed during the studied period
+                            this.activeDuringStudiedTime = true;
+                            this.studiedTimeContributors.add(committerId);
+                        } else if (
+                            contributionDate.after(recentReferenceTimeStart.getTime())
+                        ) {
+                            // committed in the recent period, count contribution in the
+                            // recent commit count and in the recent and old unique
+                            // contributor count
+                            this.oldContributors.add(committerId);
+                            this.recentContributors.add(committerId);
+                            this.recentCommitCount++;
+                        } else {
+                            // older contribution, only save to make sure we don't count
+                            // contributor as a *new* contributor during the studied period
+                            this.oldContributors.add(committerId);
+                        }
                     }
                 }
 
@@ -325,22 +330,27 @@ public class Experiment {
                     DirEntry[] labels = (DirEntry[]) it.label().get();
                     // multiple labels for the same CNT node means multiple files with
                     // identical content (multiple empty files for example)
-                    for (DirEntry label: labels) {
-                        String fileName = new String(
-                            this.graph.getLabelName(label.filenameId)
-                        );
-                        if (isValidContributingFile(this.graph, child, fileName)) {
-                            // bingo, we found explicit contributing guidelines
-                            this.hasContrib = HasContributingStatus.TRUE;
-                            return;
-                        } else if (
-                            firstReadmeFileFound == -1
-                            && isValidReadmeFile(this.graph, child, fileName)
-                        ) {
-                            // this is the first usable README file we find, save its node
-                            // in case we need to query it later (should we not find a
-                            // CONTRIBUTING-style file)
-                            firstReadmeFileFound = child;
+                    if (labels != null) {
+                        for (DirEntry label: labels) {
+                            if (label == null) {
+                                continue;
+                            }
+                            String fileName = new String(
+                                this.graph.getLabelName(label.filenameId)
+                            );
+                            if (isValidContributingFile(this.graph, child, fileName)) {
+                                // bingo, we found explicit contributing guidelines
+                                this.hasContrib = HasContributingStatus.TRUE;
+                                return;
+                            } else if (
+                                firstReadmeFileFound == -1
+                                && isValidReadmeFile(this.graph, child, fileName)
+                            ) {
+                                // this is the first usable README file we find, save its
+                                // node in case we need to query it later (should we not
+                                // find a CONTRIBUTING-style file)
+                                firstReadmeFileFound = child;
+                            }
                         }
                     }
                 }
@@ -634,14 +644,14 @@ public class Experiment {
             }
 
             DirEntry[] labels = (DirEntry[]) it.label().get();
-            if (labels.length == 0) {
+            if (labels == null || labels.length == 0 || labels[0] == null) {
                 // unnamed branch
                 if (bestBranch == -1) {
                     // if no branch were found yet, use this one but keep the -1 score so
                     // that it's replaced by any named branch we may find later
                     bestBranch = succ;
-                    continue;
                 }
+                continue;
             }
             String fullBranchName = new String(graph.getLabelName(labels[0].filenameId));
             String[] branchNameComponents = fullBranchName.split("/");
@@ -733,7 +743,6 @@ public class Experiment {
             pl.start("Discovering projects");
             for (int i = 0; i < threadCount; ++i) {
                 discoveryService.submit(() -> {
-                    try {
                         int threadId = discoveryThreadLocalId.get();
                         SwhBidirectionalGraph g = graph.copy();
                         for (
@@ -741,6 +750,7 @@ public class Experiment {
                             n < Math.min(nodesPerThread * (threadId + 1), numNodes);
                             n++
                         ) {
+                            try {
                                 long node;
                                 synchronized (permutation) {
                                     node = permutation.nextLong();
@@ -762,14 +772,24 @@ public class Experiment {
                                         pl.lightUpdate();
                                     }
                                 }
+                            } catch(Exception e) {
+                                synchronized (LOGGER) {
+                                    LOGGER.error(
+                                        "exception: {}\n{}",
+                                        e.getMessage(),
+                                        e.getStackTrace()
+                                    );
+                                }
+                            } catch(AssertionError e) {
+                                synchronized (LOGGER) {
+                                    LOGGER.error(
+                                        "assertion error: {}\n{}",
+                                        e.getMessage(),
+                                        e.getStackTrace()
+                                    );
+                                }
+                            }
                         }
-                    } catch(Exception e) {
-                        LOGGER.error("exception: {}", e.getMessage());
-                        e.printStackTrace();
-                    } catch(AssertionError e) {
-                        LOGGER.error("assertion error: {}", e.getMessage());
-                        e.printStackTrace();
-                    }
                 });
             }
 
@@ -805,7 +825,6 @@ public class Experiment {
             pl.start("Collecting project data");
             for (int i = 0; i < threadCount; ++i) {
                 collectionService.submit(() -> {
-                    try {
                         int threadId = collectionThreadLocalId.get();
                         SwhBidirectionalGraph g = graph.copy();
                         for (
@@ -813,18 +832,29 @@ public class Experiment {
                             n < Math.min(projectPerThread * (threadId + 1), projectCount);
                             n++
                         ) {
-                            collectProject(g, selectedProjectsList.getLong(n));
-                            synchronized (pl) {
-                                pl.lightUpdate();
+                            try {
+                                collectProject(g, selectedProjectsList.getLong(n));
+                                synchronized (pl) {
+                                    pl.lightUpdate();
+                                }
+                            } catch(Exception e) {
+                                synchronized (LOGGER) {
+                                    LOGGER.error(
+                                        "exception: {}\n{}",
+                                        e.getMessage(),
+                                        e.getStackTrace()
+                                    );
+                                }
+                            } catch(AssertionError e) {
+                                synchronized (LOGGER) {
+                                    LOGGER.error(
+                                        "assertion error: {}\n{}",
+                                        e.getMessage(),
+                                        e.getStackTrace()
+                                    );
+                                }
                             }
                         }
-                    } catch(Exception e) {
-                        LOGGER.error("exception: {}", e.getMessage());
-                        e.printStackTrace();
-                    } catch(AssertionError e) {
-                        LOGGER.error("assertion error: {}", e.getMessage());
-                        e.printStackTrace();
-                    }
                 });
             }
             collectionService.shutdown();
