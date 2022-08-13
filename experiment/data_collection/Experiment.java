@@ -834,9 +834,6 @@ public class Experiment {
                         ) {
                             try {
                                 collectProject(g, selectedProjectsList.getLong(n));
-                                synchronized (pl) {
-                                    pl.lightUpdate();
-                                }
                             } catch(Exception e) {
                                 synchronized (LOGGER) {
                                     LOGGER.error(
@@ -852,6 +849,10 @@ public class Experiment {
                                         e.getMessage(),
                                         e.getStackTrace()
                                     );
+                                }
+                            } finally {
+                                synchronized (pl) {
+                                    pl.lightUpdate();
                                 }
                             }
                         }
