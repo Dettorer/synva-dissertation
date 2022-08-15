@@ -41,10 +41,11 @@ elif [ ! -f $1.graph ]; then
 fi
 GRAPH_PATH=$1
 
-if [ ! -d .venv ]; then
-    echo ".venv/ does not exist, creating a virtualenv and installing the content of requirements.txt"
-    python -m venv .venv
-    ./.venv/bin/python -m pip install -r requirements.txt
+JAR_NAME="swh-graph-1.0.1.jar"
+if [ ! -f $JAR_NAME ]; then
+    >&2 echo "$JAR_NAME does not exist, fetching it from dettorer.net"
+    >&2 echo "the $JAR_NAME that will be fetched is an updated version of the one in https://pypi.org/project/swh.graph/ that makes a lot of graph querying methods thread safe."
+    wget https://dettorer.net/$JAR_NAME
 fi
 
-java -ea -cp swh-graph-1.0.1.jar -Dlogback.configurationFile=$PWD/logback.xml Experiment.java $LOAD_MODE $GRAPH_PATH
+java -ea -cp $JAR_NAME -Dlogback.configurationFile=$PWD/logback.xml Experiment.java $LOAD_MODE $GRAPH_PATH

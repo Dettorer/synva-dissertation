@@ -89,11 +89,6 @@
       };
 
       # For the Software Heritage graph manipulation
-      pythonDistribution = with pkgs; [
-        python39
-        python39Packages.pip
-        python39Packages.virtualenv
-      ];
       javaDistribution = with pkgs; [
         jdk
       ];
@@ -109,7 +104,7 @@
         nativeBuildInputs = [ pkgs.autoreconfHook ];
       };
       experimentDependencies =
-          pythonDistribution ++ javaDistribution ++ [ cmph pkgs.postgresql ];
+          javaDistribution ++ [ cmph pkgs.postgresql ];
     in
     rec {
       packages.dissertation = pkgs.stdenv.mkDerivation {
