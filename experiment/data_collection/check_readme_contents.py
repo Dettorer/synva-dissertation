@@ -4,10 +4,12 @@ import botocore.exceptions
 import csv
 import gzip
 import os
+import re
 import requests
 import sys
 
 from charset_normalizer import from_bytes as magic_decode
+from more_itertools import windowed
 from mypy_boto3_s3 import Client as S3Client
 from typing import Dict, Optional, Tuple
 
@@ -163,7 +165,34 @@ def get_readme_content(
     return readme_content
 
 
+def is_header(line: str, next_line: Optional[str]) -> bool:
+    return (
+        line.startswith("#") # standard markdown header
+        or (
+            next_line is not None
+            # alternate markdown header or standard reStructuredText header
+            and bool(re.match(r"""[=\-`:'"~^_*+#<>]+\s*""", next_line))
+        )
+    )
+
+
+CONTRIBUTING_VARIANTS = {
+    "contributing",
+    "contribution",
+    "contribute",
+    "contrib"
+}
+
 def readme_has_contrib(content: str) -> bool:
+    """Check the content for a markdown or reStructuredText header that contains
+    a "contributing"-related word"""
+    for line, next_line in windowed(content.splitlines(), 2):
+        if line is not None and is_header(line, next_line):
+            # `line` is a md or rst header
+            for variant in CONTRIBUTING_VARIANTS:
+                if variant in line.lower():
+                    return True
+
     return False
 
 

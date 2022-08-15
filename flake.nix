@@ -109,6 +109,7 @@
         python39
         python39Packages.boto3 # aws s3 querying
         python39Packages.charset-normalizer # encoding detection
+        python39Packages.more-itertools # for windowed iterators
         python39Packages.mypy-boto3-s3 # type hints for boto3
         python39Packages.requests # http querying
       ];
