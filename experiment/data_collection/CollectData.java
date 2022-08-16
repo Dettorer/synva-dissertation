@@ -25,7 +25,7 @@ import it.unimi.dsi.fastutil.longs.LongStack;
 import it.unimi.dsi.fastutil.shorts.ShortBigArrays;
 import it.unimi.dsi.logging.ProgressLogger;
 
-public class Experiment {
+public class CollectData {
     private static final Logger LOGGER = LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
 
     // The set of ORI objects visited during the initial discovery
@@ -683,7 +683,7 @@ public class Experiment {
                 System.err.format(
                     "usage: java [java options] %s.java"
                         + " memory|mapped <graph path> [thread count]\n",
-                    Experiment.class.getName()
+                    CollectData.class.getName()
                 );
                 System.exit(1);
             }

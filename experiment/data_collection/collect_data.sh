@@ -48,4 +48,4 @@ if [ ! -f $JAR_NAME ]; then
     wget https://dettorer.net/$JAR_NAME
 fi
 
-java -ea -cp $JAR_NAME -Dlogback.configurationFile=$PWD/logback.xml Experiment.java $LOAD_MODE $GRAPH_PATH
+java -ea -cp $JAR_NAME -Dlogback.configurationFile=$PWD/logback.xml CollectData.java $LOAD_MODE $GRAPH_PATH
