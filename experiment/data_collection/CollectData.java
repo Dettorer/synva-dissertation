@@ -743,7 +743,7 @@ public class CollectData {
             // Project discovery and selection
             discoveredOrigins = ShortBigArrays.newBigArray(numNodes);
             pl.itemsName = "ORI nodes";
-            pl.expectedUpdates = numNodes / 144; // an estimated 0.7% of nodes are ORI
+            pl.expectedUpdates = 34028697; // observed value on the full graph
             pl.start("Discovering projects");
             for (int i = 0; i < threadCount; ++i) {
                 discoveryService.submit(() -> {
