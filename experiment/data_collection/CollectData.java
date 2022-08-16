@@ -525,7 +525,11 @@ public class CollectData {
             return "<no origin>";
         } else {
             assert graph.getNodeType(origin) == SwhType.ORI;
-            return new String(graph.getMessage(origin));
+            byte[] msg = graph.getMessage(origin);
+            if (msg == null) {
+                return "<no origin>";
+            }
+            return new String(msg);
         }
     }
 
@@ -825,37 +829,37 @@ public class CollectData {
             pl.start("Collecting project data");
             for (int i = 0; i < threadCount; ++i) {
                 collectionService.submit(() -> {
-                        int threadId = collectionThreadLocalId.get();
-                        SwhBidirectionalGraph g = graph.copy();
-                        for (
-                            int n = projectPerThread * threadId;
-                            n < Math.min(projectPerThread * (threadId + 1), projectCount);
-                            n++
-                        ) {
-                            try {
-                                collectProject(g, selectedProjectsList.getLong(n));
-                            } catch(Exception e) {
-                                synchronized (LOGGER) {
-                                    LOGGER.error(
-                                        "exception: {}\n{}",
-                                        e.getMessage(),
-                                        e.getStackTrace()
-                                    );
-                                }
-                            } catch(AssertionError e) {
-                                synchronized (LOGGER) {
-                                    LOGGER.error(
-                                        "assertion error: {}\n{}",
-                                        e.getMessage(),
-                                        e.getStackTrace()
-                                    );
-                                }
-                            } finally {
-                                synchronized (pl) {
-                                    pl.lightUpdate();
-                                }
+                    int threadId = collectionThreadLocalId.get();
+                    SwhBidirectionalGraph g = graph.copy();
+                    for (
+                        int n = projectPerThread * threadId;
+                        n < Math.min(projectPerThread * (threadId + 1), projectCount);
+                        n++
+                    ) {
+                        try {
+                            collectProject(g, selectedProjectsList.getLong(n));
+                        } catch(Exception e) {
+                            synchronized (LOGGER) {
+                                LOGGER.error(
+                                    "exception: {}\n{}",
+                                    e.getMessage(),
+                                    e.getStackTrace()
+                                );
+                            }
+                        } catch(AssertionError e) {
+                            synchronized (LOGGER) {
+                                LOGGER.error(
+                                    "assertion error: {}\n{}",
+                                    e.getMessage(),
+                                    e.getStackTrace()
+                                );
+                            }
+                        } finally {
+                            synchronized (pl) {
+                                pl.lightUpdate();
                             }
                         }
+                    }
                 });
             }
             collectionService.shutdown();
