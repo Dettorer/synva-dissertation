@@ -35,4 +35,5 @@ main.pdf
 ...
 ```
 
-Alternatively, building on [Overleaf](overleaf.com/) should work out of the box.
+Alternatively, building on [Overleaf](https://overleaf.com/) should work out of
+the box.
