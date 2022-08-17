@@ -46,21 +46,70 @@ appliqués :
         1er juin 2019 et le 1er septembre 2019 n'ont pas été retenus ;
 \end{itemize}
 
-\section{Collecte des données}
+\section{Collecte initiale des données}
 
-\todo[inline]{%
-    TODO : parcours du graph de Software Heritage avec l'API graph
-    (\url{https://docs.softwareheritage.org/devel/swh-graph/index.html}) soit sur un sous-graph compressé
-    (\url{https://docs.softwareheritage.org/devel/swh-dataset/graph/dataset.html}) qui tient sur mon
-    ordinateur personnel, soit sur le graph complet si je trouve quelqu'un pour me donner un peu de temps de
-    calcul sur un gros serveur.%
-}
+\todo[inline]{Retravailler cette description.}
 
-\todo[inline]{TODO : penser à mettre le code en annexe}
+Le code (une classe Java) est disponible en annexe \ref{app:collect.java}.
+
+Le graphe est dirigé (un arc d'un nœud A vers B tous signifie que B est un \engl{commit} \emph{parent} de A)
+mais l'API fourni aussi des méthodes donnant accès au symmétrique de chaque arc, ce qui permet d'utiliser au
+besoin sur le graphe à la fois les algorithmes spécifiques aux graphes orientés et ceux spécifiques aux
+graphes non-orientés.
+
+Dans un premier temps, la fonction \texttt{discoverProject} est appelée sur tous les nœuds de type
+\texttt{ORI} (point de départ de l'archivage d'un projet par Software Heritage), cette fonction identifie tous
+les projets étant des \en{fork} de celui-ci via un double parcours largeur sur la composante connexe du nœud
+de départ formée par le sous-graphe des nœuds \texttt{REV} (\en{revision}, terme générique pour les
+\englpl{commit}) et \texttt{SNP} (\en{snapshot}, le point d'entrée d'\emph{un} archivage du projet). Cette
+détection se fait en deux parcours largeur au lieu d'un seul afin de calculer en même temps la taille de la
+plus longue chaîne de commits accessible depuis chaque nœud \texttt{ORI} de la composante connexe (donc depuis
+chaque fork du projet initial). Le premier parcours remonte les ancêtres du nœud de départ pour trouver les
+révisions racines (les "\en{initial commits}") du projet, puis un deuxième parcours est lancé dans l'autre
+sens avec des marqueurs de niveau depuis chacune de ces révisions racines afin de trouver tous les nœuds
+\texttt{ORI} qui peuvent les atteindre et sont donc des \en{forks} les uns des autres. Pour chaque composante
+connexe, seul un nœud \texttt{SNP} est retenu pour l'analyse en deuxième étape : celui étant le point de
+départ de la plus longue chaîne de \englpl{commit} possible, donc ayant le plus de données exploitables.
+
+Dans un deuxième temps, la fonction \texttt{collectProject} est appelée sur chaque projet retenu afin d'en
+extraire les données de recherche. Cette fonction commence par identifier la branche ayant le plus de chance
+d'être la branche principale du projet (voir la table de priorité \texttt{mainBranchScore} ligne 623), puis
+démarre un parcours largeur à partir de cette branche dans lequel elle compte :
+
+\begin{itemize}
+    \item le nombre de contributeurs pendant la période de référence n'ayant jamais contribué dans ce projet
+        avant (variable expliquée) ;
+    \item le nombre de contributeurs uniques pendant une période récente avant la période de référence
+        (variable expliquative, hypothèse H\ref{hyp:recentcontributorcount}) ;
+    \item le nombre de \englpl{commit} dans la même période récente avant la période de référence (variable
+        expliquative, hypothèse H\ref{hyp:recentcommitcount}).
+\end{itemize}
+
+La présence d'instructions de contribution (hypothèse H\ref{hyp:contributionguidelines}) est plus compliquée à
+vérifier. Le graphe possédant le nom et la hierarchie des fichiers contenus dans chaque \engl{commit}, mais
+pas leur contenu, l'analyse se contente de vérifier si un fichier dont le nom est une variante du classique
+\texttt{CONTRIBUTING.md} existe. Si ce fichier existe, l'analyse conclue que le projet possède effectivement
+des instructions de contribution, sinon, elle vérifie la présence d'un fichier dont le nom est une variante du
+classique \texttt{README.md}. Si ce fichier existe, l'analyse conclue que le projet possède \emph{peut être}
+des instructions de contribution et construie l'URL à laquelle un traitement ultérieur pourra télécharger le
+contenu du fichier \texttt{README} et y confirmer ou non la présence d'instructions de contribution (décrit en
+section \ref{sec:collectreadme}). Si aucun de ces deux types de fichier n'existe, l'analyse conclue que le
+projet ne possède pas d'instructions de contribution.
+
+Enfin, les données collectées sont affichées sur la sortie standard sous la forme d'un fichier CSV.
+
+\section{Collecte complémentaire des données}
+\label{sec:collectreadme}
+
+Le code (un script Python) est disponible en annexe \ref{app:checkreadme.py}.
+
+\todo[inline]{Décrire le script.}
 
 \section{Traitement des données}
 
-\todo[inline]{TODO}
+Le code (un script Python) est disponible en annexe \ref{app:analysis.py}.
+
+\todo[inline]{Décrire la méthodologie.}
 
 \todo[inline]{%
     TODO bonus : faire un "\en{replication package}" avec mon code, comme le font \textcite{swh-graph-2020}

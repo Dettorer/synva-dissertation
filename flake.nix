@@ -16,8 +16,8 @@
         inkscape
 
         # for minted
-        python39
-        python39Packages.pygments
+        python310
+        python310Packages.pygments
         which
       ];
       texDistribution = pkgs.texlive.combine {
@@ -91,7 +91,7 @@
 
       # For the Software Heritage graph manipulation
       javaDistribution = with pkgs; [
-        jdk
+        jdk11
       ];
       # for swh-perfecthash, a dependency of swh-graph
       cmph = pkgs.stdenv.mkDerivation {
@@ -104,14 +104,19 @@
 
         nativeBuildInputs = [ pkgs.autoreconfHook ];
       };
-      # for the README content checking script
+      # for the README content checking script and the analysis script
       pythonDistribution = with pkgs; [
-        python39
-        python39Packages.boto3 # aws s3 querying
-        python39Packages.charset-normalizer # encoding detection
-        python39Packages.more-itertools # for windowed iterators
-        python39Packages.mypy-boto3-s3 # type hints for boto3
-        python39Packages.requests # http querying
+        python310
+        python310Packages.boto3 # aws s3 querying
+        python310Packages.charset-normalizer # encoding detection
+        python310Packages.jinja2 # for pandas' latex styling
+        python310Packages.matplotlib # graphical data visualisation
+        python310Packages.more-itertools # for windowed iterators
+        python310Packages.mypy-boto3-s3 # type hints for boto3
+        python310Packages.pandas # data analysis
+        python310Packages.requests # http querying
+        python310Packages.scipy # for its statistical functions
+        python310Packages.tabulate # textual (markdown) data visualisation
       ];
       experimentDependencies =
         pythonDistribution ++ javaDistribution ++ [ cmph pkgs.postgresql ];
@@ -142,7 +147,14 @@
       devShells.default = pkgs.mkShell {
         inherit FONTCONFIG_FILE;
         buildInputs = (
-          [ texDistribution pkgs.evince ]
+          [
+            texDistribution
+            pkgs.evince
+
+            # for my code editor setup (neovim)
+            pkgs.python310Packages.pynvim
+            pkgs.python310Packages.black
+          ]
           ++ texDependencies
           ++ experimentDependencies
         );

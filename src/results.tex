@@ -1,1 +1,73 @@
+\pagelayout{wide}
+\setchapterstyle{kao}
 \chapter{Résultats}
+
+\todo[inline]{%
+    TODO : analyser hasContrib et rédiger. Voir aussi s'il n'est pas pertinent de retirer tous les projets
+    ayant moins de deux contributeurs récents (les résultats sont nettement plus positifs de cette façon :
+    \texttt{hasContrib} donne deux moyennes très différentes et le $r^2$ des régressions linéaires augmente
+    beaucoup)%
+}
+
+\begin{tabular}{cc}
+    \input{experiment/data_analysis/hasContrib_describe.tex} &
+    \input{experiment/data_analysis/newContributorCount_describe.tex}
+    \\
+    \input{experiment/data_analysis/recentContributorCount_describe.tex} &
+    \input{experiment/data_analysis/recentCommitCount_describe.tex}
+\end{tabular}
+
+\begin{figure}[ht]
+    \begin{subfigure}[t]{0.5\textwidth}
+        \includesvg[width=\textwidth]{experiment/data_analysis/hasContrib_Count.svg}
+        \caption{Nombre de projets avec ou sans instructions de contribution}
+    \end{subfigure}%
+    \begin{subfigure}[t]{0.5\textwidth}
+        \includesvg[width=\textwidth]{experiment/data_analysis/hasContrib_meanNewContributorCount.svg}
+        \caption{Moyenne du nombre de nouveaux contributeurs avec ou sans instructions de contribution}
+    \end{subfigure}
+
+    \caption{Effet de la présence d'instructions de contribution}
+    \label{fig:hasContrib}
+\end{figure}
+
+\todo[inline]{%
+    Pour vérifier à quel point cette (minuscule) différence de moyenne s'explique effectivement par
+    \texttt{hasContrib}, il faudrait faire une one-way ANOVA, mais apparemment il faut que la population de
+    base suive une loi normale, ce qui n'est pas du tout le cas, il y a peut être une application du théorème
+    central limite qui peut m'aider ?
+}
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}[t]{0.5\textwidth}
+        \includegraphics[width=\textwidth]{experiment/data_analysis/recentContributorCountRegression_linearScale.png}
+        \caption{Échelle linéaire}
+    \end{subfigure}%
+    \begin{subfigure}[t]{0.5\textwidth}
+        \includegraphics[width=\textwidth]{experiment/data_analysis/recentContributorCountRegression_logScale.png}
+        \caption{Échelle logarithmique}
+    \end{subfigure}
+
+    \input{experiment/data_analysis/recentContributorCountRegressionFormula.tex}
+    \caption{Nombre de nouveaux contributeurs en fonction du nombre de contributeurs récents uniques}
+    \label{fig:contributorCount}
+\end{figure}
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}[t]{0.5\textwidth}
+        \includegraphics[width=\textwidth]{experiment/data_analysis/recentCommitCountRegression_linearScale.png}
+        \caption{Échelle linéaire}
+    \end{subfigure}%
+    \begin{subfigure}[t]{0.5\textwidth}
+        \includegraphics[width=\textwidth]{experiment/data_analysis/recentCommitCountRegression_logScale.png}
+        \caption{Échelle logarithmique}
+    \end{subfigure}
+
+    \input{experiment/data_analysis/recentCommitCountRegressionFormula.tex}
+    \caption{Nombre de nouveaux contributeurs en fonction du nombre de commits récents}
+    \label{fig:commitCount}
+\end{figure}
+
+\pagelayout{margin}
