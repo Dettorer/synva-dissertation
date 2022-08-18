@@ -75,19 +75,26 @@ def clean_data(data: pd.DataFrame) -> pd.DataFrame:
 
     - change the hasContrib column's values to "with", "without" or pandas.NA
     """
-    # Commented below: remove projects with only one recent contributor or with
-    # an extreme number of recent commits
-    #  data = data[data["recentContributorCount"] > 1]
-    #  data = data[data["recentCommitCount"] < 10000]
-    return cast(pd.DataFrame, data.replace({
-        "hasContrib":
-        {
-            "TRUE": "with",
-            "FALSE": "without",
-            "CHECKREADMECONTENT": pd.NA,
-            "INCONCLUSIVE": pd.NA
-        }
-    }))
+    # remove all projects that have less than two recent contributors (exclusion
+    # criterion)
+    data = data[data["recentContributorCount"] >= 2]
+
+    # rewrite the values of the hasContrib column to better integrate with
+    # pandas and visualizations
+    data = cast(
+        pd.DataFrame,
+        data.replace({
+            "hasContrib":
+            {
+                "TRUE": "with",
+                "FALSE": "without",
+                "CHECKREADMECONTENT": pd.NA,
+                "INCONCLUSIVE": pd.NA
+            }
+        })
+    )
+
+    return data
 
 
 def setup_argparse() -> argparse.ArgumentParser:
@@ -106,7 +113,16 @@ def setup_argparse() -> argparse.ArgumentParser:
 
 if __name__ == "__main__":
     args = setup_argparse().parse_args()
-    initial_data = cast(pd.DataFrame, pd.read_csv(args.data_csv))
+    initial_data = cast(
+        pd.DataFrame,
+        pd.read_csv(
+            args.data_csv,
+            # force pandas to keep the hasContrib column as a string (otherwise
+            # it infers it as boolean but only for some rows, resulting in a
+            # mixed type column), we clean that column in clean_data() anyway.
+            dtype={"hasContrib": "str"}
+        )
+    )
     data = clean_data(initial_data)
     write_initial_viz(data)
     for x_col in ["recentContributorCount", "recentCommitCount"]:

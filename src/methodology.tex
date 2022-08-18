@@ -39,11 +39,13 @@ le graph de Software Heritage. Plusieurs critères d'exclusion ont ensuite été
 appliqués :
 
 \begin{itemize}
-    \item quand deux projets ou plus ont des \englpl{commit} en commun, seul
-        celui qui a reçu le plus d'activité (mesuré en regardant le nombre de
-        \englpl{commit} entre le premier et le dernier) a été retenu ;
-    \item les projets n'ayant enregistré aucune activité (aucun commit) entre le
-        1er juin 2019 et le 1er septembre 2019 n'ont pas été retenus ;
+    \item quand deux projets ou plus ont des \englpl{commit} en commun, seul celui qui a reçu le plus
+        d'activité (mesuré en regardant le nombre de \englpl{commit} entre le premier et le dernier) a été
+        retenu ;
+    \item les projets n'ayant enregistré aucune activité (aucun commit) entre le 1er juin 2019 et le 1er
+        septembre 2019 n'ont pas été retenus ;
+    \item les projets ayant vu moins de deux contributeurs uniques récents (du premier janvier 2019 au premier
+        juin 2019) n'ont pas été retenus \sideparencite[][voir][]{mining-github-2014}.
 \end{itemize}
 
 \section{Collecte initiale des données}

@@ -2,12 +2,7 @@
 \setchapterstyle{kao}
 \chapter{Résultats}
 
-\todo[inline]{%
-    TODO : analyser hasContrib et rédiger. Voir aussi s'il n'est pas pertinent de retirer tous les projets
-    ayant moins de deux contributeurs récents (les résultats sont nettement plus positifs de cette façon :
-    \texttt{hasContrib} donne deux moyennes très différentes et le $r^2$ des régressions linéaires augmente
-    beaucoup)%
-}
+\todo[inline]{TODO : analyser hasContrib et rédiger.}
 
 \begin{tabular}{cc}
     \input{experiment/data_analysis/hasContrib_describe.tex} &
@@ -32,10 +27,10 @@
 \end{figure}
 
 \todo[inline]{%
-    Pour vérifier à quel point cette (minuscule) différence de moyenne s'explique effectivement par
-    \texttt{hasContrib}, il faudrait faire une one-way ANOVA, mais apparemment il faut que la population de
-    base suive une loi normale, ce qui n'est pas du tout le cas, il y a peut être une application du théorème
-    central limite qui peut m'aider ?
+    Pour vérifier à quel point cette différence de moyenne s'explique effectivement par \texttt{hasContrib},
+    il faudrait faire une one-way ANOVA, mais apparemment il faut que la population de base suive une loi
+    normale, ce qui n'est pas du tout le cas, il y a peut être une application du théorème central limite qui
+    peut m'aider ?%
 }
 
 \begin{figure}[ht]
