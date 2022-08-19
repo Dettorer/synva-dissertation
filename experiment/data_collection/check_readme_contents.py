@@ -176,6 +176,7 @@ def is_header(line: str, next_line: Optional[str]) -> bool:
     )
 
 
+# TODO: transform to regular expressions with word bounds check
 CONTRIBUTING_VARIANTS = {
     "contributing",
     "contribution",

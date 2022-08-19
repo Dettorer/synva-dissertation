@@ -77,7 +77,8 @@ D'après les articles que j'ai pu lire, les plus importantes barrières d'entré
 arrivants dans un projet de logiciel libre sont :
 
 \begin{itemize}
-    \item le manque d'interactions sociales avec les membres du projet \sideparencite{barriers-meta-2015} ;
+    \item le manque d'interactions sociales avec les membres du projet
+        \sideparencite{barriers-meta-2015,social-barriers-2015} ;
     \item le manque de réponse (dans un temps raisonnable) à leurs requêtes \parencite{barriers-meta-2015} ;
     \item les connaissances techniques initiales \parencite{barriers-meta-2015} ;
     \item l'identification d'une tâche par laquelle commencer \sideparencite{first-task-2015} ;
@@ -120,7 +121,7 @@ permet de n'étudier qu'une variable binaire.
 
 \section{L'analyse automatique ("minage") de projets de logiciel libre}
 
-Sur le minage de façon générale :
+\todo[inline]{Voir si ces articles sont pertinents à citer}
 
 \begin{itemize}
     \item \url{https://ieeexplore.ieee.org/document/4659248}
@@ -143,20 +144,34 @@ collecte des données \parencites{mining-github-2014}{penumbra-oss-2022}.
 
 \subsection{L'archive de logiciels de Software Heritage}
 
-\todo[inline]{%
-    TODO : parler de la recherche qu'il y a autour de la construction du graphe (et les motivations derrières,
-    par exemple), et essayer de trouver des expériences qui s'en servent%
-}
+Les techniques de compression de graphe sont aujourd'hui suffisamment avancées pour permettre une nouvelle
+approche à cette analyse automatique des projets, en rendant un très grand nombre de ceux-ci disponibles au
+sein d'une même structure de donnée unifiée et optimisée \sideparencite{swh-graph-2020}. Cette approche permet
+par exemple de grandement faciliter la détection des "clones" ou "\en{forks}" de projets, c'est à dire des
+projets ayant une part de leur historique de développement en commun. Un exemple célèbre de ce phénomène est
+LibreOffice\sidenote{\url{https://www.libreoffice.org/}}, un logiciel libre de bureautique ayant démarré en se
+basant sur le code source d'OpenOffice\sidenote{\url{https://openoffice.apache.org/}} et étant maintenant un
+projet autonome avec une équipe de développement différente. La structure de donnée proposée par
+\textcite{swh-graph-2020} est un graphe orienté où chaque \engl{commit} est représenté par un nœuds et où
+chaque arc $u \xrightarrow{succ} v$ ("$v$ est un successeur de $u$", ce qui signifie dans le cas des commits
+"$v$ est un ancêtre immédiat de $u$") possède aussi un arc inverse $u \xleftarrow{pred} v$ ("$u$ est un
+prédecesseur de $v$"), ce qui signifie que trouver tous les "\en{forks}" d'un projet se fait avec un classique
+calcul de composante fortement connexe à partir de n'importe lequel de ses \englpl{commit}.
 
-\begin{itemize}
-    \item \sidetextcite{swh-graph-2020} : minage à grande échelle via l'API swh-graph de Software Heritage,
-        avec un exemple de mesure sur le graphe compressé pour montrer qu'on peut miner des vraies choses en
-        un temps raisonnable sur la totalité du corpus.
-    \item \url{https://dl.acm.org/doi/10.1145/3183558}, \url{https://hal.archives-ouvertes.fr/hal-01590958/}
-        et \url{https://ieeexplore.ieee.org/abstract/document/8816748} pour justifier l'usage de l'archive de
-        Software Heritage comme meilleur approximation existante de l'entiereté du code source développé
-        publiquement.
-\end{itemize}
+Software Heritage\sidenote{\url{https://www.softwareheritage.org/}} est une initiative exploitant ces
+techniques de compression afin de construire une archive aussi complète que possible du code source
+actuellement disponible publiquement dans le monde, elle aussi publique, et de la rendre exploitable pour la
+recherche \sideparencite{swh-2017}. Il s'agit du corpus que \textcite{swh-graph-2020} ont utilisé comme
+exemple pour leur modèle de compression. L'archive comptait en 2018 plus d'un milliard de \englpl{commit}
+uniques archivés depuis quatre-vingt-cinq millions d'origines différentes (telles que des \en{remotes}
+\engl{git} ou des versions de paquets Python publiés sur PyPi\sidenote{\url{https://pypi.org/}}) et augmente
+de façon continue en ajoutant de nouveaux projets et en suivant l'évolution des projets déjà archivés
+\sidetextcite{swh-2019}.
+
+\todo[inline]{%
+    TODO : expliquer ici la structure du graphe ? Ou plutôt dans la partie méthodologie ? Remarque j'explique
+    déjà le point le plus critique en parlant de \textcite{swh-graph-2020}.
+}
 
 \section{Méthodologies de recherches autour de ces questions}
 
@@ -183,20 +198,13 @@ d'apporter un volume important de données. Bien que les résultats semblent coh
 sélectionnant de petits projets, ils invitent la communauté scientifique à s'y intéresser plus en profondeur
 ou à plus varier ses échantillons.
 
-\todo[inline]{TODO : quelques articles potentiellement à lire}
+Quand \sidetextcite{mining-github-2014} analysent les \englpl{pull request} sur \gls{github}, ils ne
+retiennent que les projets ayant au moins deux auteurs de \englpl{commit} uniques, ce qu'ils considèrent comme
+des projets "vraiment collaboratifs". Ce choix vient de leur observation qu'une très grande partie des projets
+hébergés sur la plateforme ($71\%$) sont des projets "personnels", utilisés par leurs auteurs à des fins
+d'expérimentation ou de stockage, sans réelle ouverture à la collaboration.
 
-\begin{itemize}
-    \item \sidetextcite{social-barriers-2015} (note: qualitatif, mais dit compléter une littérature déjà très
-        quantitative, les références peut être intéressantes). Présente aussi quelques données bien agrégées
-        concernant les possibles barrières d'entrée \emph{sociales} ;
-    \item des trucs sur \en{"Cognitive Walkthrough"} ? (méthode \en{science-based} d'évaluation/découverte des
-        problèmes d'utilisation d'un logiciel pour les nouveaux utilisateurs)
-        \sideparencite{cognitive-walkthrough-2000, cognitive-walkthrough-1994}
-    \item des trucs sur "GenderMag" ? Un type de \en{Cognitive Walkthrough} spécialisé sur les problèmes liés
-        au genre. \sideparencite{gendermag-2016}. Voir aussi les études citées par
-        \textcite[p.~1005-1006]{barriers-2018} sur ces deux points, notamment celles traitant de leur
-        efficacité.
-\end{itemize}
+\todo[inline]{TODO : quelques articles potentiellement à lire}
 
 Spécifiquement autour de l'idée d'identifier les bons projets de logiciel libre vers lesquels diriger des
 étudiants qui découvrent le milieu :
@@ -207,9 +215,3 @@ Spécifiquement autour de l'idée d'identifier les bons projets de logiciel libr
     \item \sidetextcite{code-of-conduct-2017}, n'a pas l'air très concluant, à regarder rapidement.
     \item "Terell et al. [55]" dans \textcite{barriers-2018}, cité page 1011, sur comment miner \gls{github}.
 \end{itemize}
-
-Quand \sidetextcite{mining-github-2014} analysent les \englpl{pull request} sur \gls{github}, ils ne
-retiennent que les projets ayant au moins deux auteurs de \englpl{commit} uniques, ce qu'ils considèrent comme
-des projets "vraiment collaboratifs". Ce choix vient de leur observation qu'une très grande partie des projets
-hébergés sur la plateforme ($71\%$) sont des projets "personnels", utilisés par leurs auteurs à des fins
-d'expérimentation ou de stockage, sans réelle ouverture à la collaboration.
