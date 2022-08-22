@@ -2,10 +2,22 @@
 
 import argparse
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
+import pandas.api.types as pd_types
 
 from scipy import stats
 from typing import cast
+
+
+def float_to_tex(f: float) -> str:
+    """Represent the given float in LaTeX, handling the possibly needed scientific notation"""
+    float_str = f"{f:.8g}"
+    if "e" in float_str:
+        base, exponent = float_str.split("e")
+        return r"{0} \times 10^{{{1}}}".format(base, int(exponent))
+    else:
+        return float_str
 
 
 def write_regression_viz(
@@ -20,7 +32,7 @@ def write_regression_viz(
     model = stats.linregress(x, y)
 
     # Plot
-    plt.scatter(x, y)
+    plt.scatter(x, y, s=0.5)
     plt.plot(x, model.intercept + model.slope * x, 'r', label="regression")
     plt.xlabel(x_col)
     plt.ylabel(y_col)
@@ -34,46 +46,73 @@ def write_regression_viz(
     with open(f"{x_col}RegressionFormula.tex", "w") as outfile:
         tex_x = f"\\mathit{{{x_col}}}"
         tex_y = f"\\mathit{{{y_col}}}"
-        tex_slope = f"{model.slope:.8f}"
-        tex_intercept = f"{model.intercept:.8f}"
-        tex_formula = f"{tex_y} = {tex_x} * {tex_slope} + {tex_intercept}"
-        outfile.write(f"${tex_formula}$\\\\($r^2 = {model.rvalue:.8f}$)")
+        tex_slope = f"{float_to_tex(model.slope)}"
+        tex_intercept = f"{float_to_tex(abs(model.intercept))}"
+        intercept_sign = "+" if model.intercept >= 0 else "-"
+        tex_formula = f"{tex_y} = {tex_x} \\times {tex_slope} {intercept_sign} {tex_intercept}"
+        outfile.write(f"${tex_formula}$\\\\($r^2 = {float_to_tex(model.rvalue)}$)")
 
 
-def write_initial_viz(data: pd.DataFrame) -> None:
-    """Output some initial visualizations"""
-    # column descriptions, LaTeX format
-    for column in [
-        "hasContrib",
-        "newContributorCount",
-        "recentContributorCount",
-        "recentCommitCount"
-    ]:
-        tex_output = data[[column]] \
-            .describe() \
-            .style.to_latex() \
-            .replace("%", "\\%") # fix a formatting oversight
-        with open(f"{column}_describe.tex", "w") as outfile:
-            outfile.write(tex_output)
-
-    # contribution guidelines presence histogram, SVG
+def test_hasContrib(data: pd.DataFrame) -> None:
+    # Output histograms
     data.groupby(["hasContrib"])["hasContrib"].count().plot.bar()
     plt.ylabel("projects")
     plt.xticks(rotation=0, horizontalalignment="center")
-    plt.savefig("hasContrib_Count.svg")
+    plt.savefig("hasContrib_Count.png")
     plt.clf()
 
     data.groupby(["hasContrib"])["newContributorCount"].mean().plot.bar()
     plt.ylabel("newContributorCount (mean)")
     plt.xticks(rotation=0, horizontalalignment="center")
-    plt.savefig("hasContrib_meanNewContributorCount.svg")
+    plt.savefig("hasContrib_meanNewContributorCount.png")
     plt.clf()
+
+    # Compute Mann-Whitney U test
+    with_contrib = data[data["hasContrib"] == "yes"]
+    without_contrib = data[data["hasContrib"] == "no"]
+
+    u_stat, p_value = stats.mannwhitneyu(
+        with_contrib["newContributorCount"],
+        without_contrib["newContributorCount"],
+        alternative="greater",  # we expect with_contrib to have more new contributors
+    )
+
+    with open("hasContribTest.tex", "w") as outfile:
+        u, p = map(float_to_tex, (u_stat, p_value))
+        ρ_effect_size = float_to_tex(u_stat / (len(with_contrib) * len(without_contrib)))
+        outfile.write(f"Mann-Whitney statistic: $U = {u}$ ($p = {p}$, $ρ = {ρ_effect_size}$)")
+
+
+def write_initial_viz(data: pd.DataFrame) -> None:
+    """Output some initial visualizations"""
+    for column_name in [
+        "hasContrib",
+        "newContributorCount",
+        "recentContributorCount",
+        "recentCommitCount"
+    ]:
+        # column descriptions, LaTeX format
+        tex_output = data[[column_name]] \
+            .describe() \
+            .style.to_latex() \
+            .replace("%", "\\%") # fix a formatting oversight
+        with open(f"{column_name}_describe.tex", "w") as outfile:
+            outfile.write(tex_output)
+
+        # distribution
+        column: pd.Series = data[column_name]
+        if pd_types.is_numeric_dtype(column.dtype):
+            column.plot.hist(bins=50)
+            plt.yscale("log")
+            plt.savefig(f"{column_name}_distribution.png")
+            plt.clf()
+
 
 
 def clean_data(data: pd.DataFrame) -> pd.DataFrame:
     """Clean the CSV data in place:
 
-    - change the hasContrib column's values to "with", "without" or pandas.NA
+    - change the hasContrib column's values to "yes", "no" or pandas.NA
     """
     # remove all projects that have less than two recent contributors (exclusion
     # criterion)
@@ -86,8 +125,8 @@ def clean_data(data: pd.DataFrame) -> pd.DataFrame:
         data.replace({
             "hasContrib":
             {
-                "TRUE": "with",
-                "FALSE": "without",
+                "TRUE": "yes",
+                "FALSE": "no",
                 "CHECKREADMECONTENT": pd.NA,
                 "INCONCLUSIVE": pd.NA
             }
@@ -113,6 +152,8 @@ def setup_argparse() -> argparse.ArgumentParser:
 
 if __name__ == "__main__":
     args = setup_argparse().parse_args()
+
+    print("Preparing the data...")
     initial_data = cast(
         pd.DataFrame,
         pd.read_csv(
@@ -124,7 +165,15 @@ if __name__ == "__main__":
         )
     )
     data = clean_data(initial_data)
+    print("Computing the initial visualizations")
     write_initial_viz(data)
+
+    # hasContrib analysis
+    print("Computing hasContrib visualizations and statistics")
+    test_hasContrib(data)
+
+    # Recent contributor count and recent commit count analysis
     for x_col in ["recentContributorCount", "recentCommitCount"]:
         for scale in ["linear", "log"]:
+            print(f"Computing regression for {x_col} ({scale} scale)")
             write_regression_viz(data, x_col, "newContributorCount", scale)

@@ -13,6 +13,7 @@
       texDependencies = with pkgs; [
         coreutils
         glibcLocales
+        ghostscript
         inkscape
 
         # for minted
