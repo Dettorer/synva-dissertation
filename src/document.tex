@@ -18,6 +18,7 @@
 
 % Pre-document content, uses roman numerals
 \frontmatter
+\pagelayout{wide}
 
 \input{document_start}
 
@@ -25,19 +26,21 @@
 \mainmatter
 \setchapterstyle{kao}
 
+\pagelayout{margin}
 \include{introduction}
+\pagelayout{wide}
 
 \addpart{Partie théorique}
 
+\pagelayout{margin}
 \include{literature_review}
+\pagelayout{wide}
 
 \addpart{Partie expérimentale}
 
 \include{methodology}
 
 \include{results}
-
-\include{discussion}
 
 \addpart{Conclusion}
 

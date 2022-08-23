@@ -74,14 +74,6 @@
 \newcommand{\englpl}[1]{\en{\glspl{#1}}}
 \newcommand{\enGlpl}[1]{\en{\Glspl{#1}}}
 
-% Deactivate the citation/figure margin for new part pages
-\NewCommandCopy{\oldaddpart}{\addpart}
-\renewcommand{\addpart}[1]{%
-    \pagelayout{wide} % no citation/figure margin
-    \oldaddpart{#1}
-    \pagelayout{margin} % restore the margin
-}
-
 % Hyphenation
 \hyphenation{Git-Hub}
 

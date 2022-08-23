@@ -1,3 +1,4 @@
+\setchapterstyle{kao}
 \chapter{Méthodologie}
 
 \newtheorem{hypo}{Hypothèse}
@@ -12,17 +13,19 @@
 \newhyp{contributionguidelines}{%
     les projets possédant des instructions de contribution (fichier type "\en{CONTRIBUTING.md}" ou section
     type "\en{Contributing}" dans le \en{README}) sont plus accessibles pour les nouveaux contributeurs que
-    ceux n'en ayant pas \sideparencite[][voir][p.~11]{signals-2019}.%
+    ceux n'en ayant pas \parencite[voir][p.~11]{signals-2019}.%
 }
 
 \newhyp{recentcontributorcount}{%
-    le nombre de contributeurs uniques récents (du premier janvier 2019 au premier juin 2019) d'un projet
-    influe sur son accessibilité pour les nouveaux contributeurs \parencite[voir][p.~12-13,16]{signals-2019}.%
+    le nombre de contributeurs uniques récents (du premier janvier 2019 au premier juin 2019) d'un projet est
+    positivement corrélée à son accessibilité pour les nouveaux contributeurs
+    \parencite[voir][p.~12-13,16]{signals-2019}.%
 }
 
 \newhyp{recentcommitcount}{%
     le nombre de \englpl{commit} récents (du premier janvier 2019 au premier juin 2019) au sein d'un projet
-    influe sur son accessibilité pour les nouveaux contributeurs \parencite[voir][p.~13,16]{signals-2019}.
+    est positivement corrélé à son accessibilité pour les nouveaux contributeurs
+    \parencite[voir][p.~13,16]{signals-2019}.
 }
 
 \section{Mesure de l'accessibilité choisie}
@@ -30,7 +33,7 @@
 La variable mesurée pour représenter l'accessibilité d'un projet pour les nouveaux contributeurs est le nombre
 de contributeurs ayant fait leur toute première contribution au projet entre le premier juin 2019 et le
 premier septembre 2019. (voir section \ref{sec:accessibility-measure} p.~\pageref{sec:accessibility-measure},
-ainsi que \textcite[][p.~13,16]{signals-2019})
+ainsi que \textcite[p.~13,16]{signals-2019})
 
 \section{Constitution de l'échantillon}
 \label{sec:constitution_echantillon}
@@ -45,7 +48,7 @@ Plusieurs critères d'exclusion ont ensuite été appliqués :
     \item les projets n'ayant enregistré aucune activité (aucun commit) entre le 1er juin 2019 et le 1er
         septembre 2019 n'ont pas été retenus ;
     \item les projets ayant vu moins de deux contributeurs uniques récents (du premier janvier 2019 au premier
-        juin 2019) n'ont pas été retenus \sideparencite[][voir][]{mining-github-2014}.
+        juin 2019) n'ont pas été retenus \parencite[voir][]{mining-github-2014}.
 \end{itemize}
 
 \section{Collecte initiale des données}
