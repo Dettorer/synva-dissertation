@@ -1,6 +1,10 @@
 % Copyright page
 \makeatletter
-\uppertitleback{\@titlehead}
+\uppertitleback{%
+    \includepdf[pages=-,scale=0.9,offset=0 60]{images/authenticity_certificate_signed.pdf}
+
+    \@titlehead
+}
 \lowertitleback{
     \textbf{Pas de copyright} \\
     \ccby\ Ce mémoire est mis à disposition selon les termes de la
@@ -13,19 +17,11 @@
     \href{https://sourceforge.net/projects/koma-script/}{\KOMAScript} et
     \href{https://www.latex-project.org/}{\LaTeX} en utilisant la classe
     \href{https://github.com/fmarotta/kaobook/}{kaobook}.
-
-    \medskip
-
-    \textbf{Éditeur} \\
-    Première publication le \todo[inline]{TODO} par l'Université de Strasbourg
 }
 \makeatother
 
 % Note that \maketitle outputs the pages before here
 \maketitle
-
-% TODO: fill, sign and include that contract right after the titlepage
-% \includepdf[pages=-]{contrat_diffusion.pdf}
 
 % Table of contents, figures and tables
 \begingroup % Local scope for the following commands
