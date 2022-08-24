@@ -4,6 +4,7 @@
 % Figure caption setup
 \captionsetup[figure]{format=plain,singlelinecheck=true,justification=centering}
 \captionsetup[subfigure]{format=plain,singlelinecheck=true,justification=centering}
+\captionsetup[table]{format=plain,singlelinecheck=true,justification=centering}
 
 L'analyse du graphe de Software Heritage a permis de déterminer les quatre variables de recherche pour
 $60 966$ projets distincts dont les historique de développement sont eux aussi entièrement distincts deux à
@@ -11,7 +12,7 @@ deux (aucun projet analysé n'est un \en{fork} d'un autre).
 
 \section{Forme et distribution des données collectées}
 
-\begin{figure}[ht]
+\begin{table}[ht]
     \centering
     \begin{tabular}{cc}
         \input{experiment/data_analysis/hasContrib_describe.tex} &
@@ -20,12 +21,11 @@ deux (aucun projet analysé n'est un \en{fork} d'un autre).
         \input{experiment/data_analysis/recentContributorCount_describe.tex} &
         \input{experiment/data_analysis/newContributorCount_describe.tex}
     \end{tabular}
-
     \caption{Aperçu statistique des données collectées}
-    \label{fig:data_description}
-\end{figure}
+    \label{tab:data_description}
+\end{table}
 
-Un aperçu initial des données collectées (figure~\ref{fig:data_description}) révèle quelques propriétés
+Un aperçu initial des données collectées (table~\ref{tab:data_description}) révèle quelques propriétés
 intéressantes de la population étudiée. Les projets possédant des instructions de contribution sont
 significativement moins nombreux ($9 332$, soit $15\%$ des projets) que ceux n'en possédant pas. L'écart entre
 la moyenne et la médiane du nombre de \englpl{commit} récents, ainsi que sont écart type, indiquent une forte
