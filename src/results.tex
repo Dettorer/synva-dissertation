@@ -5,9 +5,9 @@
 \captionsetup[figure]{format=plain,singlelinecheck=true,justification=centering}
 \captionsetup[subfigure]{format=plain,singlelinecheck=true,justification=centering}
 
-L'analyse du graphe de Software Heritage a permis de déterminer les quatre variables de recherche pour $TODO$
-projets distincts dont les historique de développement sont eux aussi entièrement distincts deux à deux (aucun
-projet analysé n'est un \en{fork} d'un autre).
+L'analyse du graphe de Software Heritage a permis de déterminer les quatre variables de recherche pour
+$60 966$ projets distincts dont les historique de développement sont eux aussi entièrement distincts deux à
+deux (aucun projet analysé n'est un \en{fork} d'un autre).
 
 \section{Forme et distribution des données collectées}
 
@@ -26,16 +26,15 @@ projet analysé n'est un \en{fork} d'un autre).
 \end{figure}
 
 Un aperçu initial des données collectées (figure~\ref{fig:data_description}) révèle quelques propriétés
-intéressantes de la population étudiée. Les projets possédant des instructions de contribution ($TODO$, soit
-$TODO\%$ des projets) sont significativement moins nombreux que ceux n'en possédant pas. L'écart entre la
-moyenne et la médiane du nombre de \englpl{commit} récents, ainsi que sont écart type, indiquent une forte
+intéressantes de la population étudiée. Les projets possédant des instructions de contribution sont
+significativement moins nombreux ($9 332$, soit $15\%$ des projets) que ceux n'en possédant pas. L'écart entre
+la moyenne et la médiane du nombre de \englpl{commit} récents, ainsi que sont écart type, indiquent une forte
 variation de ce nombre au sein de la population étudiée, mais aussi la présence de quelques individus
-extrêmes, avec un maximum à TODO \englpl{commit} récents observés dans un seul projet. Cette dernière
-observation se retrouve aussi dans le nombre de \emph{contributeurs} récents, bien que de façon moins
-spectaculaire. Rappelons à la vue des quantiles de cette dernière valeur que les projets ayant vu moins de
-deux contributeurs distincts récents ont été exclus de l'étude (voir section
-\ref{sec:constitution_echantillon} p.~\pageref{sec:constitution_echantillon}), ce qui explique que la va leur
-minimale soit de deux.
+extrêmes, avec un maximum à $36 176$ \englpl{commit} récents observés dans un seul projet. Cette dernière
+observation se retrouve aussi dans le nombre de contributeurs récents, bien que de façon moins spectaculaire.
+Rappelons à la vue des quantiles de cette dernière valeur que les projets ayant vu moins de deux contributeurs
+distincts récents ont été exclus de l'étude (voir section \ref{sec:constitution_echantillon}
+p.~\pageref{sec:constitution_echantillon}), ce qui explique que la valeur minimale soit de deux.
 
 \begin{figure}[ht]
     \begin{subfigure}[t]{0.3\textwidth}
@@ -79,8 +78,8 @@ Une visualisation de la distribution de la population selon chaque variable num�
 qui signifie par exemple que les projets ayant peu de nouveaux contributeurs sont les plus courants, alors que
 ceux en ayant plus deviennent rapidement beaucoup plus rare à mesure que le nombre augmente. Les diagrammes
 quantile-quantile (figure~\ref{fig:qqplots}) de ces variables confirment de façon un peu plus formelle que
-leur distribution ne suit pas une loi normale, ce qui sera important pour l'interprétation des régressions
-obtenues plus loin dans cette analyse.
+leur distribution ne suit pas une loi normale, ce qui sera important pour l'interprétation des modèles obtenus
+plus loin dans cette analyse.
 
 \section{Lien entre la présence d'instructions de contribution et le nombre de nouveaux contributeurs}
 
@@ -101,32 +100,32 @@ obtenues plus loin dans cette analyse.
 \end{figure}
 
 La figure \ref{fig:hasContrib} montre la moyenne du nombre de nouveaux contributeurs au sein des projets
-possédant des instructions de contribution d'une part, et ceux n'en possédant d'autre part.
+possédant des instructions de contribution d'une part, et ceux n'en possédant pas d'autre part.
 
-Ces deux catégories de projets ont été comparées avec le test de Wilcoxon-Mann-Whitney. Celui-ci donne une
-valeur $U = TODO$ avec une taille d'effet $ρ = TODO$, ce qui signifie en langage courant que si l'on choisi au
-hasard un projet $A$ possédant des instructions de contribution et un projet $B$ n'en possédant pas, il y a
-environ $TODO\%$ de chances que le projet $A$ ait vu un plus grand nombre de nouveaux contributeurs durant la
-période étudiée que le projet $B$. Le test confirme en outre avec un degré de confiance supérieur à $TODO\%$
-($p < TODO$) que la distribution des valeurs au sein de ces deux catégories (projets avec instructions de
-contribution ou sans) est bien différente. Le test ayant été réalisé avec l'hypothèse que les projets "avec
-instructions de contribution" ont un meilleur score que les autres\footnote{hypothèse plus spécifique que la
-version "\en{two-tailed}" du test}, nous pouvons formellement affirmer que cette différence est à l'avantage
-des projets possédant des instructions de contribution, ce qui nous permet de valider
+Ces deux catégories de projets ont été comparées avec un test de Wilcoxon-Mann-Whitney. Celui-ci donne une
+taille d'effet $ρ \approx 0.57$, ce qui signifie en langage courant que si l'on choisi au hasard un projet $A$
+possédant des instructions de contribution et un projet $B$ n'en possédant pas, il y a environ $57\%$ de
+chances que le projet $A$ ait vu un plus grand nombre de nouveaux contributeurs durant la période étudiée que
+le projet $B$. Le test confirme en outre avec un degré de confiance quasi certain ($p \approx 0$) que la
+distribution des valeurs au sein de ces deux catégories (projets avec instructions de contribution ou sans)
+est bien différente. Le test ayant été réalisé avec l'hypothèse que les projets "avec instructions de
+contribution" ont un meilleur score que les autres\footnote{hypothèse plus spécifique que la version
+"\en{two-tailed}" du test.}, nous pouvons formellement affirmer que cette différence est à l'avantage des
+projets possédant des instructions de contribution, ce qui valide
 \hyperref[hyp:contributionguidelines]{l'hypothèse H\ref*{hyp:contributionguidelines}}.
 
 \subsection{Discussion}
 
 Ce résultat est cohérent avec ceux de \textcite[p.~11]{signals-2019} qui avaient déterminé que la présence
 d'instructions de contribution au sein d'un projet était un signal important dans le processus de décision
-d'un potentiel contributeur qui cherche un projet auquel contribuer. De futures recherches pourraient
-s'intéresser à la question de savoir si ce plus grand nombre de nouveaux contributeurs \emph{ayant réussi à
-contribuer} (observé dans notre étude) est dû uniquement à ce plus grand nombre de nouveaux contributeurs
-\emph{essayant de contribuer} (observé par \textcite{signals-2019}), ou si la présence d'instructions de
-contribution a un réel rôle dans le succès d'une tentative de contribution, en plus d'être un signal positif
-attirant plus de potentiels contributeurs.
+d'un potentiel contributeur qui cherche un projet auquel contribuer. De futures recherches pourraient essayer
+de déterminer si ce plus grand nombre de nouveaux contributeurs \emph{ayant réussi à contribuer} (observé dans
+notre étude) est dû uniquement à ce plus grand nombre de nouveaux contributeurs \emph{essayant de contribuer}
+(observé par \textcite{signals-2019}), ou si la présence d'instructions de contribution a un réel rôle dans le
+succès d'une tentative de contribution, en plus d'être un signal positif attirant plus de potentiels
+contributeurs.
 
-Il est tout de même important de noter que bien que le test de Wilcoxon-Mann-Whitney soit non-paramétrique et
+Il est tout de même important de noter que, bien que le test de Wilcoxon-Mann-Whitney soit non-paramétrique et
 puisse donc s'appliquer à ces données (contrairement à un test de Student nécessitant une distribution
 normale, par exemple), sa robustesse diminue significativement lorsque la distribution des données ne suit pas
 une loi normale \emph{et} que les groupes comparés ont une variance significativement différente
@@ -153,7 +152,7 @@ choisi est celui de la régression linéaire, visualisé en figure \ref{fig:cont
 
     \input{experiment/data_analysis/recentContributorCountRegressionFormula.tex}
 
-    Test d'homoscédasticité de White : $p = \input{experiment/data_analysis/recentContributorCount_white_test_p_val.tex}$
+    \input{experiment/data_analysis/recentContributorCount_white_test.tex}
 
     \caption{Nombre de nouveaux contributeurs en fonction du nombre de contributeurs récents uniques}
     \label{fig:contributorCount}
@@ -165,25 +164,26 @@ régression ($p = 0$). Cette hétéroscédasticité signifie que les données on
 au sein du problème, ce qui implique que la méthode OLS n'est pas la plus statistiquement efficace pour
 modéliser la relation entre les deux variables \parencite{GLS-2021}.
 
-Le modèle obtenu a donc finalement été calculé par la méthode des moindres carrés généralisée\footnote{Modèle
+Le modèle retenu a donc finalement été calculé par la méthode des moindres carrés généralisée\footnote{Modèle
 \texttt{GLS} du paquet Python \texttt{statsmodels}:
-\url{https://www.statsmodels.org/dev/generated/statsmodels.regression.linear_model.OLS.html}}, il suggère
+\url{https://www.statsmodels.org/dev/generated/statsmodels.regression.linear_model.GLS.html}}, il suggère
 effectivement que plus le nombre de contributeurs récents d'un projet est élevé, plus son nombre de nouveaux
-contributeurs l'est aussi. Le coefficient de détermination $R^2 \approx 0.51$ du modèle indique que le nombre
-de contributeur récent explique environ $51\%$ de la variation du nombre de nouveaux contributeurs, ce qui
-nous permet de valider \hyperref[hyp:recentcontributorcount]{l'hypothèse H\ref*{hyp:recentcontributorcount}}
-avec une taille d'effet modérée.
+contributeurs l'est aussi. Le coefficient de détermination $R^2 \approx 0.45$ du modèle indique que le nombre
+de contributeurs récent explique environ $45\%$ de la variation du nombre de nouveaux contributeurs, ce qui
+valide \hyperref[hyp:recentcontributorcount]{l'hypothèse H\ref*{hyp:recentcontributorcount}}, avec une taille
+d'effet tout de même modérée, voir faible.
 
 \subsection{Discussion}
 
 Ce résultat est aussi cohérent avec ceux de \textcite[p.~12-13,16]{signals-2019} qui observaient que le nombre
 de contributeurs uniques récents était positivement corrélé au nombre de \emph{tentatives} de contribution
 faites par de nouveaux contributeurs (représenté par le nombre de \englpl{pull request}). Là aussi de futures
-recherches pourraient étudier la causalité de cette relation, notre étude ne pouvant qu'affirmer que, le
-nombre de contributeurs récents étant mesuré sur une période antécédente à celle sur laquelle est mesuré le
-nombre de nouveaux contributeurs, cette deuxième variable ne peut pas influencer la première, du moins telles
-qu'elles ont été définies ici. Il reste à déterminer si une chaîne causale lie directement ces deux variables
-(si oui, laquelle) ou si elles ne sont liées que par un ancêtre causal commun (et si oui, lequel).
+recherches pourraient s'intéresser à la causalité de cette relation. Tout ce que notre étude peut affirmer sur
+l'éventuel lien de causalité est que, le nombre de contributeurs récents étant mesuré sur une période
+antécédente à celle sur laquelle est mesuré le nombre de nouveaux contributeurs, cette deuxième variable ne
+peut pas influencer la première, du moins tel que celles-ci ont été définies ici. Il reste à déterminer si une
+chaîne causale lie directement ces deux variables (si oui, laquelle) ou si elles ne sont liées que par un
+ancêtre causal commun (et si oui, lequel).
 
 \section{Lien entre le nombre de \en{commits} récents et le nombre de nouveaux contributeurs}
 
@@ -206,7 +206,7 @@ régression linéaire utilisant la méthode des moindres carrés généralisée 
 
     \input{experiment/data_analysis/recentCommitCountRegressionFormula.tex}
 
-    Test d'homoscédasticité de White : $p = \input{experiment/data_analysis/recentCommitCount_white_test_p_val.tex}$
+    \input{experiment/data_analysis/recentCommitCount_white_test.tex}
 
     \caption{Nombre de nouveaux contributeurs en fonction du nombre de \englpl{commit} récents}
     \label{fig:commitCount}
@@ -214,7 +214,7 @@ régression linéaire utilisant la méthode des moindres carrés généralisée 
 
 Le modèle suggère ici aussi une corrélation positive entre le nombre de \englpl{commit} récents d'un projet et
 son nombre de nouveaux contributeurs, mais son coefficient de détermination est trop faible ($R^2 \approx
-0.02$) pour considérer cette corrélation comme représentative des données du problème. Nous ne pouvons donc
+0.10$) pour considérer que le modèle représente fidèlement des données du problème. Nous ne pouvons donc
 conclure à une relation entre ces deux variables et devons rejeter
 \hyperref[hyp:recentcommitcount]{l'hypothèse H\ref*{hyp:recentcommitcount}}.
 

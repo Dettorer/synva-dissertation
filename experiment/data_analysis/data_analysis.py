@@ -58,10 +58,14 @@ def write_regression_viz(
         with open(f"{x_col}RegressionFormula.tex", "w") as outfile:
             outfile.write(f"${tex_formula}$\\\\($R^2 = {float_to_tex(model.rsquared)}$)")
 
-        # White's heteroscedasticity test
-        _lm_stat, lm_pval, _f_stat, _f_pval = het_white(model.resid, sm.add_constant(x))
-        with open(f"{x_col}_white_test_p_val.tex", "w") as outfile:
-            outfile.write(float_to_tex(cast(np.float64, lm_pval).item()))
+        # White's homoscedasticity test
+        lm_stat, lm_pval, _f_stat, _f_pval = het_white(model.resid, sm.add_constant(x))
+        with open(f"{x_col}_white_test.tex", "w") as outfile:
+            lm = float_to_tex(cast(np.float64, lm_stat).item())
+            p = float_to_tex(cast(np.float64, lm_pval).item())
+            outfile.write(
+                f"Test d'homoscédasticité de White : $LM = {lm}$ ($p = {p}$)"
+            )
 
 
 def test_hasContrib(data: pd.DataFrame) -> None:
@@ -97,7 +101,7 @@ def test_hasContrib(data: pd.DataFrame) -> None:
     with open("hasContribTest.tex", "w") as outfile:
         u, p = map(float_to_tex, (u_stat, p_value))
         ρ_effect_size = float_to_tex(u_stat / (len(with_contrib) * len(without_contrib)))
-        outfile.write(f"Mann-Whitney statistic: $U = {u}$ ($p = {p}$, $ρ = {ρ_effect_size}$)")
+        outfile.write(f"Test de Wilcoxon-Mann-Whitney : $U = {u}$ ($p = {p}$, $ρ = {ρ_effect_size}$)")
 
 
 def write_initial_viz(data: pd.DataFrame) -> None:
