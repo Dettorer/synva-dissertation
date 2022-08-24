@@ -29,11 +29,12 @@
 
 % Table of contents, figures and tables
 \begingroup % Local scope for the following commands
+    % Replace the automatic page break between those lists by a simple vertical split
+    \newcommand{\biggerskip}{\vspace{4\bigskipamount}}
+    \let\cleardoublepage\biggerskip
+    \let\clearpage\biggerskip
+
+    \tableofcontents
     \listoffigures
-
-    % Keep the list of figures and the list of tables on the same page
-    \let\cleardoublepage\bigskip
-    \let\clearpage\bigskip
-
     \listoftables
 \endgroup
