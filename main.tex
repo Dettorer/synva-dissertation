@@ -22,7 +22,7 @@
     twoside=true,  % Use different layouts for even and odd pages
 ]{kaobook}
 
-% TODO: show the page number on each page (unless forbidden by the dissertation requirements)
+% TODO: show the page numbers on each page with the count starting at the title page
 
 % Code highlighting
 \usepackage{minted}
@@ -66,7 +66,7 @@
 % Configure the index and the glossary
 \makeindex[columns=3, title=Alphabetical Index, intoc]
 \makeglossaries
-\setglossarystyle{altlist} % TODO: switch to altlistgroup if I end up with a lot entries
+\setglossarystyle{altlist}
 \input{glossary}
 % shortcut for english glossary entries
 \newcommand{\engl}[1]{\en{\gls{#1}}}
