@@ -118,7 +118,6 @@
         python310Packages.requests # http querying
         python310Packages.scipy # for its statistical functions
         python310Packages.statsmodels # for drawing Q-Q plots
-        python310Packages.tabulate # textual (markdown) data visualisation
       ];
       experimentDependencies =
         pythonDistribution ++ javaDistribution ++ [ cmph pkgs.postgresql ];

@@ -2,6 +2,8 @@
 
 [![workflow status badge](https://github.com/Dettorer/synva-dissertation/actions/workflows/build-and-release.yml/badge.svg)](https://github.com/Dettorer/synva-dissertation/releases/latest/download/Paul_Hervot_M2_dissertation.pdf)
 
+Replication package: [![replication package zenodo badge](https://zenodo.org/badge/DOI/10.5281/zenodo.7023495.svg)](https://doi.org/10.5281/zenodo.7023495)
+
 My research dissertation for Strasbourg University's
 [SYNVA](https://sfc.unistra.fr/formations/formation_-_ingenierie-de-formation_-_master-2-ingenierie-des-systemes-numeriques-virtuels-pour-lapprentissage-synva_-_2393/)
 master's degree.

@@ -6,8 +6,6 @@
 \section{Collecte initiale depuis le graphe de Software Heritage}
 \label{app:collect.java}
 
-\todo[inline]{replication package ?}
-
 Le code de la collecte initiale prend la forme d'une classe Java utilisant la bibliothèque
 \texttt{swh-graph}\footnote{\url{https://docs.softwareheritage.org/devel/swh-graph/java-api.html}} et est
 disponible sur le dépôt \gls{github} de ce mémoire au lien suivant :
@@ -70,8 +68,6 @@ les requêtes Amazon S3, ou \texttt{charset\_normalizer} pour le décodage des f
 est disponible sur le dépôt \gls{github} de ce mémoire au lien suivant :
 \url{https://github.com/Dettorer/synva-dissertation/blob/main/experiment/data_collection/check_readme_contents.py}.
 
-\todo[inline]{replication package ?}
-
 Une difficulté de la récolte du contenu des fichiers \texttt{README} est une incohérence dans le type
 d'identificateur utilisé sur \url{https://archive.softwareheritage.org/} et le \en{registry} Amazon S3. Pour
 télécharger le contenu d'un fichier depuis le site web, il faut l'identifier en utilisant son hachage
@@ -79,9 +75,10 @@ cryptographique \texttt{sha1\_git}, qui est celui renseigné dans le graphe. Le 
 revanche, identifie les contenus en utilisant un hachage différent appelé \texttt{sha1}. Pour pouvoir
 télécharger le contenu d'un fichier sur Amazon S3 à partir de données collectées dans le graphe, il faut donc
 traduire le \texttt{sha1\_git} obtenu en un \texttt{sha1}, ce qui est impossible si l'on ne possède pour seule
-information que le \texttt{sha1\_git}. Pour contourner le problème, Software Heritage m'a fourni une table de
-correspondance des deux méthodes de hachage pour les fichiers dont j'avais besoin, ce qui m'a permis de faire
-cette traduction au besoin dans mon script.
+information que le \texttt{sha1\_git}. Pour contourner le problème, une table de correspondance des deux
+méthodes de hachage peut être construite préalablement à partir de la représentation Apache ORC du
+graph\footnote{voir \url{https://docs.softwareheritage.org/devel/swh-dataset/graph/dataset.html}}, qui
+contient les deux types de hash.
 
 \section{Code d'analyse des résultats}
 \label{app:analysis.py}
