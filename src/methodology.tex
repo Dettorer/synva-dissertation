@@ -128,12 +128,35 @@ Voir aussi l'annexe \ref{app:collect.java} pour plus de détails.
 \section{Collecte complémentaire des données}
 \label{sec:collectreadme}
 
+Il nous faut maintenant vérifier le contenu du fichier \texttt{README.md} (ou assimilé) retenu pour chaque
+projet ne possédant pas de fichier \texttt{CONTRIBUTING.md} (ou assimilé) afin de déterminer s'ils possèdent
+ou non des instructions de contribution, et ainsi compléter notre jeu de donnée. Le contenu des fichiers est
+bien archivé par Software Heritage mais n'est pas disponible directement dans le graphe, il est en revanche
+possible de télécharger ces contenus de deux autres façons différentes : soit via des requêtes HTTP sur le
+site web \url{https://archive.softwareheritage.org/}, accessible publiquement, soit en téléchargeant les
+contenus directement depuis leur "\en{registry}" Amazon
+S3\footnote{\url{https://registry.opendata.aws/software-heritage}}, lui aussi accessible publiquement. Le site
+\url{https://archive.softwareheritage.org/} limite le nombre de requêtes autorisées par adresse IP à quelques
+dizaines par heure. Le \en{registry} Amazon S3 n'impose pas ce genre de limite, mais moins de contenu y sont
+disponibles. Nous utiliserons donc en priorité le \en{registry} Amazon S3 pour télécharger le contenu des
+fichiers \texttt{README} nécessaires, puis le site web \url{https://archive.softwareheritage.org/} pour tous
+ceux que nous ne parviendrons pas à y trouver.
+
+Une fois le contenu des \texttt{README} téléchargés, nous cherchons une section dont le nom contient le mot
+"\en{contributing}" ou un mot proche. Pour identifier les noms de section dans les fichiers téléchargés, nous
+supposons que ceux-ci sont formatés suivant un des deux standards les plus répandus de formatage de text
+brut : le Markdown (dont l'extension courante est \texttt{.md}) ou le reStructuredText (dont l'extension
+courante est \texttt{.rst}). Le format Markdown autorise deux façon de définir une section\footnote{voir
+\url{https://www.markdownguide.org/basic-syntax/\#headings}}, la première consiste à démarrer une ligne avec
+un ou plusieurs caractères "croisillon" ("\#") puis d'écrire le nom de la section sur la fin de la ligne,
+l'autre consiste à écrire directement le nom de la section, puis à la "souligner" en écrivant plusieurs fois
+le caractère "égal" ("=") ou "tiret" ("-") sur la ligne suivante. Le format reStructuredText n'autorise qu'une
+seule façon de définir des sections, en soulignant une ligne de la même façon que la deuxième méthode du
+Markdown, à ceci près que d'autres caractères sont aussi acceptés pour composer la ligne\footnote{voir
+\url{https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html\#sections}}.
+
+Pour déterminer si un fichier \texttt{README} contient des instructions de contribution, nous identifions donc
+tous les noms de section le composant et vérifions que l'un d'eux contiennent le mot "\en{contributing}" ou
+assimilé.
+
 Voir aussi l'annexe \ref{app:checkreadme.py} pour plus de détails.
-
-\todo[inline]{Décrire le script.}
-
-\section{Traitement des données}
-
-Voir aussi l'annexe \ref{app:analysis.py} pour plus de détails.
-
-\todo[inline]{Décrire la méthodologie.}
