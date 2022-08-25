@@ -122,26 +122,25 @@ permet de n'étudier qu'une variable binaire.
 
 \section{L'analyse automatique ("minage") de projets de logiciel libre}
 
-\todo[inline]{Voir si ces articles sont pertinents à citer}
-
-\begin{itemize}
-    \item \url{https://ieeexplore.ieee.org/document/4659248}
-    \item \url{https://onlinelibrary.wiley.com/doi/10.1002/smr.344}
-    \item \url{https://hal.archives-ouvertes.fr/hal-02158292}
-    \item \sidetextcite{mining-github-2014}
-\end{itemize}
-
-Il y a toute une conférence spécifiquement sur ça : \en{Conference on Mining Software Repositories}.
-
 Pour leur analyse quantitative, \textcite{signals-2019} commencent par collecter des données sur la plateforme
 d'hébergement de code source \gls{github} via son \gls{API}. Ce choix est cohérent avec un grand nombre des
 études de ces dernières années \sideparencite{github-mapping-2017}, la plateforme est très populaire dans le
 milieu du logiciel libre et a connu une croissance très importante ces dernières années. Ces mêmes études
-notent cependant parfois que se restreindre à cette seule plateforme est une limite diminuant potentiellement
-la représentativité de l'échantillon qu'elles étudients. Les limites et erreurs courrantes liées au "minage"
-de \gls{github} font d'ailleurs l'objet d'une littérature grandissante et remettant potentiellement en
-question les résultats des études utilisant cette technique sans détailler suffisamment leur méthodologie de
-collecte des données \parencites{mining-github-2014}{penumbra-oss-2022}.
+notent cependant parfois que se restreindre à cette seule plateforme est une limite diminuant la
+représentativité de l'échantillon qu'elles étudients \sideparencite{swh-growth-2019}. Les limites et erreurs
+courrantes liées au "minage" de \gls{github} font d'ailleurs l'objet d'une littérature grandissante et
+remettant potentiellement en question les résultats des études utilisant cette technique sans détailler
+suffisamment leur méthodologie de collecte des données \parencites{mining-github-2014}{penumbra-oss-2022}.
+
+Il est à noter aussi que le nombre de projets et d'artéfactes qui leur sont lié est en augmentation rapide,
+voir exponentielle, \sidetextcite{swh-growth-2019} estiment que le nombre de \glspl{commit} uniques originaux
+double environ tous les 30 mois, quand le nombre de fichiers uniques originaux double quant à lui tous les 22
+mois. Cette explosion du nombre de \glspl{commit} et de fichiers s'accompagne d'un important phénomène de
+duplication : de nombreux fichiers ne sont pas uniques et se retrouvent dans de nombreux projets différents,
+comme les notices de licence par exemple. Les \glspl{commit} eux-même peuvent se trouver dans plusieurs
+projets différents, c'est ce qui arrive lorsqu'un projet débute en tant que \gls{fork} d'un autre. Ces deux
+points rendent de plus en plus difficile l'analyse efficace et à grande échelle de l'historique de
+développement des projets de logiciel libre.
 
 \subsection{L'archive de logiciels de Software Heritage}
 \label{ssec:swh-graph}
@@ -164,8 +163,9 @@ recherche \sideparencite{swh-2017}. Il s'agit du corpus que \textcite{swh-graph-
 exemple pour leur modèle de compression. L'archive comptait en 2018 plus d'un milliard de \glspl{commit}
 uniques archivés depuis quatre-vingt-cinq millions d'origines différentes (telles que des \en{remotes}
 \gls{git} ou des versions de paquets Python publiés sur PyPi\sidenote{\url{https://pypi.org/}}) et augmente de
-façon continue en ajoutant de nouveaux projets et en suivant l'évolution des projets déjà archivés
-\sidetextcite{swh-2019}.
+façon continue en ajoutant de nouveaux projets et en suivant l'évolution des projets déjà archivés, ce qui en
+fait l'un des corpus les plus complets exploitable par la recherche scientifique
+\sideparencite{swh-2019,swh-growth-2019}.
 
 \section{Méthodologies de recherches autour de ces questions}
 
@@ -197,15 +197,3 @@ que les projets ayant au moins deux auteurs de \glspl{commit} uniques, ce qu'ils
 "vraiment collaboratifs". Ce choix vient de leur observation qu'une très grande partie des projets hébergés
 sur la plateforme ($71\%$) sont des projets "personnels", utilisés par leurs auteurs à des fins
 d'expérimentation ou de stockage, sans réelle ouverture à la collaboration.
-
-\todo[inline]{TODO : quelques articles potentiellement à lire}
-
-Spécifiquement autour de l'idée d'identifier les bons projets de logiciel libre vers lesquels diriger des
-étudiants qui découvrent le milieu :
-
-\begin{itemize}
-    \item \sidetextcite{mining-github-2014}.
-    \item \sidetextcite{signals-2019}, choisir des projets typiquement attirants peut aider.
-    \item \sidetextcite{code-of-conduct-2017}, n'a pas l'air très concluant, à regarder rapidement.
-    \item "Terell et al. [55]" dans \textcite{barriers-2018}, cité page 1011, sur comment miner \gls{github}.
-\end{itemize}
