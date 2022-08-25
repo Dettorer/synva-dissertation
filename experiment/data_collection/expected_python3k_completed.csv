@@ -7,7 +7,7 @@ projectMainBranch,newContributorCount,hasContrib,readmeUrl,recentContributorCoun
 36443957,0,FALSE,checked,7,124,https://gitlab.com/elixire/elixire.git
 36621506,3,TRUE,null,15,843,https://github.com/pandas-dev/pandas
 36741872,0,FALSE,checked,5,29,https://github.com/xingyizhou/CenterNet
-38902679,0,TRUE,checked,5,40,https://github.com/openatx/uiautomator2
+38902679,0,FALSE,checked,5,40,https://github.com/openatx/uiautomator2
 39309347,1,FALSE,checked,6,61,https://github.com/Netflix/flamescope
 39552794,2,TRUE,null,3,25,https://github.com/awslabs/autogluon
 39864324,1,TRUE,null,5,77,https://github.com/aws/aws-sam-cli
@@ -76,7 +76,7 @@ projectMainBranch,newContributorCount,hasContrib,readmeUrl,recentContributorCoun
 42765086,28,TRUE,null,17,114,https://github.com/openvinotoolkit/open_model_zoo
 42774683,3,TRUE,null,14,155,https://github.com/jazzband/pip-tools
 42802486,0,TRUE,checked,2,14,https://github.com/joblib/joblib
-42803583,0,TRUE,checked,2,14,https://github.com/madmaze/pytesseract
+42803583,0,FALSE,checked,2,14,https://github.com/madmaze/pytesseract
 42862328,1,TRUE,checked,0,0,https://pypi.org/project/great-expectations/
 42866621,1,TRUE,checked,2,34,https://github.com/ktbyers/netmiko
 42890167,0,TRUE,null,1,1,https://github.com/burnash/gspread
@@ -141,10 +141,10 @@ projectMainBranch,newContributorCount,hasContrib,readmeUrl,recentContributorCoun
 44069493,0,FALSE,checked,5,153,https://github.com/automl/auto-sklearn
 44084294,1,FALSE,checked,0,0,deb://Debian/packages/tryton-modules-party-siret
 44112491,1,FALSE,checked,0,0,https://pypi.org/project/sshtunnel/
-44117342,4,TRUE,checked,0,0,https://github.com/UKPLab/sentence-transformers
+44117342,4,FALSE,checked,0,0,https://github.com/UKPLab/sentence-transformers
 44129627,1,FALSE,checked,0,0,deb://Debian/packages/tryton-modules-company-work-time
 44156050,1,TRUE,null,0,0,deb://Debian/packages/mailman3
-44165076,6,TRUE,checked,1,4,https://github.com/OlafenwaMoses/ImageAI
+44165076,6,FALSE,checked,1,4,https://github.com/OlafenwaMoses/ImageAI
 44190671,1,TRUE,null,5,55,https://github.com/pallets/flask-sqlalchemy
 44191103,1,FALSE,checked,0,0,deb://Debian/packages/python-xvfbwrapper
 44225462,2,TRUE,checked,6,45,https://github.com/arrow-py/arrow
@@ -154,7 +154,7 @@ projectMainBranch,newContributorCount,hasContrib,readmeUrl,recentContributorCoun
 44333779,1,FALSE,checked,0,0,https://pypi.org/project/sentry-sdk/
 44340301,1,FALSE,checked,0,0,deb://Debian/packages/tryton-modules-sale
 44406206,1,TRUE,null,10,152,https://github.com/Eloston/ungoogled-chromium
-44408285,0,TRUE,checked,1,24,https://gitlab.com/BVollmerhaus/blurwal.git
+44408285,0,FALSE,checked,1,24,https://gitlab.com/BVollmerhaus/blurwal.git
 44408549,1,TRUE,null,8,120,https://github.com/feast-dev/feast
 44414678,1,TRUE,null,0,0,deb://Debian/packages/python-gear
 44416403,0,FALSE,checked,9,83,https://github.com/jackfrued/Python-100-Days
@@ -197,7 +197,7 @@ projectMainBranch,newContributorCount,hasContrib,readmeUrl,recentContributorCoun
 44979623,0,FALSE,checked,3,31,https://gitlab.com/tobimiller/mascor_px4_control.git
 44980757,6,FALSE,checked,0,0,https://github.com/zihangdai/xlnet
 44986656,2,FALSE,checked,2,5,https://github.com/tensorlayer/srgan
-44996249,2,TRUE,checked,7,59,https://github.com/gpuweb/gpuweb
+44996249,2,FALSE,checked,7,59,https://github.com/gpuweb/gpuweb
 44997950,0,FALSE,checked,3,201,https://github.com/cool-RR/PySnooper
 44998585,1,TRUE,checked,0,0,https://pypi.org/project/msal-extensions/
 45053002,1,FALSE,checked,0,0,deb://Debian/packages/kazam
@@ -251,7 +251,7 @@ projectMainBranch,newContributorCount,hasContrib,readmeUrl,recentContributorCoun
 45435434,0,TRUE,checked,3,99,https://github.com/taki0112/Tensorflow-Cookbook
 45441291,1,FALSE,checked,0,0,https://pypi.org/project/Rx/
 45441407,1,FALSE,checked,2,55,https://github.com/huashengdun/webssh
-45445799,1,TRUE,checked,3,4,https://github.com/minimaxir/big-list-of-naughty-strings
+45445799,1,FALSE,checked,3,4,https://github.com/minimaxir/big-list-of-naughty-strings
 45483887,1,FALSE,checked,1,12,https://gitlab.com/divisadero/cloud-functions-python-emulator.git
 45493492,0,FALSE,checked,0,0,https://github.com/bbfamily/abu
 45501175,2,FALSE,checked,6,14,https://github.com/openai/spinningup

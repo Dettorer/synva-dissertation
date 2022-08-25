@@ -176,13 +176,12 @@ def is_header(line: str, next_line: Optional[str]) -> bool:
     )
 
 
-# TODO: transform to regular expressions with word bounds check
-CONTRIBUTING_VARIANTS = {
-    "contributing",
-    "contribution",
-    "contribute",
-    "contrib"
-}
+CONTRIBUTING_VARIANTS = set(map(re.compile, [
+    r"\bcontributing\b",
+    r"\bcontribution\b",
+    r"\bcontribute\b",
+    r"\bcontrib\b"
+]))
 
 def readme_has_contrib(content: str) -> bool:
     """Check the content for a markdown or reStructuredText header that contains
@@ -190,9 +189,9 @@ def readme_has_contrib(content: str) -> bool:
     for line, next_line in windowed(content.splitlines(), 2):
         if line is not None and is_header(line, next_line):
             # `line` is a md or rst header
-            for variant in CONTRIBUTING_VARIANTS:
-                if variant in line.lower():
-                    return True
+            line = line.lower()
+            if any(variant.search(line) for variant in CONTRIBUTING_VARIANTS):
+                return True
 
     return False
 
