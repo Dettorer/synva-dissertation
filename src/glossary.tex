@@ -31,7 +31,7 @@
     description={
         \url{https://git-scm.com/}\\
         Logiciel de gestion de versions (dit "système de versionnement"). Git est un logiciel permettant de
-        sauvegarder l'historique de développement d'un projet (ses \englpl{commit}) et d'organiser les
+        sauvegarder l'historique de développement d'un projet (ses \glspl{commit}) et d'organiser les
         contributions d'un petit ou grand nombre de personnes. Il est pensé pour mais pas limité aux logiciels
         libre, git a été conçu à l'origine pour organiser le développement du noyau de système d'exploitation
         \gls{linux}. L'historique d'un projet tel que sauvegardé par Git est communément appelé un
@@ -53,7 +53,7 @@
     name=\textsc{GitHub},
     description={
         \url{https://github.com/}\\
-        Une plateforme d'hébergement de \glspl{dépôt} \gls{git} avec \engl{bug tracker} et autres outils
+        Une plateforme d'hébergement de \glspl{dépôt} \gls{git} avec \gls{bug tracker} et autres outils
         annexes, gérée par une entreprise privée
     },
 }
@@ -66,8 +66,8 @@
         utilisateur usuelle du service en question, on parle donc d'interface logicielle. Par exemple,
         l'\en{API} du site \gls{github} (détaillée ici : \url{https://docs.github.com/en/rest}) permet aux
         développeurs et chercheurs d'écrire des programmes collectant automatiquement des données de la
-        plateforme (comme le nom des projets hébergés, le nombre de \englpl{pull request} d'un projet
-        spécifique, les auteurs de \englpl{commit}, etc.), et cela sans utiliser de navigateur web
+        plateforme (comme le nom des projets hébergés, le nombre de \glspl{pull request} d'un projet
+        spécifique, les auteurs de \glspl{commit}, etc.), et cela sans utiliser de navigateur web
     },
 }
 
@@ -76,17 +76,16 @@
     description={
         \url{https://about.gitlab.com/}\\
         Un logiciel libre permettant de créer des plateformes d'hébergement de \glspl{dépôt} \gls{git} avec
-        \engl{bug tracker} et autres outils annexes
+        \gls{bug tracker} et autres outils annexes
     },
 }
 
 \newglossaryentry{fosdem}{
-    name=FOSDEM,
+    name=\en{FOSDEM},
     description={
-        \url{https://fosdem.org}\\
-        Acronyme de "\en{Free and Open Source Developers' European Meeting}". Il s'agit d'une conférence
-        annuelle à l'accès gratuit hébergeant le temps d'un week-end de nombreuses présentations, ateliers et
-        discussions autour du logiciel libre
+        \url{https://fosdem.org}\\ Acronyme de "\en{Free and Open Source Developers' European Meeting}". Il
+        s'agit d'une conférence annuelle à l'accès gratuit hébergeant le temps d'un week-end de nombreuses
+        présentations, ateliers et discussions autour du logiciel libre
     },
 }
 
@@ -121,9 +120,28 @@
     name=\en{pull request},
     description={
         Une proposition de contribution à un projet. Une \en{pull request} prend la forme d'un ensemble de
-        \englpl{commit} que des personnes internes ou externes au projet soumettent à la validation des
-        personnes ayant la permission de modifier son code source. Les pull request font typiquement l'objet
-        de relectures, commentaires et demandes d'ajustement de la part des contributeurs habitués et reconnus
-        du projet
+        \glspl{commit} que des personnes internes ou externes au projet soumettent à la validation des
+        personnes ayant la permission de modifier son code source. Les \en{pull request} font typiquement
+        l'objet de relectures, commentaires et demandes d'ajustement de la part des contributeurs habitués et
+        reconnus du projet
     },
+}
+
+\newglossaryentry{fork}{
+    name=\en{fork},
+    description={
+        En développement logiciel, un \en{fork} est un projet dont le début de l'historique de développement
+        est confondu avec celui d'un autre projet. Il s'agit en quelque sorte d'une version alternative d'un
+        projet existant, devenue autonome par la suite et pouvant avoir sa propre équipe de développement
+        totalement distincte, jusqu'à éventuellement (mais pas obligatoirement) n'avoir plus rien à voir avec
+        le projet d'origine. Un exemple célèbre de ce phénomène est
+        LibreOffice\footnote{\url{https://www.libreoffice.org/}}, un logiciel libre de bureautique ayant
+        démarré en se basant sur le code source d'OpenOffice\footnote{\url{https://openoffice.apache.org/}} et
+        étant maintenant un projet autonome avec une équipe de développement différente.
+    },
+}
+
+\newglossaryentry{clone}{
+    name=clone,
+    description={En développement logiciel, voir \gls{fork}},
 }

@@ -23,8 +23,8 @@
 }
 
 \newhyp{recentcommitcount}{%
-    le nombre de \englpl{commit} récents (du premier janvier 2019 au premier juin 2019) au sein d'un projet
-    est positivement corrélé à son accessibilité pour les nouveaux contributeurs
+    le nombre de \glspl{commit} récents (du premier janvier 2019 au premier juin 2019) au sein d'un projet est
+    positivement corrélé à son accessibilité pour les nouveaux contributeurs
     \parencite[voir][p.~13,16]{signals-2019}.
 }
 
@@ -42,8 +42,8 @@ L'échantillon de départ est constitué de la totalité des projets archivés d
 Plusieurs critères d'exclusion ont ensuite été appliqués :
 
 \begin{itemize}
-    \item quand deux projets ou plus ont des \englpl{commit} en commun, seul celui qui a reçu le plus
-        d'activité (mesuré en regardant le nombre de \englpl{commit} entre le premier et le dernier) a été
+    \item quand deux projets ou plus ont des \glspl{commit} en commun, seul celui qui a reçu le plus
+        d'activité (mesuré en regardant le nombre de \glspl{commit} entre le premier et le dernier) a été
         retenu ;
     \item les projets n'ayant enregistré aucune activité (aucun commit) entre le 1er juin 2019 et le 1er
         septembre 2019 n'ont pas été retenus ;
@@ -60,24 +60,25 @@ Plusieurs critères d'exclusion ont ensuite été appliqués :
 
 Le code (une classe Java) est disponible en annexe \ref{app:collect.java}.
 
-Le graphe est dirigé (un arc d'un nœud A vers B tous signifie que B est un \engl{commit} \emph{parent} de A)
+Le graphe est dirigé (un arc d'un nœud A vers B tous signifie que B est un \gls{commit} \emph{parent} de A)
 mais l'API fourni aussi des méthodes donnant accès au symmétrique de chaque arc, ce qui permet d'utiliser au
 besoin sur le graphe à la fois les algorithmes spécifiques aux graphes orientés et ceux spécifiques aux
 graphes non-orientés.
 
 Dans un premier temps, la fonction \texttt{discoverProject} est appelée sur tous les nœuds de type
 \texttt{ORI} (point de départ de l'archivage d'un projet par Software Heritage), cette fonction identifie tous
-les projets étant des \en{fork} de celui-ci via un double parcours largeur sur la composante connexe du nœud
+les projets étant des \gls{fork} de celui-ci via un double parcours largeur sur la composante connexe du nœud
 de départ formée par le sous-graphe des nœuds \texttt{REV} (\en{revision}, terme générique pour les
-\englpl{commit}) et \texttt{SNP} (\en{snapshot}, le point d'entrée d'\emph{un} archivage du projet). Cette
+\glspl{commit}) et \texttt{SNP} (\en{snapshot}, le point d'entrée d'\emph{un} archivage du projet). Cette
 détection se fait en deux parcours largeur au lieu d'un seul afin de calculer en même temps la taille de la
 plus longue chaîne de commits accessible depuis chaque nœud \texttt{ORI} de la composante connexe (donc depuis
 chaque fork du projet initial). Le premier parcours remonte les ancêtres du nœud de départ pour trouver les
 révisions racines (les "\en{initial commits}") du projet, puis un deuxième parcours est lancé dans l'autre
 sens avec des marqueurs de niveau depuis chacune de ces révisions racines afin de trouver tous les nœuds
-\texttt{ORI} qui peuvent les atteindre et sont donc des \en{forks} les uns des autres. Pour chaque composante
-connexe, seul un nœud \texttt{SNP} est retenu pour l'analyse en deuxième étape : celui étant le point de
-départ de la plus longue chaîne de \englpl{commit} possible, donc ayant le plus de données exploitables.
+\texttt{ORI} qui peuvent les atteindre et sont donc des \glspl{fork} les uns des autres. Pour chaque
+composante connexe, seul un nœud \texttt{SNP} est retenu pour l'analyse en deuxième étape : celui étant le
+point de départ de la plus longue chaîne de \glspl{commit} possible, donc ayant le plus de données
+exploitables.
 
 Dans un deuxième temps, la fonction \texttt{collectProject} est appelée sur chaque projet retenu afin d'en
 extraire les données de recherche. Cette fonction commence par identifier la branche ayant le plus de chance
@@ -89,13 +90,13 @@ démarre un parcours largeur à partir de cette branche dans lequel elle compte�
         avant (variable expliquée) ;
     \item le nombre de contributeurs uniques pendant une période récente avant la période de référence
         (variable expliquative, hypothèse H\ref{hyp:recentcontributorcount}) ;
-    \item le nombre de \englpl{commit} dans la même période récente avant la période de référence (variable
+    \item le nombre de \glspl{commit} dans la même période récente avant la période de référence (variable
         expliquative, hypothèse H\ref{hyp:recentcommitcount}).
 \end{itemize}
 
 La présence d'instructions de contribution (hypothèse H\ref{hyp:contributionguidelines}) est plus compliquée à
-vérifier. Le graphe possédant le nom et la hierarchie des fichiers contenus dans chaque \engl{commit}, mais
-pas leur contenu, l'analyse se contente de vérifier si un fichier dont le nom est une variante du classique
+vérifier. Le graphe possédant le nom et la hierarchie des fichiers contenus dans chaque \gls{commit}, mais pas
+leur contenu, l'analyse se contente de vérifier si un fichier dont le nom est une variante du classique
 \texttt{CONTRIBUTING.md} existe. Si ce fichier existe, l'analyse conclue que le projet possède effectivement
 des instructions de contribution, sinon, elle vérifie la présence d'un fichier dont le nom est une variante du
 classique \texttt{README.md}. Si ce fichier existe, l'analyse conclue que le projet possède \emph{peut être}
