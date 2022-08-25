@@ -144,6 +144,7 @@ question les résultats des études utilisant cette technique sans détailler su
 collecte des données \parencites{mining-github-2014}{penumbra-oss-2022}.
 
 \subsection{L'archive de logiciels de Software Heritage}
+\label{ssec:swh-graph}
 
 Les techniques de compression de graphe sont aujourd'hui suffisamment avancées pour permettre une nouvelle
 approche à cette analyse automatique des projets, en rendant un très grand nombre de ceux-ci disponibles au
@@ -151,10 +152,10 @@ sein d'une même structure de donnée unifiée et optimisée \sideparencite{swh-
 par exemple de grandement faciliter la détection des "\glspl{clone}" ou "\glspl{fork}" de projets, c'est à
 dire des projets ayant une part de leur historique de développement en commun. La structure de donnée proposée
 par \textcite{swh-graph-2020} est un graphe orienté où chaque \gls{commit} est représenté par un nœuds et où
-chaque arc $u \xrightarrow{succ} v$ ("$v$ est un successeur de $u$", ce qui signifie dans le cas des commits
-"$v$ est un ancêtre immédiat de $u$") possède aussi un arc inverse $u \xleftarrow{pred} v$ ("$u$ est un
-prédecesseur de $v$"), ce qui signifie que trouver tous les "\gls{fork}" d'un projet se fait avec un classique
-calcul de composante fortement connexe à partir de n'importe lequel de ses \glspl{commit}.
+chaque arc $u \xrightarrow{succ} v$ ("$v$ est un successeur de $u$", ce qui signifie dans le cas des
+\glspl{commit} "$v$ est un ancêtre immédiat de $u$") possède aussi un arc inverse $u \xleftarrow{pred} v$
+("$u$ est un prédécesseur de $v$"), ce qui signifie que trouver tous les "\gls{fork}" d'un projet se fait avec
+un classique calcul de composante fortement connexe à partir de n'importe lequel de ses \glspl{commit}.
 
 Software Heritage\sidenote{\url{https://www.softwareheritage.org/}} est une initiative exploitant ces
 techniques de compression afin de construire une archive aussi complète que possible du code source
@@ -165,11 +166,6 @@ uniques archivés depuis quatre-vingt-cinq millions d'origines différentes (tel
 \gls{git} ou des versions de paquets Python publiés sur PyPi\sidenote{\url{https://pypi.org/}}) et augmente de
 façon continue en ajoutant de nouveaux projets et en suivant l'évolution des projets déjà archivés
 \sidetextcite{swh-2019}.
-
-\todo[inline]{%
-    TODO : expliquer ici la structure du graphe ? Ou plutôt dans la partie méthodologie ? Remarque j'explique
-    déjà le point le plus critique en parlant de \textcite{swh-graph-2020}.
-}
 
 \section{Méthodologies de recherches autour de ces questions}
 

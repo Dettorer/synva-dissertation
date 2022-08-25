@@ -8,6 +8,39 @@
     \end{restatable}%
 }
 
+\section{Problématique}
+
+La question de l'accessibilité des projets de logiciel libre pour les nouveaux contributeurs est encore assez
+peu explorée dans la littérature. \textcite{signals-2019} se sont intéressé aux signaux que les potentiels
+nouveaux contributeurs utilisent afin de sélectionner les projets auxquels ils \emph{essayent} de contribuer,
+c'est à dire les signaux formant l'attractivité de ces projets. Nous nous attacherons dans notre étude à
+déterminer si certains de ces mêmes signaux sont, de surcroit, prédictifs d'une réelle accessibilité de ces
+projets, c'est à dire à quel point de nouveaux contributeurs \emph{réussissent} à produire une contribution
+apparaissant dans l'historique de développement du projet.
+
+Comme nous l'avons vu, la recherche quantitative portant sur les historiques de développement des logiciels
+libre a récemment eu tendance à limiter sa population étudiée aux projets hébergés sur la plateforme
+\gls{github}, ce qui occulte une part importante des projets de logiciel libre
+\parencites{mining-github-2014}{penumbra-oss-2022}. Pour améliorer la représentativité de nos résultats, nous
+utiliserons donc dans notre étude l'archive de Software Heritage, celle-ci ne se limitant pas aux projets
+hébergés sur \gls{github}, ni même au système de versionnement \gls{git}.
+
+L'usage de cette archive nous limitera en revanche dans le type de données que nous pourrons collecter. Il
+sera par exemple impossible de mesurer le nombre d'\en{issues} publiées par de nouveaux intervenants dans le
+\gls{bug tracker} des projets, ou le nombre de \glspl{pull request}. Nous devrons nous servir exclusivement
+des données disponibles dans l'historique de développement en tant que tel, comme l'ensemble des
+\glspl{commit}, leurs auteurs, leur date, ainsi que les noms et contenus des fichiers qu'ils manipulent.
+
+\section{Mesure de l'accessibilité choisie}
+
+La variable mesurée qui sera utilisée comme proxy pour l'accessibilité d'un projet pour les nouveaux
+contributeurs est le nombre de contributeurs apparaissant pour la première fois dans l'historique de
+développement du projet au cours de la période de référence étudiée : du premier juin 2019 au premier
+septembre 2019 (voir section \ref{sec:accessibility-measure} p.~\pageref{sec:accessibility-measure}, ainsi que
+\textcite[p.~13,16]{signals-2019}). Cette période de référence a été choisie sur recommandation de Software
+Heritage, la désignant comme un bon compromis entre le nombre de projets pour lesquels les données sont
+disponible dans l'archive à cette période et le caractère récent des observations.
+
 \section{Hypothèses}
 
 \newhyp{contributionguidelines}{%
@@ -17,23 +50,16 @@
 }
 
 \newhyp{recentcontributorcount}{%
-    le nombre de contributeurs uniques récents (du premier janvier 2019 au premier juin 2019) d'un projet est
-    positivement corrélée à son accessibilité pour les nouveaux contributeurs
+    le nombre de contributeurs uniques récents (au cours des six mois précédents la période de référence
+    étudiée) d'un projet est positivement corrélée à son accessibilité pour les nouveaux contributeurs
     \parencite[voir][p.~12-13,16]{signals-2019}.%
 }
 
 \newhyp{recentcommitcount}{%
-    le nombre de \glspl{commit} récents (du premier janvier 2019 au premier juin 2019) au sein d'un projet est
-    positivement corrélé à son accessibilité pour les nouveaux contributeurs
+    le nombre de \glspl{commit} récents (au cours des six mois précédents la période de référence étudiée) au
+    sein d'un projet est positivement corrélé à son accessibilité pour les nouveaux contributeurs
     \parencite[voir][p.~13,16]{signals-2019}.
 }
-
-\section{Mesure de l'accessibilité choisie}
-
-La variable mesurée pour représenter l'accessibilité d'un projet pour les nouveaux contributeurs est le nombre
-de contributeurs ayant fait leur toute première contribution au projet entre le premier juin 2019 et le
-premier septembre 2019. (voir section \ref{sec:accessibility-measure} p.~\pageref{sec:accessibility-measure},
-ainsi que \textcite[p.~13,16]{signals-2019})
 
 \section{Constitution de l'échantillon}
 \label{sec:constitution_echantillon}
@@ -42,85 +68,72 @@ L'échantillon de départ est constitué de la totalité des projets archivés d
 Plusieurs critères d'exclusion ont ensuite été appliqués :
 
 \begin{itemize}
-    \item quand deux projets ou plus ont des \glspl{commit} en commun, seul celui qui a reçu le plus
-        d'activité (mesuré en regardant le nombre de \glspl{commit} entre le premier et le dernier) a été
-        retenu ;
-    \item les projets n'ayant enregistré aucune activité (aucun commit) entre le 1er juin 2019 et le 1er
-        septembre 2019 n'ont pas été retenus ;
-    \item les projets ayant vu moins de deux contributeurs uniques récents (du premier janvier 2019 au premier
-        juin 2019) n'ont pas été retenus \parencite[voir][]{mining-github-2014}.
+    \item quand deux projets ou plus ont un ou plusieurs \glspl{commit} en commun et sont donc des
+        \glspl{fork} les uns des autres, seul celui qui a reçu le plus d'activité (mesuré par le nombre
+        d'arêtes maximal entre le \gls{commit} source et un des \glspl{commit} initiaux) a été retenu comme
+        représentant du groupe, afin d'éviter de mesurer plusieurs fois les mêmes historiques ;
+    \item les projets n'ayant enregistré aucune activité (aucun \gls{commit}) au cours de la période de
+        référence étudiée sont considérés inactifs et n'ont pas été retenus
+        \parencite[voir][]{mining-github-2014} ;
+    \item les projets ayant vu moins de deux contributeurs uniques récents (au cours des six mois précédent la
+        période de référence) sont considérés comme des projets individuels, non réellement collaboratifs et
+        n'ont pas été retenus \parencite[voir][]{mining-github-2014}.
 \end{itemize}
 
 \section{Collecte initiale des données}
 
-\todo[inline]{%
-    Retravailler cette description, n'en garder qu'un résumé dans cette section et reléguer le détail en
-    annexe.
-}
-
-Le code (une classe Java) est disponible en annexe \ref{app:collect.java}.
-
-Le graphe est dirigé (un arc d'un nœud A vers B tous signifie que B est un \gls{commit} \emph{parent} de A)
-mais l'API fourni aussi des méthodes donnant accès au symmétrique de chaque arc, ce qui permet d'utiliser au
-besoin sur le graphe à la fois les algorithmes spécifiques aux graphes orientés et ceux spécifiques aux
-graphes non-orientés.
-
-Dans un premier temps, la fonction \texttt{discoverProject} est appelée sur tous les nœuds de type
-\texttt{ORI} (point de départ de l'archivage d'un projet par Software Heritage), cette fonction identifie tous
-les projets étant des \gls{fork} de celui-ci via un double parcours largeur sur la composante connexe du nœud
-de départ formée par le sous-graphe des nœuds \texttt{REV} (\en{revision}, terme générique pour les
-\glspl{commit}) et \texttt{SNP} (\en{snapshot}, le point d'entrée d'\emph{un} archivage du projet). Cette
-détection se fait en deux parcours largeur au lieu d'un seul afin de calculer en même temps la taille de la
-plus longue chaîne de commits accessible depuis chaque nœud \texttt{ORI} de la composante connexe (donc depuis
-chaque fork du projet initial). Le premier parcours remonte les ancêtres du nœud de départ pour trouver les
-révisions racines (les "\en{initial commits}") du projet, puis un deuxième parcours est lancé dans l'autre
-sens avec des marqueurs de niveau depuis chacune de ces révisions racines afin de trouver tous les nœuds
-\texttt{ORI} qui peuvent les atteindre et sont donc des \glspl{fork} les uns des autres. Pour chaque
-composante connexe, seul un nœud \texttt{SNP} est retenu pour l'analyse en deuxième étape : celui étant le
-point de départ de la plus longue chaîne de \glspl{commit} possible, donc ayant le plus de données
-exploitables.
-
-Dans un deuxième temps, la fonction \texttt{collectProject} est appelée sur chaque projet retenu afin d'en
-extraire les données de recherche. Cette fonction commence par identifier la branche ayant le plus de chance
-d'être la branche principale du projet (voir la table de priorité \texttt{mainBranchScore} ligne 623), puis
-démarre un parcours largeur à partir de cette branche dans lequel elle compte :
+Comme présenté en section \ref{ssec:swh-graph}, l'archive de Software Heritage se présente sous la forme d'un
+graphe dirigé. Ses nœuds représentent diverses entités de l'historique de développement, parmi lesquelles les
+\glspl{commit} (appelés \en{revisions} au sein du graphe), les origines (URL à partir de laquelle a été
+archivé un projet), les \en{snapshots} (point de départ d'un archivage précis et daté, beaucoup de projets
+étant ré-archivés régulièrement), les dossiers et les fichiers (contenu du projet). Un arc $u
+\xrightarrow{succ} v$ peut donc signifier, en fonction des types de $u$ et $v$ : 
 
 \begin{itemize}
-    \item le nombre de contributeurs pendant la période de référence n'ayant jamais contribué dans ce projet
-        avant (variable expliquée) ;
-    \item le nombre de contributeurs uniques pendant une période récente avant la période de référence
-        (variable expliquative, hypothèse H\ref{hyp:recentcontributorcount}) ;
-    \item le nombre de \glspl{commit} dans la même période récente avant la période de référence (variable
-        expliquative, hypothèse H\ref{hyp:recentcommitcount}).
+    \item que $u$ est un \gls{commit} créé immédiatement après le \gls{commit} $v$ ;
+    \item que $v$ est un archivage (\en{snapshot}) du projet disponible à l'origine $u$ ;
+    \item que $v$ est le dernier \gls{commit} d'une des branches disponibles en date de l'archivage $u$ ;
+    \item que $v$ est le dossier racine du contenu du projet au moment du \gls{commit} $u$ ;
+    \item etc.
 \end{itemize}
 
-La présence d'instructions de contribution (hypothèse H\ref{hyp:contributionguidelines}) est plus compliquée à
-vérifier. Le graphe possédant le nom et la hierarchie des fichiers contenus dans chaque \gls{commit}, mais pas
-leur contenu, l'analyse se contente de vérifier si un fichier dont le nom est une variante du classique
-\texttt{CONTRIBUTING.md} existe. Si ce fichier existe, l'analyse conclue que le projet possède effectivement
-des instructions de contribution, sinon, elle vérifie la présence d'un fichier dont le nom est une variante du
-classique \texttt{README.md}. Si ce fichier existe, l'analyse conclue que le projet possède \emph{peut être}
-des instructions de contribution et construie l'URL à laquelle un traitement ultérieur pourra télécharger le
-contenu du fichier \texttt{README} et y confirmer ou non la présence d'instructions de contribution (décrit en
-section \ref{sec:collectreadme}). Si aucun de ces deux types de fichier n'existe, l'analyse conclue que le
-projet ne possède pas d'instructions de contribution.
+Afin de découvrir et sélectionner les projets dans lesquels nous collecterons les données, une première
+exploration est lancée à partir de chaque nœud de type "origine" du graphe avec deux objectifs : identifier
+tous les \glspl{fork} du projet de départ et sélectionner un représentant pour le groupe. Pour ce faire,
+l'exploration prend la forme d'un premier parcours largeur sur les arcs "successeur" des nœuds "révision" afin
+d'identifier tous les \glspl{commit} initiaux accessibles depuis l'origine de départ, puis d'un deuxième
+parcours largeur partant de chacun de ces \glspl{commit} initiaux afin d'identifier tous les autres nœuds
+"origine" de la composante connexe. Des marqueurs de niveaux lors de ce deuxième parcours largeur permettent
+de mesurer la distance qui éloigne chaque origine ainsi découverte de son \gls{commit} initial le plus
+éloigné. Pour chaque composante connexe, seule le dernier \en{snapshot} de l'origine la plus éloignée d'un
+\gls{commit} initial est retenu pour la collecte.
 
-Enfin, les données collectées sont affichées sur la sortie standard sous la forme d'un fichier CSV.
+Pour tous les projets ainsi retenu, un nouveau parcours largeur est démarré à partir de sa branche principale
+afin de récolter les données de recherche. Le nombre de contributeurs uniques récents et de \glspl{commit}
+récents se compte facilement en accédant à la date et aux auteurs de chaque nœud "révision" rencontré, mais la
+vérification de la présence d'instructions de contribution demande un peu plus de travail. Le graphe possède
+le nom et la hiérarchie de chacun des fichiers du projet, à chaque \gls{commit}, mais pas leur contenu. Ce
+parcours se contente donc initialement de vérifier la présence d'un fichier nommé \texttt{CONTRIBUTING.md} ou
+assimilé, auquel cas nous considérons que le projet possède effectivement des instructions de contribution. Si
+aucun fichier de ce type n'est trouvé, nous recherchons alors la présence d'un fichier nommé
+\texttt{README.md} ou assimilé, l'absence d'un tel fichier nous permet de conclure que le projet ne possède
+\emph{pas} d'instructions de contribution. Si un tel fichier est trouvé, en revanche, nous devons vérifier son
+contenu avant de conclure, nous sauvegardons alors l'identifiant unique du contenu du fichier afin de pouvoir
+l'analyser lors d'une phase de collecte ultérieure. Enfin, le nombre de nouveaux contributeurs est calculé en
+comptant les contributeurs uniques de la période de référence qui n'apparaissent dans aucun \gls{commit}
+antérieur à cette période (et non seulement au cours des six mois précédents la période de référence).
+
+Voir aussi l'annexe \ref{app:collect.java} pour plus de détails.
 
 \section{Collecte complémentaire des données}
 \label{sec:collectreadme}
 
-Le code (un script Python) est disponible en annexe \ref{app:checkreadme.py}.
+Voir aussi l'annexe \ref{app:checkreadme.py} pour plus de détails.
 
 \todo[inline]{Décrire le script.}
 
 \section{Traitement des données}
 
-Le code (un script Python) est disponible en annexe \ref{app:analysis.py}.
+Voir aussi l'annexe \ref{app:analysis.py} pour plus de détails.
 
 \todo[inline]{Décrire la méthodologie.}
-
-\todo[inline]{%
-    TODO bonus : faire un "\en{replication package}" avec mon code, comme le font \textcite{swh-graph-2020}
-    ici : \url{https://zenodo.org/record/3574459} ?%
-}
