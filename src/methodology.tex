@@ -11,12 +11,12 @@
 \section{Problématique}
 
 La question de l'accessibilité des projets de logiciel libre pour les nouveaux contributeurs est encore assez
-peu explorée dans la littérature. \textcite{signals-2019} se sont intéressé aux signaux que les potentiels
-nouveaux contributeurs utilisent afin de sélectionner les projets auxquels ils \emph{essayent} de contribuer,
-c'est à dire les signaux formant l'attractivité de ces projets. Nous nous attacherons dans notre étude à
-déterminer si certains de ces mêmes signaux sont, de surcroit, prédictifs d'une réelle accessibilité de ces
-projets, c'est à dire à quel point de nouveaux contributeurs \emph{réussissent} à produire une contribution
-apparaissant dans l'historique de développement du projet.
+peu explorée de façon quantitative dans la littérature. \textcite{signals-2019} se sont intéressés aux signaux
+que les potentiels nouveaux contributeurs utilisent afin de sélectionner les projets auxquels ils
+\emph{essayent} de contribuer, c'est à dire les signaux formant l'attractivité de ces projets. Nous nous
+attacherons dans notre étude à déterminer si certains de ces mêmes signaux sont, de surcroit, prédictifs d'une
+réelle accessibilité de ces projets, c'est à dire à quel point de nouveaux contributeurs \emph{réussissent} à
+produire une contribution apparaissant dans l'historique de développement du projet.
 
 Comme nous l'avons vu, la recherche quantitative portant sur les historiques de développement des logiciels
 libre a récemment eu tendance à limiter sa population étudiée aux projets hébergés sur la plateforme
@@ -36,17 +36,19 @@ des données disponibles dans l'historique de développement en tant que tel, co
 La variable mesurée qui sera utilisée comme proxy pour l'accessibilité d'un projet pour les nouveaux
 contributeurs est le nombre de contributeurs apparaissant pour la première fois dans l'historique de
 développement du projet au cours de la période de référence étudiée : du premier juin 2019 au premier
-septembre 2019 (voir section \ref{sec:accessibility-measure} p.~\pageref{sec:accessibility-measure}, ainsi que
-\textcite[p.~13,16]{signals-2019}). Cette période de référence a été choisie sur recommandation de Software
-Heritage, la désignant comme un bon compromis entre le nombre de projets pour lesquels les données sont
-disponible dans l'archive à cette période et le caractère récent des observations.
+septembre 2019 \parencite[voir section \ref{sec:accessibility-measure}, ainsi que][p.~13,16]{signals-2019}.
+Cette période de référence a été choisie sur recommandation de Software Heritage, la désignant comme un bon
+compromis entre le nombre de projets pour lesquels les données sont disponible dans l'archive à cette période
+et le caractère récent des observations.
+
+\pagebreak[4]
 
 \section{Hypothèses}
 
 \newhyp{contributionguidelines}{%
-    les projets possédant des instructions de contribution (fichier type "\en{CONTRIBUTING.md}" ou section
-    type "\en{Contributing}" dans le \en{README}) sont plus accessibles pour les nouveaux contributeurs que
-    ceux n'en ayant pas \parencite[voir][p.~11]{signals-2019}.%
+    les projets possédant des instructions de contribution (fichier type "\texttt{CONTRIBUTING.md}" ou section
+    type "\en{Contributing}" dans un fichier type \texttt{README.md}) sont plus accessibles pour les nouveaux contributeurs
+    que ceux n'en ayant pas \parencite[voir][p.~11]{signals-2019}.%
 }
 
 \newhyp{recentcontributorcount}{%
@@ -60,6 +62,8 @@ disponible dans l'archive à cette période et le caractère récent des observa
     sein d'un projet est positivement corrélé à son accessibilité pour les nouveaux contributeurs
     \parencite[voir][p.~13,16]{signals-2019}.
 }
+
+\todo[inline]{TODO : continuer la relecture à partir de là}
 
 \section{Constitution de l'échantillon}
 \label{sec:constitution_echantillon}
