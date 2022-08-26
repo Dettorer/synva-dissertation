@@ -126,12 +126,15 @@
 				backrefpages = {citeret på sider},
 			}
 		}{}
-		\IfStringInList{english}{\bbl@loaded}{%
-			\DefineBibliographyStrings{english}{%
-				backrefpage = {cited on page},
-				backrefpages = {cited on pages},
-			}
-		}{}
+                \IfStringInList{english}{\bbl@loaded}{%
+                        \DefineBibliographyStrings{english}{%
+                                % DETTORER HACK: make the backreference look like the french variant even if
+                                % the entry's langid is english (only titles and names should be typeset in
+                                % english, the rest of the document is in french)
+                                backrefpage = {cf. p.},
+                                backrefpages = {cf. p.},
+                        }
+                }{}
 		\IfStringInList{italian}{\bbl@loaded}{%
 			\DefineBibliographyStrings{italian}{%
 				backrefpage = {citato a pag.},
@@ -147,7 +150,9 @@
 
 % Command to format the marginnote created for cited items
 \NewDocumentCommand{\formatmargincitation}{m}{% The parameter is a single citation key
-	\textcite{#1}: \citetitle{#1}%
+    % DETTORER HACK: The foreignlanguage command is a hack to make margin citations follow english typesetting
+    % only inside the quotation marks. This works only as long as I cite english-speaking sources exclusively.
+    \textcite{#1}: \foreignlanguage{english}{\citetitle{#1}}%
 }
 
 % Command to format the marginnote created for supercited items

@@ -27,7 +27,7 @@
 
 % Main and default language is french but there are some parts in english
 \usepackage[main=french,english]{babel}
-\newcommand{\en}[1]{\foreignlanguage{english}{\itshape #1}}
+\newcommand{\en}[1]{\foreignlanguage{english}{\emph{#1}}}
 \usepackage{csquotes}
 \MakeOuterQuote{"}
 
@@ -35,7 +35,7 @@
 \usepackage[inkscapepath=./build/svg-inkscape/]{svg}
 
 % Bibliography configuration
-\usepackage[style=apa]{kaobiblio}
+\usepackage[style=apa,autolang=other]{kaobiblio}
 \DefineBibliographyExtras{french}{\restorecommand\mkbibnamefamily}
 \addbibresource{references.bib}
 % Properly cite articles indirectly cited via meta-analysis, this mimics the \nocitemeta command from apacite
