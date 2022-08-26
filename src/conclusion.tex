@@ -1,3 +1,53 @@
 \chapter*{Conclusion}
 
-\todo[inline]{TODO}
+Les problématiques liées au numérique prennent de plus en plus d'importance dans notre monde, la question du
+logiciel libre devient de ce fait un enjeu de société déterminant pour la transparence des technologies,
+l'ouverture de l'information et la collaboration international. Rendre disponible publiquement et gratuitement
+le code source et le processus de développement ne suffit cependant pas à le rendre réellement accessible, de
+nombreuses barrières existent pour les personnes souhaitant se familiariser avec les projets de logiciel libre
+et y contribuer. Ces barrières représentent même un frein pour les enseignants souhaitant introduire leurs
+étudiants à ce milieu, même lorsque ces enseignants y sont eux-mêmes déjà familiers.
+
+Dans ce mémoire, nous avons commencé la construction d'un outil permettant aux enseignants de répondre à l'un
+de ces freins : la sélection de projets de logiciel libre réels susceptibles d'être un bon support de travaux
+pratiques. Ce travail préliminaire se base sur une littérature florissante d'identification des barrières aux
+contribution dans le logiciel libre, sa méthodologie s'inscrit quant à elle dans le domaine de l'analyse
+automatique des dépôts logiciels (\href{https://conf.researchr.org/series/msr}{\en{Mining Software
+Repositories}}).
+
+Par l'analyse de l'archive de Software Heritage, l'un des corpus de développement logiciel les plus
+représentatifs et exploitables dans un contexte de recherche, nous avons tenté de déterminer si trois signaux
+facilement observables pour un enseignant ou un nouveau contributeur sont prédictifs de la capacité d'un
+projet à accompagner les nouveaux contributeurs suffisamment pour leur permettre de mener leur première
+contribution à terme.
+
+Nos résultats suggèrent que la présence d'instructions de contribution au sein d'un projet (typiquement au
+travers d'un fichier "\texttt{CONTRIBUTING.md}"), ainsi que le nombre de contributeurs uniques ayant récemment
+contribué au projet, est positivement corrélé au nombre de \emph{nouveaux} contributeurs étant parvenus à
+ajouter leur pierre à l'édifice. Nous n'avons en revanche pas trouvé de corrélation, positive ou négative,
+permettant d'affirmer que le nombre de \glspl{commit} récents au sein d'un projet était prédictif du nombre de
+nouveaux contributeurs allant au bout de leur contribution.
+
+Quelques précautions mériteraient cependant d'être prises dans l'interprétation de ces résultats. La limite la
+plus importante de ce travail est l'absence d'information permettant d'inférer un quelconque lien de causalité
+entre les éléments étudiés. Rien dans nos résultats ne nous permet par exemple de dire que la présence
+d'instructions de contribution \emph{améliore} l'accessibilité d'un projet de logiciel libre pour les nouveaux
+contributeurs, la corrélation que nous observons entre ces deux variables pourrait s'expliquer par le fait que
+les mainteneurs d'un projet qui ont tendance à efficacement guider les nouveaux contributeurs ont aussi
+tendance à écrire des instructions de contribution. Par ailleurs, plusieurs propriétés statistiques des
+données collectées rendent difficile leur analyse. Nous avons tenté traiter ces difficultés au mieux de nos
+capacités, mais une étude et une préparation plus rigoureuse des données améliorerait sans doute la fiabilité
+des conclusions que nous en avons tiré.
+
+Les perspectives de recherche concernant l'accessibilité des projets de logiciel libre sont encore nombreuses,
+le sujet étant à la fois très changeant et relativement nouveau, la littérature existe mais est encore très
+qualitative. De futures études quantitatives pourraient s'intéresser aux éventuels mécanismes causaux
+responsables de l'accessibilité observée des projets. Le domaine de l'analyse automatique des dépôts logiciels
+pose encore beaucoup de questions intéressantes, l'archive de Software Heritage par exemple apporte une
+nouvelle méthode particulièrement puissante, mais celle-ci est encore jeune et peu d'étude se consacrent aux
+bénéfices et limites de ce qu'elle peut apporter à la science. Enfin, si nos résultats suggèrent que la
+présence d'instructions de contribution ainsi que le nombre de contributeurs unique récents sont de bons
+indicateurs à observer pour un enseignant souhaitant trouver un projet sur lequel faire travailler ses
+étudiants, de futures recherches mériteraient d'être conduites afin de déterminer si cette accessibilité se
+traduit effectivement dans la qualité de l'apprentissage, ou si le contexte est trop différent pour que les
+étudiants soient réduit à la catégorie générique des "nouveaux contributeurs".
