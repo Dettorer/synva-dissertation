@@ -9,7 +9,8 @@
 Le code de la collecte initiale prend la forme d'une classe Java utilisant la bibliothèque
 \texttt{swh-graph}\footnote{\url{https://docs.softwareheritage.org/devel/swh-graph/java-api.html}} et est
 disponible sur le dépôt \gls{github} de ce mémoire au lien suivant :
-\url{https://github.com/Dettorer/synva-dissertation/blob/main/experiment/data_collection/CollectData.java}.
+\url{https://github.com/Dettorer/synva-dissertation/blob/main/experiment/data_collection/CollectData.java},
+ainsi que dans son "\en{replication package}" \parencite{replication-package}.
 
 La version de \texttt{swh-graph} utilisée est cependant une version modifiée pour rendre la plupart des
 fonctions d'accès aux données du graphe "\en{thread safe}", c'est à dire utilisables dans un contexte
@@ -66,7 +67,8 @@ Le code de cette collecte complémentaire prend la forme d'un script Python util
 comme \texttt{requests} pour les requêtes sur \url{https://archive.softwareheritage.org/}, \texttt{boto3} pour
 les requêtes Amazon S3, ou \texttt{charset\_normalizer} pour le décodage des fichiers brut. Le script complet
 est disponible sur le dépôt \gls{github} de ce mémoire au lien suivant :
-\url{https://github.com/Dettorer/synva-dissertation/blob/main/experiment/data_collection/check_readme_contents.py}.
+\url{https://github.com/Dettorer/synva-dissertation/blob/main/experiment/data_collection/check_readme_contents.py}
+ainsi que dans son "\en{replication package}" \parencite{replication-package}.
 
 Une difficulté de la récolte du contenu des fichiers \texttt{README} est une incohérence dans le type
 d'identificateur utilisé sur \url{https://archive.softwareheritage.org/} et le \en{registry} Amazon S3. Pour
@@ -87,6 +89,5 @@ Le code utilisé pour produire les analyses du chapitre \ref{chap:results} prend
 utilisant plusieurs bibliothèques de traitement des données et d'analyse statistique comme \texttt{pandas},
 \texttt{numpy}, \texttt{scipy}, \texttt{statsmodels}, ainsi que \texttt{matplotlib} pour la production des
 visualisations. Le script complet est disponible sur le dépôt \gls{github} de ce mémoire au lien suivant :
-\url{https://github.com/Dettorer/synva-dissertation/blob/main/experiment/data_analysis/data_analysis.py}.
-
-\todo[inline]{replication package ?}
+\url{https://github.com/Dettorer/synva-dissertation/blob/main/experiment/data_analysis/data_analysis.py}
+ainsi que dans son "\en{replication package}" \parencite{replication-package}.
