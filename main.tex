@@ -65,7 +65,7 @@
 \makeindex[columns=3, title=Alphabetical Index, intoc]
 \makeglossaries
 \setglossarystyle{altlist}
-\input{glossary}
+\AtBeginDocument{\input{glossary}} % Use AtBeginDocument to enable csquotes' MakeOuterQuote in descriptions
 
 % Hyphenation
 \hyphenation{Git-Hub}
