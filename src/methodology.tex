@@ -63,8 +63,6 @@ et le caractère récent des observations.
     \parencite[voir][p.~13,16]{signals-2019}.
 }
 
-\todo[inline]{TODO : continuer la relecture à partir de là}
-
 \section{Constitution de l'échantillon}
 \label{sec:constitution_echantillon}
 
@@ -75,7 +73,7 @@ Plusieurs critères d'exclusion ont ensuite été appliqués :
     \item quand deux projets ou plus ont un ou plusieurs \glspl{commit} en commun et sont donc des
         \glspl{fork} les uns des autres, seul celui qui a reçu le plus d'activité (mesuré par le nombre
         d'arêtes maximal entre le \gls{commit} source et un des \glspl{commit} initiaux) a été retenu comme
-        représentant du groupe, afin d'éviter de mesurer plusieurs fois les mêmes historiques ;
+        représentant du groupe, afin d'éviter de compter plusieurs fois les mêmes historiques ;
     \item les projets n'ayant enregistré aucune activité (aucun \gls{commit}) au cours de la période de
         référence étudiée sont considérés inactifs et n'ont pas été retenus
         \parencite[voir][]{mining-github-2014} ;
@@ -87,8 +85,8 @@ Plusieurs critères d'exclusion ont ensuite été appliqués :
 \section{Collecte initiale des données}
 
 Comme présenté en section \ref{ssec:swh-graph}, l'archive de Software Heritage se présente sous la forme d'un
-graphe dirigé. Ses nœuds représentent diverses entités de l'historique de développement, parmi lesquelles les
-\glspl{commit} (appelés \en{revisions} au sein du graphe), les origines (URL à partir de laquelle a été
+graphe orienté. Ses nœuds représentent diverses entités de l'historique de développement, parmi lesquelles les
+\glspl{commit} (appelés \en{revisions} au sein du graphe), les origines (l'URL à partir de laquelle a été
 archivé un projet), les \en{snapshots} (point de départ d'un archivage précis et daté, beaucoup de projets
 étant ré-archivés régulièrement), les dossiers et les fichiers (contenu du projet). Un arc $u
 \xrightarrow{succ} v$ peut donc signifier, en fonction des types de $u$ et $v$ : 
@@ -96,8 +94,9 @@ archivé un projet), les \en{snapshots} (point de départ d'un archivage précis
 \begin{itemize}
     \item que $u$ est un \gls{commit} créé immédiatement après le \gls{commit} $v$ ;
     \item que $v$ est un archivage (\en{snapshot}) du projet disponible à l'origine $u$ ;
-    \item que $v$ est le dernier \gls{commit} d'une des branches disponibles en date de l'archivage $u$ ;
-    \item que $v$ est le dossier racine du contenu du projet au moment du \gls{commit} $u$ ;
+    \item que $v$ est le dernier \gls{commit} d'une des branches visibles lors de l'archivage (\en{snapshot})
+        $u$ ;
+    \item que $v$ est le dossier racine du contenu du projet en l'état du \gls{commit} $u$ ;
     \item etc.
 \end{itemize}
 
@@ -109,23 +108,24 @@ d'identifier tous les \glspl{commit} initiaux accessibles depuis l'origine de d�
 parcours largeur partant de chacun de ces \glspl{commit} initiaux afin d'identifier tous les autres nœuds
 "origine" de la composante connexe. Des marqueurs de niveaux lors de ce deuxième parcours largeur permettent
 de mesurer la distance qui éloigne chaque origine ainsi découverte de son \gls{commit} initial le plus
-éloigné. Pour chaque composante connexe, seule le dernier \en{snapshot} de l'origine la plus éloignée d'un
-\gls{commit} initial est retenu pour la collecte.
+éloigné. Pour chaque composante connexe, seule le \en{snapshot} le plus récent de l'origine la plus éloignée
+d'un \gls{commit} initial est retenu pour la collecte.
 
 Pour tous les projets ainsi retenu, un nouveau parcours largeur est démarré à partir de sa branche principale
 afin de récolter les données de recherche. Le nombre de contributeurs uniques récents et de \glspl{commit}
 récents se compte facilement en accédant à la date et aux auteurs de chaque nœud "révision" rencontré, mais la
 vérification de la présence d'instructions de contribution demande un peu plus de travail. Le graphe possède
-le nom et la hiérarchie de chacun des fichiers du projet, à chaque \gls{commit}, mais pas leur contenu. Ce
+le nom et la hiérarchie de chacun des fichiers du projet pour chaque \gls{commit}, mais pas leur contenu. Ce
 parcours se contente donc initialement de vérifier la présence d'un fichier nommé \texttt{CONTRIBUTING.md} ou
-assimilé, auquel cas nous considérons que le projet possède effectivement des instructions de contribution. Si
-aucun fichier de ce type n'est trouvé, nous recherchons alors la présence d'un fichier nommé
-\texttt{README.md} ou assimilé, l'absence d'un tel fichier nous permet de conclure que le projet ne possède
-\emph{pas} d'instructions de contribution. Si un tel fichier est trouvé, en revanche, nous devons vérifier son
-contenu avant de conclure, nous sauvegardons alors l'identifiant unique du contenu du fichier afin de pouvoir
-l'analyser lors d'une phase de collecte ultérieure. Enfin, le nombre de nouveaux contributeurs est calculé en
-comptant les contributeurs uniques de la période de référence qui n'apparaissent dans aucun \gls{commit}
-antérieur à cette période (et non seulement au cours des six mois précédents la période de référence).
+assimilé, nous considérons que le projet possède effectivement des instructions de contribution si un tel
+fichier existe. Si aucun fichier de ce type n'est trouvé, nous recherchons alors la présence d'un fichier
+nommé \texttt{README.md} ou assimilé, l'absence d'un tel fichier nous permet de conclure que le projet ne
+possède \emph{pas} d'instructions de contribution. Si un tel fichier est trouvé, en revanche, nous devons
+vérifier son contenu avant de conclure, nous sauvegardons alors l'identifiant unique du contenu du fichier
+afin de pouvoir l'analyser lors d'une phase de collecte ultérieure. Enfin, le nombre de nouveaux contributeurs
+est calculé en comptant les contributeurs uniques de la période de référence qui n'apparaissent dans aucun
+\gls{commit} antérieur à cette période (et non seulement au cours des six mois précédents la période de
+référence).
 
 Voir aussi l'annexe \ref{app:collect.java} pour plus de détails.
 
@@ -141,12 +141,12 @@ site web \url{https://archive.softwareheritage.org/}, accessible publiquement, s
 contenus directement depuis leur "\en{registry}" Amazon
 S3\footnote{\url{https://registry.opendata.aws/software-heritage}}, lui aussi accessible publiquement. Le site
 \url{https://archive.softwareheritage.org/} limite le nombre de requêtes autorisées par adresse IP à quelques
-dizaines par heure. Le \en{registry} Amazon S3 n'impose pas ce genre de limite, mais moins de contenu y sont
-disponibles. Nous utiliserons donc en priorité le \en{registry} Amazon S3 pour télécharger le contenu des
-fichiers \texttt{README} nécessaires, puis le site web \url{https://archive.softwareheritage.org/} pour tous
-ceux que nous ne parviendrons pas à y trouver.
+dizaines par heure. Le \en{registry} Amazon S3 n'impose pas ce genre de limite, mais le contenus de certains
+fichiers n'y est pas encore disponible. Nous utiliserons donc en priorité le \en{registry} Amazon S3 pour
+télécharger le contenu des fichiers \texttt{README} nécessaires, puis le site web
+\url{https://archive.softwareheritage.org/} pour tous ceux que nous ne parviendrons pas à y trouver.
 
-Une fois le contenu des \texttt{README} téléchargés, nous cherchons une section dont le nom contient le mot
+Une fois le contenu des \texttt{README} téléchargés, nous y cherchons une section dont le nom contient le mot
 "\en{contributing}" ou un mot proche. Pour identifier les noms de section dans les fichiers téléchargés, nous
 supposons que ceux-ci sont formatés suivant un des deux standards les plus répandus de formatage de text
 brut : le Markdown (dont l'extension courante est \texttt{.md}) ou le reStructuredText (dont l'extension
@@ -160,13 +160,14 @@ Markdown, à ceci près que d'autres caractères sont aussi acceptés pour compo
 \url{https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html\#sections}}.
 
 Pour déterminer si un fichier \texttt{README} contient des instructions de contribution, nous identifions donc
-tous les noms de section le composant et vérifions que l'un d'eux contiennent le mot "\en{contributing}" ou
+tous les noms de section le composant et vérifions si l'un d'eux contient le mot "\en{contributing}" ou
 assimilé.
 
 Voir aussi l'annexe \ref{app:checkreadme.py} pour plus de détails.
 
 \section{Reproduction des travaux}
 
-Afin d'aider à la reproduction des travaux de ce mémoire, un \en{replication package} contenant le code source
-et les bibliothèques utilisés dans ce mémoire, ainsi que les données brut collectées, a été publié sur Zenodo
+Afin d'améliorer la transparence méthodologique de ce mémoire et d'aider l'éventuelle reproduction des
+résultats qui y sont présentés, un \en{replication package} contenant le code source et les bibliothèques
+utilisés dans ce mémoire, ainsi que les données brut collectées, a été publié sur Zenodo
 \parencite{replication-package}.
