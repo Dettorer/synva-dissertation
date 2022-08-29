@@ -1,7 +1,7 @@
 \setchapterstyle{plain}
 \pagelayout{wide}
 
-\chapter{Code source de la collecte et de l'analyse des données}
+\chapter{Détails techniques de la collecte et de l'analyse des données}
 
 \section{Collecte initiale depuis le graphe de Software Heritage}
 \label{app:collect.java}
@@ -16,22 +16,29 @@ La version de \texttt{swh-graph} utilisée est cependant une version modifiée p
 fonctions d'accès aux données du graphe "\en{thread safe}", c'est à dire utilisables dans un contexte
 parallélisé sans besoin de synchronisation des fils d'exécution pour éviter les appels concurrents. Cette
 version de la bibliothèque permet l'implémentation d'algorithmes parallélisés beaucoup plus rapides, car
-utilisant beaucoup moins de points de synchronisation.
+utilisant beaucoup moins de points de synchronisation, elle est disponible dans le \en{replication package}
+sous la forme d'un fichier \texttt{swh-graph-1.0.1.jar}.
 
 Dans un premier temps, la fonction \texttt{discoverProject} est appelée sur tous les nœuds de type
 \texttt{ORI} (point de départ de l'archivage d'un projet par Software Heritage), cette fonction identifie tous
 les projets étant des \gls{fork} de celui-ci via un double parcours largeur sur la composante connexe du nœud
 de départ formée par le sous-graphe des nœuds \texttt{REV} (\en{revision}, terme générique pour les
-\glspl{commit}) et \texttt{SNP} (\en{snapshot}, le point d'entrée d'\emph{un} archivage du projet). Cette
-détection se fait en deux parcours largeur au lieu d'un seul afin de calculer en même temps la taille de la
-plus longue chaîne de commits accessible depuis chaque nœud \texttt{ORI} de la composante connexe (donc depuis
+\glspl{commit}) et \texttt{SNP} (\en{snapshot}, le point d'entrée d'un archivage du projet). Cette détection
+se fait en deux parcours largeur au lieu d'un seul afin de calculer en même temps la taille de la plus longue
+chaîne de \glspl{commit} accessible depuis chaque nœud \texttt{ORI} de la composante connexe (donc depuis
 chaque \gls{fork} du projet initial). Le premier parcours remonte les ancêtres du nœud de départ pour trouver
 les révisions racines (les "\en{initial \glspl{commit}}") du projet, puis un deuxième parcours est lancé dans
 l'autre sens avec des marqueurs de niveau depuis chacune de ces révisions racines afin de trouver tous les
 nœuds \texttt{ORI} qui peuvent les atteindre et sont donc des \glspl{fork} les uns des autres. Pour chaque
 composante connexe, seul un nœud \texttt{SNP} est retenu pour l'analyse en deuxième étape : celui étant le
 point de départ de la plus longue chaîne de \glspl{commit} possible, donc ayant le plus de données
-exploitables.
+exploitables. Cette partie du code étant parallélisée, il est possible qu'à un instant donné, plusieurs
+fils d'exécution soient en train d'explorer la même composante connexe (en y étant entrés par différents nœuds
+\texttt{ORI}). La sélection du représentant de la composante est en revanche déterministe, les différents fils
+d'exécution sélectionneront donc systématiquement le même projet pour une même composante. Afin d'éviter la
+duplication des projets retenus liée à cette parallélisation, ceux-ci sont donc simplement stockés dans une
+structure d'ensemble dont l'API garanti l'unicité de ses éléments (en l'occurrence le conteneur
+\texttt{LongOpenHashSet}).
 
 Dans un deuxième temps, la fonction \texttt{collectProject} est appelée sur chaque projet retenu afin d'en
 extraire les données de recherche. Cette fonction commence par identifier la branche ayant le plus de chance
@@ -41,22 +48,22 @@ parcours largeur à partir de cette branche dans lequel elle compte :
 \begin{itemize}
     \item le nombre de contributeurs pendant la période de référence n'ayant jamais contribué dans ce projet
         avant (variable expliquée) ;
-    \item le nombre de contributeurs uniques pendant une période récente avant la période de référence
-        (variable explicative, hypothèse H\ref{hyp:recentcontributorcount}) ;
-    \item le nombre de \glspl{commit} dans la même période récente avant la période de référence (variable
-        explicative, hypothèse H\ref{hyp:recentcommitcount}).
+    \item le nombre de contributeurs uniques lors des six mois précédant la période de référence (variable
+        explicative de hypothèse H\ref{hyp:recentcontributorcount}) ;
+    \item le nombre de \glspl{commit} enregistrés lors des même six mois précédant la période de référence
+        (variable explicative de hypothèse H\ref{hyp:recentcommitcount}).
 \end{itemize}
 
-La présence d'instructions de contribution (hypothèse H\ref{hyp:contributionguidelines}) est plus compliquée à
-vérifier. Le graphe possédant le nom et la hiérarchie des fichiers disponibles à chaque \gls{commit}, mais pas
-leur contenu, l'analyse se contente de vérifier si un fichier dont le nom est une variante du classique
-\texttt{CONTRIBUTING.md} existe. Si ce fichier existe, l'analyse conclue que le projet possède effectivement
-des instructions de contribution, sinon, elle vérifie la présence d'un fichier dont le nom est une variante du
-classique \texttt{README.md}. Si ce fichier existe, l'analyse conclue que le projet possède \emph{peut être}
-des instructions de contribution et construit l'URL à laquelle un traitement ultérieur pourra télécharger le
-contenu du fichier \texttt{README} et y confirmer ou non la présence d'instructions de contribution. Si aucun
-de ces deux types de fichier n'existe, l'analyse conclue que le projet ne possède pas d'instructions de
-contribution.
+La présence d'instructions de contribution (variable explicative de l'hypothèse
+H\ref{hyp:contributionguidelines}) est plus compliquée à vérifier. Le graphe possédant le nom et la hiérarchie
+des fichiers disponibles à chaque \gls{commit}, mais pas leur contenu, l'analyse se contente de vérifier si un
+fichier dont le nom est une variante du classique \texttt{CONTRIBUTING.md} existe. Si ce fichier existe,
+l'analyse conclue que le projet possède effectivement des instructions de contribution, sinon, elle vérifie la
+présence d'un fichier dont le nom est une variante du classique \texttt{README.md}. Si ce fichier existe,
+l'analyse conclue que le projet possède \emph{peut être} des instructions de contribution et construit l'URL à
+laquelle un traitement ultérieur pourra télécharger le contenu du fichier \texttt{README} et y confirmer ou
+non la présence d'instructions de contribution. Si aucun de ces deux types de fichier n'existe, l'analyse
+conclue que le projet ne possède pas d'instructions de contribution.
 
 Enfin, les données collectées sont affichées sur la sortie standard sous la forme d'un fichier CSV.
 
@@ -79,15 +86,23 @@ télécharger le contenu d'un fichier sur Amazon S3 à partir de données collec
 traduire le \texttt{sha1\_git} obtenu en un \texttt{sha1}, ce qui est impossible si l'on ne possède pour seule
 information que le \texttt{sha1\_git}. Pour contourner le problème, une table de correspondance des deux
 méthodes de hachage peut être construite préalablement à partir de la représentation Apache ORC du
-graph\footnote{voir \url{https://docs.softwareheritage.org/devel/swh-dataset/graph/dataset.html}}, qui
+graphe\footnote{voir \url{https://docs.softwareheritage.org/devel/swh-dataset/graph/dataset.html}}, qui
 contient les deux types de hash.
 
-\section{Code d'analyse des résultats}
+Une table de correspondance permettant de traduire tous les \texttt{sha1\_git} des fichiers README strictement
+nécessaire à l'étude de ce mémoire n'étant pas déjà disponibles sur le \en{registry} Amazon S3 se trouve dans
+le \en{replication package}, elle se présente sous la forme d'un fichier CSV appelé
+\texttt{sha1\_git\_to\_sha1.csv}.
+
+\section{Analyse des résultats}
 \label{app:analysis.py}
 
 Le code utilisé pour produire les analyses du chapitre \ref{chap:results} prend la forme d'un script Python
 utilisant plusieurs bibliothèques de traitement des données et d'analyse statistique comme \texttt{pandas},
 \texttt{numpy}, \texttt{scipy}, \texttt{statsmodels}, ainsi que \texttt{matplotlib} pour la production des
 visualisations. Le script complet est disponible sur le dépôt \gls{github} de ce mémoire au lien suivant :
-\url{https://github.com/Dettorer/synva-dissertation/blob/main/experiment/data_analysis/data_analysis.py}
-ainsi que dans son "\en{replication package}" \parencite{replication-package}.
+\url{https://github.com/Dettorer/synva-dissertation/blob/main/experiment/data_analysis/data_analysis.py} ainsi
+que dans son "\en{replication package}" \parencite{replication-package}. Ce dernier contient de plus un
+fichier \texttt{2022-08-18\_completed.csv} contenant les données collectées et complétées lors de la phase
+précédente, il s'agit du fichier exact utilisé pour la présentation des résultats du chapitre
+\ref{chap:results}.
