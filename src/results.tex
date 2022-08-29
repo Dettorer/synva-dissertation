@@ -120,21 +120,20 @@ projets possédant des instructions de contribution, ce qui valide
 
 Ce résultat est cohérent avec ceux de \textcite[p.~11]{signals-2019} qui avaient déterminé que la présence
 d'instructions de contribution au sein d'un projet était un signal important dans le processus de décision
-d'un potentiel contributeur qui cherche un projet auquel contribuer. De futures recherches pourraient essayer
-de déterminer si ce plus grand nombre de nouveaux contributeurs \emph{ayant réussi à contribuer} (observé dans
-notre étude) est dû uniquement à ce plus grand nombre de nouveaux contributeurs \emph{essayant de contribuer}
-(observé par \textcite{signals-2019}), ou si la présence d'instructions de contribution a un réel rôle dans le
-succès d'une tentative de contribution, en plus d'être un signal positif attirant plus de potentiels
-contributeurs.
+d'un contributeur potentiel qui cherche un projet auquel contribuer. De futures recherches pourraient essayer
+de déterminer si ce plus grand nombre de nouveaux contributeurs \emph{ayant réussi} à contribuer (observé dans
+notre étude) est dû uniquement à ce plus grand nombre de nouveaux contributeurs \emph{essayant} de contribuer,
+ou si la présence d'instructions de contribution a un réel rôle dans le succès d'une tentative de
+contribution, en plus d'être un signal positif attirant plus de contributeurs potentiels.
 
-Il est tout de même important de noter que, bien que le test de Wilcoxon-Mann-Whitney soit non-paramétrique et
-puisse donc s'appliquer à ces données (contrairement à un test de Student nécessitant une distribution
+Il est tout de même important de noter que, bien que le test de Wilcoxon-Mann-Whitney ne soit pas paramétrique
+et puisse donc s'appliquer à ces données (contrairement à un test de Student nécessitant une distribution
 normale, par exemple), sa robustesse diminue significativement lorsque la distribution des données ne suit pas
 une loi normale \emph{et} que les groupes comparés ont une variance significativement différente
 \parencite{WMW-robustness-1998}, ce qui est le cas ici (voir figures \ref{sfig:newContributorQQplot} et
-\ref{sfig:hasContribVariance}). Ce point, ainsi que la petite taille d'effet obtenue, justifierait une
+\ref{sfig:hasContribVariance}). Ce point, ainsi que la petite taille d'effet obtenue, justifieraient une
 attention plus particulière à la préparation des données afin d'approcher une distribution normale et d'en
-homogénéiser la variance, tâche qui n'a pas pu être réalisée dans cette étude faute de temps.
+homogénéiser la variance.
 
 \section{Lien entre le nombre de contributeurs récents et le nombre de nouveaux contributeurs}
 
@@ -171,7 +170,7 @@ Le modèle retenu a donc finalement été calculé par la méthode des moindres 
 \url{https://www.statsmodels.org/dev/generated/statsmodels.regression.linear_model.GLS.html}}, il suggère
 effectivement que plus le nombre de contributeurs récents d'un projet est élevé, plus son nombre de nouveaux
 contributeurs l'est aussi. Le coefficient de détermination $R^2 \approx 0.45$ du modèle indique que le nombre
-de contributeurs récent explique environ $45\%$ de la variation du nombre de nouveaux contributeurs, ce qui
+de contributeurs récents explique environ $45\%$ de la variation du nombre de nouveaux contributeurs, ce qui
 valide \hyperref[hyp:recentcontributorcount]{l'hypothèse H\ref*{hyp:recentcontributorcount}}, avec une taille
 d'effet tout de même modérée, voir faible.
 
@@ -179,9 +178,9 @@ d'effet tout de même modérée, voir faible.
 
 Ce résultat est aussi cohérent avec ceux de \textcite[p.~12-13,16]{signals-2019} qui observaient que le nombre
 de contributeurs uniques récents était positivement corrélé au nombre de \emph{tentatives} de contribution
-faites par de nouveaux contributeurs (représenté par le nombre de \glspl{pull request}). Là aussi de futures
+faites par de nouveaux contributeurs (mesuré par le nombre de \glspl{pull request}). Là aussi de futures
 recherches pourraient s'intéresser à la causalité de cette relation. Tout ce que notre étude peut affirmer sur
-l'éventuel lien de causalité est que, le nombre de contributeurs récents étant mesuré sur une période
+un éventuel lien de causalité est que, le nombre de contributeurs récents étant mesuré sur une période
 antécédente à celle sur laquelle est mesuré le nombre de nouveaux contributeurs, cette deuxième variable ne
 peut pas influencer la première, du moins tel que celles-ci ont été définies ici. Il reste à déterminer si une
 chaîne causale lie directement ces deux variables (si oui, laquelle) ou si elles ne sont liées que par un
@@ -225,7 +224,7 @@ conclure à une relation entre ces deux variables et devons rejeter
 Ce résultat ne rejoint cette fois pas ceux de \textcite[p.~13,16]{signals-2019}, qui avaient là encore trouvé
 une corrélation positive entre le nombre de \glspl{commit} récents d'un projets et le nombre de tentatives de
 contribution faites par de nouveaux contributeurs. Cela pourrait potentiellement signifier que le nombre de
-\glspl{commit} récents d'un projet est un signal que les potentiels nouveaux contributeurs utilisent \emph{à
+\glspl{commit} récents d'un projet est un signal que les nouveaux contributeurs potentiels utilisent \emph{à
 tort} pour choisir un projet auquel essayer de contribuer. Nos résultats ne permettent pas de conclure qu'un
 grand nombre de \glspl{commit} récents, bien qu'il attire les nouveaux contributeurs, est un indicateur de
 l'accessibilité du projet pour ces nouveaux contributeurs.
