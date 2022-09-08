@@ -21,6 +21,56 @@
         python310Packages.pygments
         which
       ];
+
+      # dependency for mtheme
+      latex-readprov = pkgs.stdenv.mkDerivation rec {
+        version = "0.5";
+        pname = "readprov";
+        name = "${pname}-${version}";
+        tlType = "run";
+
+        src = pkgs.fetchurl {
+          url = "https://mirrors.ctan.org/macros/latex/contrib/fileinfo.zip";
+          sha256 = "Y+UHnq303p/WRHhJfXpDNDjGnc3VmKOYiQ6GX7W3P/A=";
+        };
+
+        buildInputs = [ pkgs.unzip ];
+        installPhase = "
+          mkdir -p $out/tex/latex/readprov
+          cp -va *.sty $out/tex/latex/readprov
+          mkdir -p $out/doc/latex/readprov
+          cp -va doc/* $out/doc/latex/readprov
+        ";
+      };
+      # the beamer template for my slides
+      latex-mtheme = pkgs.stdenv.mkDerivation rec {
+        version = "1.2";
+        pname = "mtheme";
+        name = "${pname}-${version}";
+        tlType = "run";
+
+        src = pkgs.fetchurl {
+          url = "https://github.com/matze/mtheme/archive/refs/tags/v${version}.tar.gz";
+          sha256 = "+9q4OzUeBiwQRFaP/X5koIl4Pdrr3vp/RiUq9FEEoTg=";
+        };
+
+        buildInputs = [
+          pkgs.gnumake
+          pkgs.unzip
+          (pkgs.texlive.combine {
+            inherit (pkgs.texlive) scheme-small latexmk enumitem;
+            readprov.pkgs = [ latex-readprov ];
+          })
+        ];
+        buildPhase = "make";
+        installPhase = "
+        mkdir -p $out/tex/latex/mtheme
+        cp -va *.sty $out/tex/latex/mtheme
+        mkdir -p $out/doc/latex/mtheme
+        cp -va doc/* $out/doc/latex/mtheme
+        ";
+      };
+
       texDistribution = pkgs.texlive.combine {
         inherit (pkgs.texlive)
           # base scheme
@@ -79,12 +129,15 @@
           xurl
           zref
 
+          pgfopts # not sure why needed
+
           # utilities
           biber
           latex-bin
           latexmk
           xindy
         ;
+        mtheme.pkgs = [latex-mtheme];
       };
       FONTCONFIG_FILE = pkgs.makeFontsConf {
         fontDirectories = with pkgs; [ libertinus liberation_ttf ];
@@ -140,6 +193,27 @@
         installPhase = ''
           mkdir -p $out
           mv build/main.pdf $out/Paul_Hervot_M2_dissertation.pdf
+        '';
+      };
+
+      packages.slides = pkgs.stdenv.mkDerivation {
+        name = "PaulHervotSYNVADissertationSlides";
+        src = ./.;
+        buildInputs = [ texDistribution ] ++ texDependencies;
+        phases = [ "unpackPhase" "buildPhase" "installPhase" ];
+        buildPhase = ''
+          cd defense_slides
+          export FONTCONFIG_FILE=${FONTCONFIG_FILE}
+          mkdir -p .cache/texmf-var
+          DIR=$(mktemp -d)
+          env \
+            TEXMFHOME=.cache TEXMFVAR=.cache/texmf-var \
+            SOURCE_DATE_EPOCHE=${toString self.lastModified} \
+            latexmk -interaction=nonstopmode
+        '';
+        installPhase = ''
+          mkdir -p $out
+          mv build/slides.pdf $out/Paul_Hervot_M2_dissertation_slides.pdf
         '';
       };
 

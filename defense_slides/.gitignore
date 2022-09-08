@@ -1,0 +1,17 @@
+_minted-slides/
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.nav
+*.out
+*.pdf
+*.snm
+*.toc
+*.vrb
+*.bbl
+*.bcf
+*.blg
+*.run.xml
+*.synctex.gz
+*.listing
