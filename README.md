@@ -11,6 +11,8 @@ master's degree.
 Latest successful build is available
 [here](https://github.com/Dettorer/synva-dissertation/releases/latest/download/Paul_Hervot_M2_dissertation.pdf).
 
+TODO: CI build and links to the defense slides and EIAH 2023 submission
+
 ## Build
 
 The most reliable way to build this document is using the
@@ -30,6 +32,7 @@ Without nix, make sure you have a LaTeX distribution with
 in the [flake.nix](flake.nix) file. Then simply run:
 
 ```shell-session
+$ cd master_dissertation
 $ latexmk
 $ ls build/
 ...
