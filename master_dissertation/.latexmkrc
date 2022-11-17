@@ -12,7 +12,7 @@ set_tex_cmds( '--shell-escape %O %S' );
 # template (custom .cls and .sty)
 ensure_path( 'TEXINPUTS', './template/kaobook-0.9.7//' );
 # vendored APA biblatex style
-ensure_path( 'TEXINPUTS', './biblatex-apa//' );
+ensure_path( 'TEXINPUTS', '../biblatex-apa//' );
 # most tex files are in the src folder
 ensure_path( 'TEXINPUTS', './src//' );
 

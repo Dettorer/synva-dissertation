@@ -16,11 +16,11 @@ deux (aucun projet analysé n'est un \en{fork} d'un autre).
 \begin{table}[ht]
     \centering
     \begin{tabular}{cc}
-        \input{experiment/data_analysis/hasContrib_describe.tex} &
-        \input{experiment/data_analysis/recentCommitCount_describe.tex}
+        \input{../experiment/data_analysis/hasContrib_describe.tex} &
+        \input{../experiment/data_analysis/recentCommitCount_describe.tex}
         \\
-        \input{experiment/data_analysis/recentContributorCount_describe.tex} &
-        \input{experiment/data_analysis/newContributorCount_describe.tex}
+        \input{../experiment/data_analysis/recentContributorCount_describe.tex} &
+        \input{../experiment/data_analysis/newContributorCount_describe.tex}
     \end{tabular}
     \caption{Aperçu statistique des données collectées}
     \label{tab:data_description}
@@ -40,15 +40,15 @@ minimale soit de deux.
 
 \begin{figure}[ht]
     \begin{subfigure}[t]{0.3\textwidth}
-        \includegraphics[width=\textwidth]{experiment/data_analysis/recentCommitCount_distribution}
+        \includegraphics[width=\textwidth]{../experiment/data_analysis/recentCommitCount_distribution}
         \caption{Nombre de \glspl{commit} récents\\(ordonnées logarithmiques)}
     \end{subfigure}
     \begin{subfigure}[t]{0.3\textwidth}
-        \includegraphics[width=\textwidth]{experiment/data_analysis/recentContributorCount_distribution}
+        \includegraphics[width=\textwidth]{../experiment/data_analysis/recentContributorCount_distribution}
         \caption{Nombre de contributeurs récents\\(ordonnées logarithmiques)}
     \end{subfigure}%
     \begin{subfigure}[t]{0.3\textwidth}
-        \includegraphics[width=\textwidth]{experiment/data_analysis/newContributorCount_distribution}
+        \includegraphics[width=\textwidth]{../experiment/data_analysis/newContributorCount_distribution}
         \caption{Nombre de nouveaux contributeurs\\(ordonnées logarithmiques)}
     \end{subfigure}
 
@@ -58,15 +58,15 @@ minimale soit de deux.
 
 \begin{figure}[ht]
     \begin{subfigure}[t]{0.3\textwidth}
-        \includegraphics[width=\textwidth]{experiment/data_analysis/recentCommitCount_qqplot}
+        \includegraphics[width=\textwidth]{../experiment/data_analysis/recentCommitCount_qqplot}
         \caption{Nombre de \glspl{commit} récents}
     \end{subfigure}
     \begin{subfigure}[t]{0.3\textwidth}
-        \includegraphics[width=\textwidth]{experiment/data_analysis/recentContributorCount_qqplot}
+        \includegraphics[width=\textwidth]{../experiment/data_analysis/recentContributorCount_qqplot}
         \caption{Nombre de contributeurs récents}
     \end{subfigure}%
     \begin{subfigure}[t]{0.3\textwidth}
-        \includegraphics[width=\textwidth]{experiment/data_analysis/newContributorCount_qqplot}
+        \includegraphics[width=\textwidth]{../experiment/data_analysis/newContributorCount_qqplot}
         \caption{Nombre de nouveaux contributeurs}
         \label{sfig:newContributorQQplot}
     \end{subfigure}
@@ -87,16 +87,16 @@ plus loin dans cette analyse.
 
 \begin{figure}[ht]
     \begin{subfigure}[t]{0.5\textwidth}
-        \includegraphics[width=\textwidth]{experiment/data_analysis/hasContrib_meanNewContributorCount}
+        \includegraphics[width=\textwidth]{../experiment/data_analysis/hasContrib_meanNewContributorCount}
         \caption{Moyenne du nombre de nouveaux contributeurs pour chaque catégorie}
     \end{subfigure}%
     \begin{subfigure}[t]{0.5\textwidth}
-        \includegraphics[width=\textwidth]{experiment/data_analysis/hasContrib_varianceNewContributorCount}
+        \includegraphics[width=\textwidth]{../experiment/data_analysis/hasContrib_varianceNewContributorCount}
         \caption{Variance du nombre de nouveaux contributeurs pour chaque catégorie}
         \label{sfig:hasContribVariance}
     \end{subfigure}
 
-    \input{experiment/data_analysis/hasContribTest.tex}
+    \input{../experiment/data_analysis/hasContribTest.tex}
     \caption{Moyenne du nombre de nouveaux contributeurs pour chaque catégorie}
     \label{fig:hasContrib}
 \end{figure}
@@ -143,17 +143,17 @@ choisi est celui de la régression linéaire, visualisé en figure \ref{fig:cont
 \begin{figure}
     \centering
     \begin{subfigure}[t]{0.5\textwidth}
-        \includegraphics[width=\textwidth]{experiment/data_analysis/recentContributorCountRegression_linearScale}
+        \includegraphics[width=\textwidth]{../experiment/data_analysis/recentContributorCountRegression_linearScale}
         \caption{Échelle linéaire}
     \end{subfigure}%
     \begin{subfigure}[t]{0.5\textwidth}
-        \includegraphics[width=\textwidth]{experiment/data_analysis/recentContributorCountRegression_logScale}
+        \includegraphics[width=\textwidth]{../experiment/data_analysis/recentContributorCountRegression_logScale}
         \caption{Échelle logarithmique}
     \end{subfigure}
 
-    \input{experiment/data_analysis/recentContributorCountRegressionFormula.tex}
+    \input{../experiment/data_analysis/recentContributorCountRegressionFormula.tex}
 
-    \input{experiment/data_analysis/recentContributorCount_white_test.tex}
+    \input{../experiment/data_analysis/recentContributorCount_white_test.tex}
 
     \caption{Nombre de nouveaux contributeurs en fonction du nombre de contributeurs récents uniques}
     \label{fig:contributorCount}
@@ -197,17 +197,17 @@ régression linéaire utilisant la méthode des moindres carrés généralisée 
 \begin{figure}[ht]
     \centering
     \begin{subfigure}[t]{0.5\textwidth}
-        \includegraphics[width=\textwidth]{experiment/data_analysis/recentCommitCountRegression_linearScale}
+        \includegraphics[width=\textwidth]{../experiment/data_analysis/recentCommitCountRegression_linearScale}
         \caption{Échelle linéaire}
     \end{subfigure}%
     \begin{subfigure}[t]{0.5\textwidth}
-        \includegraphics[width=\textwidth]{experiment/data_analysis/recentCommitCountRegression_logScale}
+        \includegraphics[width=\textwidth]{../experiment/data_analysis/recentCommitCountRegression_logScale}
         \caption{Échelle logarithmique}
     \end{subfigure}
 
-    \input{experiment/data_analysis/recentCommitCountRegressionFormula.tex}
+    \input{../experiment/data_analysis/recentCommitCountRegressionFormula.tex}
 
-    \input{experiment/data_analysis/recentCommitCount_white_test.tex}
+    \input{../experiment/data_analysis/recentCommitCount_white_test.tex}
 
     \caption{Nombre de nouveaux contributeurs en fonction du nombre de \glspl{commit} récents}
     \label{fig:commitCount}

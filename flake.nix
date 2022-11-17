@@ -182,6 +182,7 @@
         buildInputs = [ texDistribution ] ++ texDependencies;
         phases = [ "unpackPhase" "buildPhase" "installPhase" ];
         buildPhase = ''
+          cd master_dissertation
           export FONTCONFIG_FILE=${FONTCONFIG_FILE}
           mkdir -p .cache/texmf-var
           DIR=$(mktemp -d)
