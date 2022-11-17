@@ -1,0 +1,154 @@
+% Suppress some acceptable compilation warnings
+\RequirePackage[save,showerrors]{silence}
+\WarningFilter{multicol}
+  {May not work with the twocolumn option} % I'm not really using the multicol package
+\WarningFilter{latex}
+  {Marginpar on page} % Margin stuff moved to not overlap with other stuff, this is fine
+
+% llncs class documentation:
+% https://ctan.tetaneutral.net/macros/latex/contrib/llncs/llncsdoc.pdf
+\documentclass[twocolumn,dvipsnames]{llncs}
+
+% language settings
+\usepackage[main=french,english]{babel}
+\newcommand{\en}[1]{\foreignlanguage{english}{\todo{fix weird hspace}\emph{#1}}}
+\usepackage{csquotes}
+\MakeOuterQuote{"}
+
+% bibliography settings
+\usepackage[hyperref=true,backref=true]{biblatex}
+\DefineBibliographyExtras{french}{\restorecommand\mkbibnamefamily}
+\addbibresource{../references.bib}
+
+\usepackage{todonotes}
+
+% links setup
+\usepackage[nobiblatex]{xurl}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true}
+
+\title{L'Identification des Projets de Logiciel Libre Accessibles aux Nouveaux Contributeurs}
+\author{%
+    \todo[inline]{TODO: anonymiser les auteurs pour la soumission initiale}
+    Benoît Crespin\inst{1}\orcidID{0000-0002-9105-0243}%
+    \and%
+    Paul Hervot\inst{1}%
+}
+\institute{Université de Strasbourg}
+
+\begin{document}
+    \maketitle
+
+    \begin{abstract}
+        \todo{TODO abstract}
+        \keywords{
+            Logiciel libre \and Analyse automatique de dépôts logiciels \and
+            Barrières d'entrée du logiciel libre \and Nouveaux contributeurs
+        }
+    \end{abstract}
+
+    \section{Introduction}
+    \todo{TODO : sans doute à compacter et enlever les sous-sections}
+    \subsection{Le logiciel libre}
+    Au cours des quelques décennies précédentes, le numérique s'est développé
+    pour intégrer et assister la plupart des domaines de recherche, des secteurs
+    industriels, ainsi que des aspects de nos vies. Son champ est aujourd'hui
+    très vaste et connaît en son sein de nombreuses dynamiques différentes ayant
+    un impact sur ses domaines d'applications, parmi lesquelles celle du
+    logiciel libre.
+
+    En essence, les logiciels, applications, services numériques et autres
+    programmes sont des ensembles d'instructions compréhensibles par un
+    ordinateur et lui indiquant comment utiliser ses ressources afin de réaliser
+    un certain nombre de tâches. Pour être utilisables par un ordinateur, ces
+    instructions doivent être formulées en "code machine", un langage souvent
+    représenté en binaire et extrêmement difficile à manipuler par les humains,
+    même les plus spécialisés, aussi bien en ce qui concerne son écriture que sa
+    compréhension. C'est pourquoi lors de la création d'un logiciel, les
+    développeurs décrivent d'abord le comportement souhaité dans un autre
+    langage, textuel et raisonnablement maîtrisable pour un être humain
+    spécialisé, que l'on appelle un "langage de programmation". Cette
+    description textuelle du logiciel est ce que l'on appelle son "code source",
+    il est ensuite traduit en code machine par un autre programme (généralement
+    appelé un "compilateur") avant d'être livré aux personnes souhaitant
+    utiliser le logiciel.
+
+    Pour utiliser un logiciel, nous n'avons donc besoin que de son code machine,
+    mais c'est seulement en lisant son code \emph{source} que l'on peut
+    vraisemblablement comprendre son fonctionnement, corriger ses éventuelles
+    erreurs, l'adapter à d'autres besoins, vérifier la présence de comportements
+    malveillants, etc. La question de rendre publiquement disponible le code
+    source d'un logiciel est un enjeu faisant souvent intervenir plusieurs
+    intérêts divergents, allant de la transparence du fonctionnement de certains
+    services et leur gestion démocratique au secret industriel.
+
+    L'expression "logiciel libre" désigne en français un logiciel disponible
+    publiquement et gratuitement dont le code source est lui aussi disponible
+    publiquement et gratuitement, ainsi que sa modification et sa redistribution
+    par toutes et tous. Cette expression désigne aussi et surtout un mouvement
+    visant à développer la part de logiciel libre dans le numérique, un
+    mouvement dans lequel se développe toute une culture, des pratiques, des
+    fondations et des événements internationaux. L'expression équivalente
+    anglaise, "\en{Free and Open Source Software}" (FOSS) est souvent utilisée
+    dans les références citées dans ce mémoire.
+
+    \subsection{Les projets de logiciel libre dans l'enseignement de l'informatique}
+    La pédagogie de projet est une méthode d'enseignement qui consiste à inviter
+    les apprenants à appliquer leurs connaissances et à en acquérir de nouvelles
+    au travers d'un projet plus ou moins concret et imitant plus ou moins
+    fidèlement une situation réelle. Réalisé soit individuellement soit en
+    groupe, les projets aboutissent généralement à une production évaluée par
+    l'enseignant, parfois au travers d'une présentation donnée par les
+    apprenants. L'efficacité de cette méthode a fait l'objet de nombreuses
+    recherches au cours des années précédentes. Plusieurs méta-analyses
+    concluent que cette méthode a des effets mesurables, positifs et importants
+    sur les résultats académiques des apprenants en sciences sociales et en
+    sciences naturelles \cite{pbl-2019, pbl-2018}.
+
+    Les projets proposés aux étudiants sont le plus souvent factices, imaginés
+    par les enseignants dans le seul but de servir d'exercice. Utiliser au
+    contraire des projets réels, qui ne cessent pas d'exister après la fin de la
+    séquence pédagogique, sur lesquels faire travailler les étudiants donne des
+    résultats encore meilleurs, mais est aussi plus difficile et incertain à
+    encadrer pour les enseignants \cite{real-pbl-2010, real-pbl-2004}. Il est
+    notamment très difficile pour l'enseignant de prévoir à l'avance les
+    problèmes que les apprenants risquent de rencontrer, c'est pourquoi d'autres
+    efforts dans cette direction ont tenté un compromis, consistant à créer des
+    projets de logiciel libre aussi proches des situations réelles que possible,
+    mais dédiés à l'éducation \cite{oss-edu-2008}. Les projets en question ne
+    sont cependant plus accessibles aujourd'hui, une explication possible à leur
+    disparition étant leur portée réduite à l'éducation et l'absence d'une
+    communauté persistante autour d'eux.
+
+    Bien qu'elles soient plutôt rares, quelques initiatives existent aussi pour
+    enseigner spécifiquement les pratiques du logiciel libre dans l'éducation
+    supérieur et la formation tout au long de la vie. Certaines sont des
+    initiatives venant des communautés du logiciel libre, comme le
+    \en{Professional Certificate in Open Source Software Development, Linux and
+    Git}%
+    \footnote{\url{https://www.edx.org/professional-certificate/linuxfoundationx-open-source-software-development-linux-and-git}}
+    de la \en{Linux Foundation}, et en particulier la première séquence :
+    \en{Open Source Software Development: Linux for Developers}%
+    \footnote{\url{https://www.edx.org/course/open-source-software-development-linux-for-developers}} ;
+    ou les séminaires de l'\en{open source
+    initiative}\footnote{\url{https://opensource.org/osi-open-source-education}}.
+    Enfin, certaines universités proposent des cursus en informatique ayant des
+    éléments visant spécifiquement les pratiques du logiciel libre, c'est le cas
+    notamment de l'Université de l'État de Caroline du Nord aux États-Unis, qui
+    a expérimenté plusieurs façons d'inclure la contribution aux projets de
+    logiciel libre dans leurs cursus d'informatique \cite{oss-edu-2008,
+    oss-edu-2007} ; mais aussi de l'université de Calais qui propose
+    actuellement un "Master Informatique - Ingénierie du logiciel libre"%
+    \footnote{\url{https://www.univ-littoral.fr/formation/offre-de-formation/masters/master-informatique-ingenierie-du-logiciel-libre/}},
+    sous la forme d'une formation en alternance.
+
+    \section{Revue de littérature}
+
+    \section{Méthodologie}
+
+    \section{Résultats et discussion}
+
+    \section{Conclusion}
+
+    \printbibliography[heading=bibintoc]
+\end{document}

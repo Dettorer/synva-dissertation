@@ -101,6 +101,7 @@
           ifmtarg
           ifoddpage
           imakeidx
+          llncs
           marginfix
           marginnote
           mdframed
@@ -215,6 +216,27 @@
         installPhase = ''
           mkdir -p $out
           mv build/slides.pdf $out/Paul_Hervot_M2_dissertation_slides.pdf
+        '';
+      };
+
+      packages.paper = pkgs.stdenv.mkDerivation {
+        name = "EIAH2023Paper";
+        src = ./.;
+        buildInputs = [ texDistribution ] ++ texDependencies;
+        phases = [ "unpackPhase" "buildPhase" "installPhase" ];
+        buildPhase = ''
+          cd EIAH_2023_paper
+          export FONTCONFIG_FILE=${FONTCONFIG_FILE}
+          mkdir -p .cache/texmf-var
+          DIR=$(mktemp -d)
+          env \
+            TEXMFHOME=.cache TEXMFVAR=.cache/texmf-var \
+            SOURCE_DATE_EPOCHE=${toString self.lastModified} \
+            latexmk -interaction=nonstopmode
+        '';
+        installPhase = ''
+          mkdir -p $out
+          mv build/paper.pdf $out/EIAH_2023_paper.pdf
         '';
       };
 
