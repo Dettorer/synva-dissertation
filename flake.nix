@@ -101,7 +101,6 @@
           ifmtarg
           ifoddpage
           imakeidx
-          llncs
           marginfix
           marginnote
           mdframed
