@@ -57,20 +57,19 @@
     \todo[inline]{TODO : raccourcir les abstracts}
     \selectlanguage{french}
     \begin{abstract}
-        Le logiciel libre prend de plus en plus de place dans le paysage public et industriel,
-        notamment pour ses intérêts en terme de transparence des logiciels et de leur gestion
-        démocratique, pour autant le simple fait de rendre le code source d'un logiciel publique ne le
-        rend pas automatiquement accessible, et les nouveaux contributeurs de ces projets rencontrent
-        de nombreuses barrières d'entrée les empêchant parfois de mener leurs contributions à leur
-        terme. Au travers d'une analyse à grande échelle de l'archive de Software Heritage, nous
-        testons la pertinence de trois indicateurs dans l'identification des projets de logiciel libre
-        accessibles aux nouveaux contributeurs. Nos résultats montrent notamment un lien de
-        corrélation positif entre le nombre de contributions menées à leur terme au sein d'un projet
-        par de nouveaux contributeurs et la présence d'instructions de contribution, ainsi qu'une
-        corrélation positive entre ce même nombre et le nombre de contributeurs uniques récents du
-        projet. De tels indicateurs trouveraient leur utilité notamment dans l'enseignement des
-        pratiques du logiciel libre, les enseignants de ce sujet ayant souvent du mal à sélectionner
-        des projets accessibles sur lesquels faire travailler les étudiants.
+        Le logiciel libre prend de plus en plus de place dans le paysage public et industriel, notamment pour
+        ses intérêts en terme de transparence des logiciels et de leur gestion démocratique, pour autant le
+        simple fait de rendre le code source d'un logiciel publique ne le rend pas automatiquement accessible,
+        et les nouveaux contributeurs de ces projets rencontrent de nombreuses barrières d'entrée les
+        empêchant parfois de mener leurs contributions à leur terme. Au travers d'une analyse à grande échelle
+        de l'archive de Software Heritage, nous testons la pertinence de trois indicateurs dans
+        l'identification des projets de logiciel libre accessibles aux nouveaux contributeurs. Nos résultats
+        montrent notamment un lien de corrélation positif entre le nombre de contributions menées à leur terme
+        au sein d'un projet par de nouveaux contributeurs et la présence d'instructions de contribution, ainsi
+        qu'une corrélation positive entre ce même nombre et le nombre de contributeurs uniques récents du
+        projet. De tels indicateurs trouveraient leur utilité notamment dans l'enseignement des pratiques du
+        logiciel libre, les enseignants de ce sujet ayant souvent du mal à sélectionner des projets
+        accessibles sur lesquels faire travailler les étudiants.
 
         \keywords{
             Logiciel libre \and Analyse automatique de dépôts logiciels \and Barrières d'entrée du
@@ -79,19 +78,18 @@
     \end{abstract}
     \selectlanguage{english}
     \begin{abstract}
-        Free and Open Source Software make more and more of the public and industrial software
-        landscape, notably for its benefits for software transparency and their democratic governance.
-        However, simply making the source code of a software public doesn't automatically make it
-        accessible, and new contributors approaching these projects often face many barriers to entry
-        that prevent them from bringing their contribution to completion. Through a large-scale
-        software mining of the Software Heritage archive, we test the pertinence of three signals in
-        the identification of accessible FOSS projects for new contributors. Our results notably show
-        a positive correlation between the number of new contributors of a project successfully
-        bringing their contribution to completion and the presence of contributing guidelines, as well
-        as a positive correlation between that same number and the number of recent unique
-        contributors in the project. Such signals could find a use in the teaching of FOSS practices,
-        as teachers of this subject often find it difficult to select an accessible project for their
-        students to work on.
+        Free and Open Source Software make more and more of the public and industrial software landscape,
+        notably for its benefits for software transparency and their democratic governance. However, simply
+        making the source code of a software public doesn't automatically make it accessible, and new
+        contributors approaching these projects often face many barriers to entry that prevent them from
+        bringing their contribution to completion. Through a large-scale software mining of the Software
+        Heritage archive, we test the pertinence of three signals in the identification of accessible FOSS
+        projects for new contributors. Our results notably show a positive correlation between the number of
+        new contributors of a project successfully bringing their contribution to completion and the presence
+        of contributing guidelines, as well as a positive correlation between that same number and the number
+        of recent unique contributors in the project. Such signals could find a use in the teaching of FOSS
+        practices, as teachers of this subject often find it difficult to select an accessible project for
+        their students to work on.
 
         \keywords{
             FOSS \and Mining Software Repositories \and Open source barriers to entry \and New
@@ -101,96 +99,41 @@
     \selectlanguage{french}
 
     \section{Introduction}
-    \todo{TODO : sans doute à compacter et enlever les sous-sections}
-    \subsection{Le logiciel libre}
-    Au cours des quelques décennies précédentes, le numérique s'est développé
-    pour intégrer et assister la plupart des domaines de recherche, des secteurs
-    industriels, ainsi que des aspects de nos vies. Son champ est aujourd'hui
-    très vaste et connaît en son sein de nombreuses dynamiques différentes ayant
-    un impact sur ses domaines d'applications, parmi lesquelles celle du
-    logiciel libre.
 
-    En essence, les logiciels, applications, services numériques et autres
-    programmes sont des ensembles d'instructions compréhensibles par un
-    ordinateur et lui indiquant comment utiliser ses ressources afin de réaliser
-    un certain nombre de tâches. Pour être utilisables par un ordinateur, ces
-    instructions doivent être formulées en "code machine", un langage souvent
-    représenté en binaire et extrêmement difficile à manipuler par les humains,
-    même les plus spécialisés, aussi bien en ce qui concerne son écriture que sa
-    compréhension. C'est pourquoi lors de la création d'un logiciel, les
-    développeurs décrivent d'abord le comportement souhaité dans un autre
-    langage, textuel et raisonnablement maîtrisable pour un être humain
-    spécialisé, que l'on appelle un "langage de programmation". Cette
-    description textuelle du logiciel est ce que l'on appelle son "code source",
-    il est ensuite traduit en code machine par un autre programme (généralement
-    appelé un "compilateur") avant d'être livré aux personnes souhaitant
-    utiliser le logiciel.
+    La pédagogie de projet est une méthode d'enseignement qui consiste à inviter les apprenants à appliquer
+    leurs connaissances et à en acquérir de nouvelles au travers d'un projet plus ou moins concret et imitant
+    plus ou moins fidèlement une situation réelle. Réalisé soit individuellement soit en groupe, les projets
+    aboutissent généralement à une production évaluée par l'enseignant, parfois au travers d'une présentation
+    donnée par les apprenants. L'efficacité de cette méthode a fait l'objet de nombreuses recherches au cours
+    des années précédentes. Plusieurs méta-analyses concluent que cette méthode a des effets mesurables,
+    positifs et importants sur les résultats académiques des apprenants en sciences sociales et en sciences
+    naturelles \cite{pbl-2019, pbl-2018}.
 
-    Pour utiliser un logiciel, nous n'avons donc besoin que de son code machine,
-    mais c'est seulement en lisant son code \emph{source} que l'on peut
-    vraisemblablement comprendre son fonctionnement, corriger ses éventuelles
-    erreurs, l'adapter à d'autres besoins, vérifier la présence de comportements
-    malveillants, etc. La question de rendre publiquement disponible le code
-    source d'un logiciel est un enjeu faisant souvent intervenir plusieurs
-    intérêts divergents, allant de la transparence du fonctionnement de certains
-    services et leur gestion démocratique au secret industriel.
+    Les projets proposés aux étudiants sont le plus souvent factices, imaginés par les enseignants dans le
+    seul but de servir d'exercice. Utiliser au contraire des projets réels, qui ne cessent pas d'exister après
+    la fin de la séquence pédagogique, sur lesquels faire travailler les étudiants donne des résultats encore
+    meilleurs, mais est aussi plus difficile et incertain à encadrer pour les enseignants \cite{real-pbl-2010,
+    real-pbl-2004}. Il est notamment très difficile pour l'enseignant de prévoir à l'avance les problèmes que
+    les apprenants risquent de rencontrer, c'est pourquoi d'autres efforts dans cette direction ont tenté un
+    compromis, consistant à créer des projets de logiciel libre aussi proches des situations réelles que
+    possible, mais dédiés à l'éducation \cite{oss-edu-2008}. Les projets en question ne sont cependant plus
+    accessibles aujourd'hui, une explication possible à leur disparition étant leur portée réduite à
+    l'éducation et l'absence d'une communauté persistante autour d'eux.
 
-    L'expression "logiciel libre" désigne en français un logiciel disponible
-    publiquement et gratuitement dont le code source est lui aussi disponible
-    publiquement et gratuitement, ainsi que sa modification et sa redistribution
-    par toutes et tous. Cette expression désigne aussi et surtout un mouvement
-    visant à développer la part de logiciel libre dans le numérique, un
-    mouvement dans lequel se développe toute une culture, des pratiques, des
-    fondations et des événements internationaux. L'expression équivalente
-    anglaise, "\en{Free and Open Source Software}" (FOSS) est souvent utilisée
-    dans les références citées dans ce mémoire.
-
-    \subsection{Les projets de logiciel libre dans l'enseignement de l'informatique}
-    La pédagogie de projet est une méthode d'enseignement qui consiste à inviter
-    les apprenants à appliquer leurs connaissances et à en acquérir de nouvelles
-    au travers d'un projet plus ou moins concret et imitant plus ou moins
-    fidèlement une situation réelle. Réalisé soit individuellement soit en
-    groupe, les projets aboutissent généralement à une production évaluée par
-    l'enseignant, parfois au travers d'une présentation donnée par les
-    apprenants. L'efficacité de cette méthode a fait l'objet de nombreuses
-    recherches au cours des années précédentes. Plusieurs méta-analyses
-    concluent que cette méthode a des effets mesurables, positifs et importants
-    sur les résultats académiques des apprenants en sciences sociales et en
-    sciences naturelles \cite{pbl-2019, pbl-2018}.
-
-    Les projets proposés aux étudiants sont le plus souvent factices, imaginés
-    par les enseignants dans le seul but de servir d'exercice. Utiliser au
-    contraire des projets réels, qui ne cessent pas d'exister après la fin de la
-    séquence pédagogique, sur lesquels faire travailler les étudiants donne des
-    résultats encore meilleurs, mais est aussi plus difficile et incertain à
-    encadrer pour les enseignants \cite{real-pbl-2010, real-pbl-2004}. Il est
-    notamment très difficile pour l'enseignant de prévoir à l'avance les
-    problèmes que les apprenants risquent de rencontrer, c'est pourquoi d'autres
-    efforts dans cette direction ont tenté un compromis, consistant à créer des
-    projets de logiciel libre aussi proches des situations réelles que possible,
-    mais dédiés à l'éducation \cite{oss-edu-2008}. Les projets en question ne
-    sont cependant plus accessibles aujourd'hui, une explication possible à leur
-    disparition étant leur portée réduite à l'éducation et l'absence d'une
-    communauté persistante autour d'eux.
-
-    Bien qu'elles soient plutôt rares, quelques initiatives existent aussi pour
-    enseigner spécifiquement les pratiques du logiciel libre dans l'éducation
-    supérieur et la formation tout au long de la vie. Certaines sont des
-    initiatives venant des communautés du logiciel libre, comme le
-    \en{Professional Certificate in Open Source Software Development, Linux and
-    Git}%
+    Bien qu'elles soient plutôt rares, quelques initiatives existent aussi pour enseigner spécifiquement les
+    pratiques du logiciel libre dans l'éducation supérieur et la formation tout au long de la vie. Certaines
+    sont des initiatives venant des communautés du logiciel libre, comme le \en{Professional Certificate in
+    Open Source Software Development, Linux and Git}%
     \footnote{\url{https://www.edx.org/professional-certificate/linuxfoundationx-open-source-software-development-linux-and-git}}
-    de la \en{Linux Foundation}, et en particulier la première séquence :
-    \en{Open Source Software Development: Linux for Developers}%
-    \footnote{\url{https://www.edx.org/course/open-source-software-development-linux-for-developers}} ;
-    ou les séminaires de l'\en{open source
-    initiative}\footnote{\url{https://opensource.org/osi-open-source-education}}.
-    Enfin, certaines universités proposent des cursus en informatique ayant des
-    éléments visant spécifiquement les pratiques du logiciel libre, c'est le cas
-    notamment de l'Université de l'État de Caroline du Nord aux États-Unis, qui
-    a expérimenté plusieurs façons d'inclure la contribution aux projets de
-    logiciel libre dans leurs cursus d'informatique \cite{oss-edu-2008,
-    oss-edu-2007} ; mais aussi de l'université de Calais qui propose
+    de la \en{Linux Foundation}, et en particulier la première séquence : \en{Open Source Software
+    Development: Linux for Developers}%
+    \footnote{\url{https://www.edx.org/course/open-source-software-development-linux-for-developers}} ; ou les
+    séminaires de l'\en{open source
+    initiative}\footnote{\url{https://opensource.org/osi-open-source-education}}. Enfin, certaines universités
+    proposent des cursus en informatique ayant des éléments visant spécifiquement les pratiques du logiciel
+    libre, c'est le cas notamment de l'Université de l'État de Caroline du Nord aux États-Unis, qui a
+    expérimenté plusieurs façons d'inclure la contribution aux projets de logiciel libre dans leurs cursus
+    d'informatique \cite{oss-edu-2008, oss-edu-2007} ; mais aussi de l'université de Calais qui propose
     actuellement un "Master Informatique - Ingénierie du logiciel libre"%
     \footnote{\url{https://www.univ-littoral.fr/formation/offre-de-formation/masters/master-informatique-ingenierie-du-logiciel-libre/}},
     sous la forme d'une formation en alternance.
@@ -201,33 +144,17 @@
 
     \textcite{barriers-2018} notent la difficulté des nouveaux volontaires à rejoindre une communauté de
     logiciel libre, citant comme exemple extrême le projet "Apache Hadoop" voyant 82\% de ses nouveaux
-    volontaires quitter le projet après leur première contribution \parencite{hadoop-dropout-2013}. Les études
-    qu'ils citent mentionnent deux approches différentes de la résolution de problèmes observées dans les
-    projets informatique : l'une consiste à d'abord rassembler le plus d'informations possibles sur le
-    problème avant de tenter en un deuxième temps de le résoudre (approche statistiquement plus commune chez
-    les femmes que chez les hommes), l'autre consiste à agir sur la première information ou piste prometteuse
-    trouvée, quitte à revenir en arrière et chercher de nouvelles informations si elles n'étaient pas
-    concluantes (approche statistiquement plus commune chez les hommes que chez les femmes)
-    \parencite{gender-information-processing-1995,gender-information-processing-2015}. De façon plus précise
-    concernant les logiciels, on observe deux façons d'apprendre les fonctionnalités d'un logiciel
-    statistiquement préférées de façon inégales selon le genre : l'une, statistiquement plus représentée chez
-    les femmes, consiste à les apprendre méthodiquement en suivant des processus d'apprentissage clairs.
-    L'autre, statistiquement plus représentée chez les hommes, consiste à expérimenter à la manière d'un jeu
-    avec ces fonctionnalités \parencite{gender-programming-2010,gender-programming-2006}. Une des tendances
-    trouvées par \textcite[p.~1008]{barriers-2018} est que la majorité ($58\%$) des barrières rencontrées dans
-    leur étude sont de nature sociale ("\en{community-oriented}") et non techniques. Concernant les aspects
-    plus techniques, il semble que les outils et la documentation représentent la majorité des barrières
-    rencontrées, alors même que ces éléments ont spécifiquement pour objectif d'aider les nouvelles
+    volontaires quitter le projet après leur première contribution \parencite{hadoop-dropout-2013}. Une des
+    tendances qu'ils trouvent est que la majorité ($58\%$) des barrières rencontrées dans leur étude sont de
+    nature sociale ("\en{community-oriented}") et non techniques\parencite[p.~1008]{barriers-2018}. Concernant
+    les aspects plus techniques, il semble que les outils et la documentation représentent la majorité des
+    barrières rencontrées, alors même que ces éléments ont spécifiquement pour objectif d'aider les nouvelles
     contributions. C'est un type de barrière qui semble amplifié lorsque les méthodes d'apprentissage et de
     traitement de l'information de la personne consistent à rassembler le plus d'information possible avant de
-    commencer à agir. Ces méthodes étant sur-représentées chez les femmes, ces barrières deviennent
-    discriminantes selon le genre, et peuvent potentiellement participer à expliquer la sous-représentation
-    des femmes dans les communautés de logiciel libre.
-
-    Plus précisément en ce qui concerne les contributions, selon \textcite{hadoop-dropout-2013}, les facteurs
-    susceptibles de provoquer un abandon des nouveaux contributeurs semblent être les réponses inadéquates
-    proposées à leurs questions, notamment lorsqu'un autre nouveau contributeur répond à la place d'un membre
-    expérimenté du projet.
+    commencer à agir. Ces méthodes étant sur-représentées chez les
+    femmes\parencite{gender-information-processing-1995,gender-information-processing-2015}, ces barrières
+    deviennent discriminantes selon le genre, et peuvent potentiellement participer à expliquer la
+    sous-représentation des femmes dans les communautés de logiciel libre.
 
     Il a été théorisé et souvent observé de façon générale que la diversité de genre, d'origines et
     d'ancienneté au sein d'une équipe augmente sa productivité \parencite[voir par exemple][]{diversity-2007}.
@@ -252,8 +179,8 @@
     \end{itemize}
 
     \subsection{Mesure de l'accessibilité d'un projet pour les nouveaux contributeurs}
-    \label{sec:accessibility-measure}
 
+    \label{sec:accessibility-measure}
     Ces modèles de barrières d'entrée permettent d'identifier les freins que rencontrent les nouveaux
     contributeurs dans un projet de logiciel libre. Un autre point de vue sur la question consiste à mesurer
     \emph{a posteriori} la capacité d'un projet à accueillir les nouveaux contributeurs et à leur permettre de
@@ -310,6 +237,7 @@
     des projets de logiciel libre.
 
     \subsection{L'archive de logiciels de Software Heritage}
+
     \label{ssec:swh-graph}
 
     Les techniques de compression de graphe sont aujourd'hui suffisamment avancées pour permettre une nouvelle
@@ -324,14 +252,14 @@
     d'un projet avec un classique calcul de composante fortement connexe, ce qui peut se faire avec un simple
     parcours profondeur ou largeur du graphe à partir de n'importe lequel de ses \en{commits}.
 
-    Software Heritage\note{\url{https://www.softwareheritage.org/}} est une initiative exploitant ces
+    Software Heritage\footnote{\url{https://www.softwareheritage.org/}} est une initiative exploitant ces
     techniques de compression afin de construire une archive aussi complète que possible du code source
     actuellement disponible publiquement dans le monde. L'archive est elle aussi publique et un de leurs
     objectifs est de la rendre exploitable pour la recherche \parencite{swh-2017}. Il s'agit du corpus que
     \textcite{swh-graph-2020} ont utilisé comme exemple pour leur modèle de compression. L'archive comptait en
     2018 plus d'un milliard de \en{commits} uniques archivés depuis quatre-vingt-cinq millions d'origines
     différentes (telles que des \en{remotes} \en{git} ou des versions de paquets Python publiés sur
-    PyPi\note{\url{https://pypi.org/}}). L'archive est stockée dans une structure en "ajout seul" : elle
+    PyPi\footnote{\url{https://pypi.org/}}). L'archive est stockée dans une structure en "ajout seul" : elle
     grandit de façon continue en archivant petit à petit de nouveaux projets et en ajoutant de nouveaux
     artéfacts à chaque évolution des projets déjà archivés, ce qui en fait l'un des corpus les plus complets
     et exploitable par la recherche scientifique \parencite{swh-2019,swh-growth-2019}.
@@ -359,8 +287,8 @@
     assez peu explorée de façon quantitative dans la littérature. \textcite{signals-2019} se sont intéressés
     aux signaux que les potentiels nouveaux contributeurs utilisent afin de sélectionner les projets auxquels
     ils \emph{essayent} de contribuer, c'est à dire les signaux formant l'attractivité de ces projets. Nous
-    nous attacherons dans notre étude à déterminer si certains de ces mêmes signaux sont, de surcroit,
-    prédictifs d'une réelle accessibilité de ces projets, c'est à dire à quel point de nouveaux contributeurs
+    nous attacherons ici à déterminer si certains de ces mêmes signaux sont, de surcroit, prédictifs d'une
+    réelle accessibilité de ces projets, c'est à dire à quel point de nouveaux contributeurs
     \emph{réussissent} à produire une contribution apparaissant dans l'historique de développement du projet.
 
     Comme nous l'avons vu, la recherche quantitative portant sur les historiques de développement des
@@ -385,8 +313,6 @@
     que][p.~13,16]{signals-2019}. Cette période de référence a été choisie sur recommandation de Software
     Heritage, la désignant comme un bon compromis entre le nombre de projets pour lesquels les données sont
     disponible dans l'archive à cette période et le caractère récent des observations.
-
-    \pagebreak[4]
 
     \subsection{Hypothèses}
 
@@ -435,6 +361,7 @@
 
     \subsection{Collecte initiale des données}
 
+    \todo{TODO : il y a peut être des explications à dédupliquer avec la section \ref{ssec:swh-graph}}
     Comme présenté en section \ref{ssec:swh-graph}, l'archive de Software Heritage se présente sous la forme
     d'un graphe orienté. Ses nœuds représentent diverses entités de l'historique de développement, parmi
     lesquelles les \en{commits} (appelés \en{revisions} au sein du graphe), les origines (l'URL à partir de
@@ -515,6 +442,7 @@
 
     \subsection{Reproduction des travaux}
 
+    \todo{TODO : anonymiser, voir ne pas mentionner}
     Afin d'améliorer la transparence méthodologique de ce travail et d'aider l'éventuelle reproduction des
     résultats qui y sont présentés, un \en{replication package} contenant le code source et les bibliothèques
     utilisés dans ce mémoire, ainsi que les données brut collectées, a été publié sur Zenodo
@@ -555,8 +483,7 @@
     Cette dernière observation se retrouve aussi dans le nombre de contributeurs récents, bien que de façon
     moins spectaculaire. Rappelons à la vue des quantiles de cette dernière valeur que les projets ayant vu
     moins de deux contributeurs distincts récents ont été exclus de l'étude (voir section
-    \ref{sec:constitution_echantillon} p.~\pageref{sec:constitution_echantillon}), ce qui explique que la
-    valeur minimale soit de deux.
+    \ref{sec:constitution_echantillon}), ce qui explique que la valeur minimale soit de deux.
 
     \begin{figure}[ht]
         \begin{subfigure}[t]{0.3\textwidth}
