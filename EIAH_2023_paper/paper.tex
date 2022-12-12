@@ -122,24 +122,22 @@
     accessibles aujourd'hui, une explication possible à leur disparition étant leur portée réduite à
     l'éducation et l'absence d'une communauté persistante autour d'eux.
 
-    \todo{TODO : enlever les footnotes, y'en a trop}
     Bien qu'elles soient plutôt rares, quelques initiatives existent aussi pour enseigner spécifiquement les
     pratiques du logiciel libre dans l'éducation supérieur et la formation tout au long de la vie. Certaines
-    sont des initiatives venant des communautés du logiciel libre, comme le \en{Professional Certificate in
-    Open Source Software Development, Linux and Git}%
-    \footnote{\url{https://www.edx.org/professional-certificate/linuxfoundationx-open-source-software-development-linux-and-git}}
-    de la \en{Linux Foundation}, et en particulier la première séquence : \en{Open Source Software
-    Development: Linux for Developers}%
-    \footnote{\url{https://www.edx.org/course/open-source-software-development-linux-for-developers}} ; ou les
-    séminaires de l'\en{open source
-    initiative}\footnote{\url{https://opensource.org/osi-open-source-education}}. Enfin, certaines universités
-    proposent des cursus en informatique ayant des éléments visant spécifiquement les pratiques du logiciel
-    libre, c'est le cas notamment de l'Université de l'État de Caroline du Nord aux États-Unis, qui a
+    sont des initiatives venant des communautés du logiciel libre, comme le
+    \href{https://www.edx.org/professional-certificate/linuxfoundationx-open-source-software-development-linux-and-git}{\en{Professional
+    Certificate in Open Source Software Development, Linux and Git}} de la \en{Linux Foundation}, et en
+    particulier la première séquence :
+    \href{https://www.edx.org/course/open-source-software-development-linux-for-developers}{\en{Open Source
+    Software Development: Linux for Developers}} ou les séminaires de
+    l'\href{https://opensource.org/osi-open-source-education}{\en{open source initiative}}. Enfin, certaines
+    universités proposent des cursus en informatique ayant des éléments visant spécifiquement les pratiques du
+    logiciel libre, c'est le cas notamment de l'Université de l'État de Caroline du Nord aux États-Unis, qui a
     expérimenté plusieurs façons d'inclure la contribution aux projets de logiciel libre dans leurs cursus
     d'informatique \cite{oss-edu-2008, oss-edu-2007} ; mais aussi de l'université de Calais qui propose
-    actuellement un "Master Informatique - Ingénierie du logiciel libre"%
-    \footnote{\url{https://www.univ-littoral.fr/formation/offre-de-formation/masters/master-informatique-ingenierie-du-logiciel-libre/}},
-    sous la forme d'une formation en alternance.
+    actuellement un
+    "\href{https://www.univ-littoral.fr/formation/offre-de-formation/masters/master-informatique-ingenierie-du-logiciel-libre/}{Master
+    Informatique - Ingénierie du logiciel libre}", sous la forme d'une formation en alternance.
 
     \section{Les nouveaux contributeurs dans le logiciel libre}
 
@@ -218,17 +216,17 @@
     d'un projet avec un classique calcul de composante fortement connexe, ce qui peut se faire avec un simple
     parcours profondeur ou largeur du graphe à partir de n'importe lequel de ses \en{commits}.
 
-    Software Heritage\footnote{\url{https://www.softwareheritage.org/}} est une initiative exploitant ces
-    techniques de compression afin de construire une archive aussi complète que possible du code source
-    actuellement disponible publiquement dans le monde. L'archive est elle aussi publique et un de leurs
-    objectifs est de la rendre exploitable pour la recherche \parencite{swh-2017}. Il s'agit du corpus que
-    \textcite{swh-graph-2020} ont utilisé comme exemple pour leur modèle de compression. L'archive comptait en
-    2018 plus d'un milliard de \en{commits} uniques archivés depuis quatre-vingt-cinq millions d'origines
-    différentes (telles que des \en{remotes} \en{git} ou des versions de paquets Python publiés sur
-    PyPi\footnote{\url{https://pypi.org/}}). L'archive est stockée dans une structure en "ajout seul" : elle
-    grandit de façon continue en archivant petit à petit de nouveaux projets et en ajoutant de nouveaux
-    artéfacts à chaque évolution des projets déjà archivés, ce qui en fait l'un des corpus les plus complets
-    et exploitable par la recherche scientifique \parencite{swh-2019,swh-growth-2019}.
+    Software Heritage est une initiative exploitant ces techniques de compression afin de construire une
+    archive aussi complète que possible du code source actuellement disponible publiquement dans le monde.
+    L'archive est elle aussi publique et un de leurs objectifs est de la rendre exploitable pour la recherche
+    \parencite{swh-2017}. Il s'agit du corpus que \textcite{swh-graph-2020} ont utilisé comme exemple pour
+    leur modèle de compression. L'archive comptait en 2018 plus d'un milliard de \en{commits} uniques archivés
+    depuis quatre-vingt-cinq millions d'origines différentes (telles que des \en{remotes} \en{git} ou des
+    versions de paquets Python publiés sur \href{https://pypi.org/}{PyPi}). L'archive est stockée dans une
+    structure en "ajout seul" : elle grandit de façon continue en archivant petit à petit de nouveaux projets
+    et en ajoutant de nouveaux artéfacts à chaque évolution des projets déjà archivés, ce qui en fait l'un des
+    corpus les plus complets et exploitable par la recherche scientifique
+    \parencite{swh-2019,swh-growth-2019}.
 
     \subsection{Sélection des projets étudiés}
 
@@ -379,29 +377,27 @@
     possèdent ou non des instructions de contribution, et ainsi compléter notre jeu de donnée. Le contenu des
     fichiers est bien archivé par Software Heritage mais n'est pas disponible directement dans le graphe, il
     est en revanche possible de télécharger ces contenus de deux autres façons différentes : soit via des
-    requêtes HTTP sur le site web \url{https://archive.softwareheritage.org/}\todo{TODO : ne mentionner le
-    lien qu'une seule fois et le réduire (sans https:// machin)}, accessible publiquement, soit en
-    téléchargeant les contenus directement depuis leur "\en{registry}" Amazon
-    S3\footnote{\url{https://registry.opendata.aws/software-heritage}}, lui aussi accessible publiquement. Le
-    site \url{https://archive.softwareheritage.org/} limite le nombre de requêtes autorisées par adresse IP à
-    quelques dizaines par heure. Le \en{registry} Amazon S3 n'impose pas ce genre de limite, mais le contenus
-    de certains fichiers n'y est pas encore disponible. Nous utiliserons donc en priorité le \en{registry}
-    Amazon S3 pour télécharger le contenu des fichiers \texttt{README} nécessaires, puis le site web
-    \url{https://archive.softwareheritage.org/} pour tous ceux que nous ne parviendrons pas à y trouver.
+    requêtes HTTP sur le site web \href{https://archive.softwareheritage.org/}{archive.softwareheritage.org},
+    accessible publiquement, soit en téléchargeant les contenus directement depuis leur \en{registry} Amazon
+    S3 (\href{https://registry.opendata.aws/software-heritage}{registry.opendata.aws/software-heritage}), lui
+    aussi accessible publiquement. Le site limite le nombre de requêtes autorisées par adresse IP à quelques
+    dizaines par heure. Le \en{registry} n'impose pas ce genre de limite, mais le contenus de certains
+    fichiers n'y est pas encore disponible. Nous utiliserons donc en priorité le \en{registry} Amazon S3 pour
+    télécharger le contenu des fichiers \texttt{README} nécessaires, puis le site pour tous ceux que nous ne
+    parviendrons pas à y trouver.
 
     Une fois le contenu des \texttt{README} téléchargés, nous y cherchons une section dont le nom contient le
     mot "\en{contributing}" ou un mot proche. Pour identifier les noms de section dans les fichiers
     téléchargés, nous supposons que ceux-ci sont formatés suivant un des deux standards les plus répandus de
     formatage de text brut : le Markdown (dont l'extension courante est \texttt{.md}) ou le reStructuredText
     (dont l'extension courante est \texttt{.rst}). Le format Markdown autorise deux façon de définir une
-    section\footnote{voir \url{https://www.markdownguide.org/basic-syntax/\#headings}}, la première consiste à
-    démarrer une ligne avec un ou plusieurs caractères "croisillon" ("\#") puis d'écrire le nom de la section
-    sur la fin de la ligne, l'autre consiste à écrire directement le nom de la section, puis à la "souligner"
-    en écrivant plusieurs fois le caractère "égal" ("=") ou "tiret" ("-") sur la ligne suivante. Le format
-    reStructuredText n'autorise qu'une seule façon de définir des sections, en soulignant une ligne de la même
-    façon que la deuxième méthode du Markdown, à ceci près que d'autres caractères sont aussi acceptés pour
-    composer la ligne\footnote{voir
-    \url{https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html\#sections}}.
+    section \parencite{markdown-headings}, la première consiste à démarrer une ligne avec un ou plusieurs
+    caractères "\texttt{\#}" puis d'écrire le nom de la section sur la fin de la ligne, l'autre consiste à
+    écrire directement le nom de la section, puis à la "souligner" en écrivant plusieurs fois le caractère
+    "\texttt{=}" ou "\texttt{-}" sur la ligne suivante. Le format reStructuredText n'autorise qu'une seule
+    façon de définir des sections, en soulignant une ligne de la même façon que la deuxième méthode du
+    Markdown, à ceci près que d'autres caractères sont aussi acceptés pour composer la ligne
+    \parencite{rst-sections}.
 
     Pour déterminer si un fichier \texttt{README} contient des instructions de contribution, nous identifions
     donc tous les noms de section le composant et vérifions si l'un d'eux contient le mot "\en{contributing}"
@@ -529,9 +525,9 @@
     étudiée que le projet $B$. Le test confirme en outre avec un degré de confiance quasi certain ($p \approx
     0$) que la distribution des valeurs au sein de ces deux catégories (projets avec instructions de
     contribution ou sans) est bien différente. Le test ayant été réalisé avec l'hypothèse que les projets
-    "avec instructions de contribution" ont un meilleur score que les autres\footnote{hypothèse plus
-    spécifique que la version "\emph{two-tailed}" du test.}, nous pouvons formellement affirmer que cette
-    différence est à l'avantage des projets possédant des instructions de contribution, ce qui valide
+    "avec instructions de contribution" ont un meilleur score que les autres (contrairement à la version
+    \en{two-tailed} du test), nous pouvons formellement affirmer que cette différence est à l'avantage des
+    projets possédant des instructions de contribution, ce qui valide
     \hyperref[hyp:contributionguidelines]{l'hypothèse H\ref*{hyp:contributionguidelines}}.
 
     Ce résultat est cohérent avec ceux de \textcite[p.~11]{signals-2019} qui avaient déterminé que la présence
@@ -582,14 +578,14 @@
     hétérogène au sein du problème, ce qui implique que la méthode OLS n'est pas la plus statistiquement
     efficace pour modéliser la relation entre les deux variables \parencite{GLS-2021}.
 
-    Le modèle retenu a donc finalement été calculé par la méthode des moindres carrés
-    généralisée\footnote{Modèle \texttt{GLS} du paquet Python \texttt{statsmodels}:
-    \url{https://www.statsmodels.org/dev/generated/statsmodels.regression.linear_model.GLS.html}}, il suggère
-    effectivement que plus le nombre de contributeurs récents d'un projet est élevé, plus son nombre de
-    nouveaux contributeurs l'est aussi. Le coefficient de détermination $R^2 \approx 0.45$ du modèle indique
-    que le nombre de contributeurs récents explique environ $45\%$ de la variation du nombre de nouveaux
-    contributeurs, ce qui valide \hyperref[hyp:recentcontributorcount]{l'hypothèse
-    H\ref*{hyp:recentcontributorcount}}, avec une taille d'effet tout de même modérée, voir faible.
+    Le modèle retenu a donc finalement été calculé par la méthode des moindres carrés généralisée (modèle
+    \href{https://www.statsmodels.org/dev/generated/statsmodels.regression.linear_model.GLS.html}{GLS} du
+    paque Python \texttt{statsmodel}), il suggère effectivement que plus le nombre de contributeurs récents
+    d'un projet est élevé, plus son nombre de nouveaux contributeurs l'est aussi. Le coefficient de
+    détermination $R^2 \approx 0.45$ du modèle indique que le nombre de contributeurs récents explique environ
+    $45\%$ de la variation du nombre de nouveaux contributeurs, ce qui valide
+    \hyperref[hyp:recentcontributorcount]{l'hypothèse H\ref*{hyp:recentcontributorcount}}, avec une taille
+    d'effet tout de même modérée, voir faible.
 
     Ce résultat est aussi cohérent avec ceux de \textcite[p.~12-13,16]{signals-2019} qui observaient que le
     nombre de contributeurs uniques récents était positivement corrélé au nombre de \emph{tentatives} de
