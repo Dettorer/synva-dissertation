@@ -53,9 +53,13 @@
     \maketitle
     \todo{TODO : anonymiser les auteurs}
     \todo{TODO général : réduire à 12 pages}
+    \todo{TODO : Ajouter la petite ligne de header (pages paires : nom de la conférence, pages impaires :
+    titre court)}
+    \todo{TODO : relire le document de référence docx}
 
     % Abstracts and keywords
     \selectlanguage{french}
+    \todo{TODO : réduire à 70-150 mots par abstract}
     \begin{abstract}
         Le logiciel libre prend de plus en plus de place dans le paysage public et industriel, notamment pour
         ses intérêts en terme de transparence des logiciels et de leur gestion démocratique, pour autant le
@@ -71,6 +75,8 @@
         sujet ayant souvent du mal à sélectionner des projets accessibles sur lesquels faire travailler les
         étudiants.
 
+        \todo{TODO : utiliser comme mots-clé les catégories de la conférence (pour les deux ou trois
+        premiers)}
         \textbf{Mots-clé :} Logiciel libre, Analyse automatique de dépôts logiciels, Barrières d'entrée du
         logiciel libre, Nouveaux contributeurs.
     \end{abstract}
@@ -116,6 +122,7 @@
     accessibles aujourd'hui, une explication possible à leur disparition étant leur portée réduite à
     l'éducation et l'absence d'une communauté persistante autour d'eux.
 
+    \todo{TODO : enlever les footnotes, y'en a trop}
     Bien qu'elles soient plutôt rares, quelques initiatives existent aussi pour enseigner spécifiquement les
     pratiques du logiciel libre dans l'éducation supérieur et la formation tout au long de la vie. Certaines
     sont des initiatives venant des communautés du logiciel libre, comme le \en{Professional Certificate in
@@ -173,6 +180,7 @@
     (p.~16), ce qui leur permet de n'étudier qu'une variable binaire.
 
     \section{L'analyse automatique ("minage") de projets de logiciel libre}
+    \todo{TODO : fusionner les sections 2 et 3}
 
     Pour leur analyse quantitative, \textcite{signals-2019} commencent par collecter des données sur la
     plateforme d'hébergement de code source \en{github} via son \en{API}. Ce choix est cohérent avec un grand
@@ -371,8 +379,9 @@
     possèdent ou non des instructions de contribution, et ainsi compléter notre jeu de donnée. Le contenu des
     fichiers est bien archivé par Software Heritage mais n'est pas disponible directement dans le graphe, il
     est en revanche possible de télécharger ces contenus de deux autres façons différentes : soit via des
-    requêtes HTTP sur le site web \url{https://archive.softwareheritage.org/}, accessible publiquement, soit
-    en téléchargeant les contenus directement depuis leur "\en{registry}" Amazon
+    requêtes HTTP sur le site web \url{https://archive.softwareheritage.org/}\todo{TODO : ne mentionner le
+    lien qu'une seule fois et le réduire (sans https:// machin)}, accessible publiquement, soit en
+    téléchargeant les contenus directement depuis leur "\en{registry}" Amazon
     S3\footnote{\url{https://registry.opendata.aws/software-heritage}}, lui aussi accessible publiquement. Le
     site \url{https://archive.softwareheritage.org/} limite le nombre de requêtes autorisées par adresse IP à
     quelques dizaines par heure. Le \en{registry} Amazon S3 n'impose pas ce genre de limite, mais le contenus
@@ -400,7 +409,7 @@
 
     \subsection{Reproduction des travaux}
 
-    \todo{TODO : anonymiser, voir ne pas mentionner}
+    \todo{TODO : anonymiser, voir ne pas mentionner, possibilité d'en refaire un anonyme}
     Afin d'améliorer la transparence méthodologique de ce travail et d'aider l'éventuelle reproduction des
     résultats qui y sont présentés, un \en{replication package} contenant le code source et les bibliothèques
     utilisés dans ce mémoire, ainsi que les données brut collectées, a été publié sur Zenodo
@@ -421,9 +430,10 @@
 
     \begin{table}[ht]
         \centering
-        \begin{tabular}{cc}
+        \begin{tabular}{c|c}
             \input{../experiment/data_analysis/hasContrib_describe.tex} &
-            \input{../experiment/data_analysis/recentCommitCount_describe.tex}
+            \input{../experiment/data_analysis/recentCommitCount_describe.tex}\\
+            \hline
             \\
             \input{../experiment/data_analysis/recentContributorCount_describe.tex} &
             \input{../experiment/data_analysis/newContributorCount_describe.tex}
@@ -431,6 +441,7 @@
         \caption{Aperçu statistique des données collectées}
         \label{tab:data_description}
     \end{table}
+    \todo{TODO : mettre les noms de propriété en gras (hasContrib, recentCommitCount, etc.)}
 
     Un aperçu initial des données collectées (table~\ref{tab:data_description}) révèle quelques propriétés
     intéressantes de la population étudiée. Les projets possédant des instructions de contribution sont
@@ -460,6 +471,8 @@
         \caption{Distribution des individus selon chaque variable numérique}
         \label{fig:distribution}
     \end{figure}
+    \todo{TODO : voir à augmenter la taille des légendes dans les graphiques pour améliorer la lisibilité}
+    \todo{TODO : repasser les bar plots en vectoriel, mais pdf et pas svg}
 
     \begin{figure}[ht]
         \begin{subfigure}[t]{0.3\textwidth}
@@ -481,10 +494,10 @@
     \end{figure}
 
     Une visualisation de la distribution de la population selon chaque variable numérique
-    (figure~\ref{fig:distribution}) semble donner une forme d'exponentielle décroissante pour chacune d'elles,
+    (Fig.~\ref{fig:distribution}) semble donner une forme d'exponentielle décroissante pour chacune d'elles,
     ce qui signifie par exemple que les projets ayant peu de nouveaux contributeurs sont les plus courants,
     alors que ceux en ayant plus deviennent rapidement beaucoup plus rare à mesure que le nombre augmente. Les
-    diagrammes quantile-quantile (figure~\ref{fig:qqplots}) de ces variables confirment de façon un peu plus
+    diagrammes quantile-quantile (Fig.~\ref{fig:qqplots}) de ces variables confirment de façon un peu plus
     formelle que leur distribution ne suit pas une loi normale, ce qui sera important pour l'interprétation
     des modèles obtenus plus loin dans cette analyse.
 
@@ -593,8 +606,8 @@
     Suivant la même approche que pour l'analyse du nombre de contributeurs récents, une première modélisation
     par régression linéaire suivant la méthode des moindres carrés ordinaires a d'abord été faite. Un test
     d'homoscédasticité de White a, là aussi, conclu à une forte hétéroscédasticité des données, c'est donc une
-    régression linéaire utilisant la méthode des moindres carrés généralisée qui a été retenue (figure
-    \ref{fig:commitCount}).
+    régression linéaire utilisant la méthode des moindres carrés généralisée qui a été retenue
+    (Fig.~\ref{fig:commitCount}).
 
     \begin{figure}[ht]
         \centering
@@ -614,6 +627,7 @@
         \caption{Nombre de nouveaux contributeurs en fonction du nombre de \emph{commits} récents}
         \label{fig:commitCount}
     \end{figure}
+    \todo{TODO : retirer les formules dans toutes les figures de regression}
 
     Le modèle suggère ici aussi une corrélation positive entre le nombre de \en{commits} récents d'un projet
     et son nombre de nouveaux contributeurs, mais son coefficient de détermination est trop faible ($R^2
@@ -686,5 +700,7 @@
     l'apprentissage, ou si le contexte est trop différent pour que les étudiants soient réduit à la catégorie
     générique des "nouveaux contributeurs".
 
+    \todo{TODO : réduire le nombre d'URL dans la biblio (garder seulement le doi) et voir s'il n'y a pas
+    d'autres simplifications possibles, retirer les backrefs par exemple}
     \printbibliography[heading=bibintoc]
 \end{document}
