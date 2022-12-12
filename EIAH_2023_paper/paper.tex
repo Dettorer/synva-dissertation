@@ -136,22 +136,22 @@
     expérimenté plusieurs façons d'inclure la contribution aux projets de logiciel libre dans leurs cursus
     d'informatique \cite{oss-edu-2008, oss-edu-2007} ; mais aussi de l'université de Calais qui propose
     actuellement un
-    "\href{https://www.univ-littoral.fr/formation/offre-de-formation/masters/master-informatique-ingenierie-du-logiciel-libre/}{Master
-    Informatique - Ingénierie du logiciel libre}", sous la forme d'une formation en alternance.
+    \href{https://www.univ-littoral.fr/formation/offre-de-formation/masters/master-informatique-ingenierie-du-logiciel-libre/}{Master
+    Informatique - Ingénierie du logiciel libre}, sous la forme d'une formation en alternance.
 
     \section{Les nouveaux contributeurs dans le logiciel libre}
 
     \textcite{barriers-2018} notent la difficulté des nouveaux volontaires à rejoindre une communauté de
-    logiciel libre, citant comme exemple extrême le projet "Apache Hadoop" voyant 82\% de ses nouveaux
+    logiciel libre, citant comme exemple extrême le projet Apache Hadoop qui a vu 82\% de ses nouveaux
     volontaires quitter le projet après leur première contribution \parencite{hadoop-dropout-2013}. Une des
     tendances qu'ils trouvent est que la majorité ($58\%$) des barrières rencontrées dans leur étude sont de
-    nature sociale ("\en{community-oriented}") et non techniques\parencite[p.~1008]{barriers-2018}. Concernant
-    les aspects plus techniques, il semble que les outils et la documentation représentent la majorité des
-    barrières rencontrées, alors même que ces éléments ont spécifiquement pour objectif d'aider les nouvelles
-    contributions. C'est un type de barrière qui semble amplifié lorsque les méthodes d'apprentissage et de
-    traitement de l'information de la personne consistent à rassembler le plus d'information possible avant de
-    commencer à agir. Ces méthodes étant sur-représentées chez les
-    femmes\parencite{gender-information-processing-1995,gender-information-processing-2015}, ces barrières
+    nature sociale ("\en{community-oriented}") et non techniques \parencite[p.~1008]{barriers-2018}.
+    Concernant les aspects plus techniques, il semble que les outils et la documentation représentent la
+    majorité des barrières rencontrées, alors même que ces éléments ont spécifiquement pour objectif d'aider
+    les nouvelles contributions. C'est un type de barrière qui semble amplifié lorsque les méthodes
+    d'apprentissage et de traitement de l'information de la personne consistent à rassembler le plus
+    d'information possible avant de commencer à agir. Ces méthodes étant sur-représentées chez les femmes
+    \parencite{gender-information-processing-1995,gender-information-processing-2015}, ces barrières
     deviennent discriminantes selon le genre, et peuvent potentiellement participer à expliquer la
     sous-représentation des femmes dans les communautés de logiciel libre.
 
@@ -171,8 +171,8 @@
 
     \textcite{signals-2019} suggèrent qu'une mesure possible de l'accessibilité pour les nouveaux
     contributeurs ("\en{newcomers openness}" dans l'article) est le pourcentage de \en{pull requests} créées
-    par des contributeurs externes. Ils définissent les "contributeurs externes" par opposition aux
-    contributeurs principaux (les "\en{core contributors}") qu'ils identifient, eux, comme étant les personnes
+    par des contributeurs externes. Ils définissent les contributeurs externes par opposition aux
+    contributeurs principaux ("\en{core contributors}") qu'ils identifient, eux, comme étant les personnes
     auteurs de plus de 5\% des \en{commits} du projet. En réalité cependant, leur étude quantitative simplifie
     la mesure en ne retenant que la présence ou non de \en{pull request} venant de nouveaux contributeurs
     (p.~16), ce qui leur permet de n'étudier qu'une variable binaire.
@@ -186,7 +186,7 @@
     dans le milieu du logiciel libre et a connu une croissance très importante ces dernières années. Ces mêmes
     études notent cependant parfois que se restreindre à cette seule plateforme est une limite diminuant la
     représentativité de l'échantillon qu'elles étudient \parencite{swh-growth-2019}. Les limites et erreurs
-    courantes liées au "minage" de \en{github} font d'ailleurs l'objet d'une littérature grandissante et
+    courantes liées au minage de \en{github} font d'ailleurs l'objet d'une littérature grandissante et
     remettant potentiellement en question les résultats des études utilisant cette technique sans détailler
     suffisamment leur méthodologie de collecte des données \parencite{mining-github-2014,penumbra-oss-2022}.
 
@@ -207,13 +207,13 @@
     Les techniques de compression de graphe sont aujourd'hui suffisamment avancées pour permettre une nouvelle
     approche à cette analyse automatique des projets, en rendant un très grand nombre de ceux-ci disponibles
     au sein d'une même structure de donnée unifiée et optimisée \parencite{swh-graph-2020}. Cette approche
-    permet par exemple de grandement faciliter la détection des "\en{clones}" ou "\en{forks}" de projets,
-    c'est à dire des projets ayant une part de leur historique de développement en commun. La structure de
-    donnée proposée par \textcite{swh-graph-2020} est un graphe orienté où chaque \en{commit} est représenté
-    par un nœud et où chaque arc $u \xrightarrow{succ} v$ ("$v$ est un successeur de $u$", autrement dit pour
-    les \en{commits} "$v$ est un ancêtre immédiat de $u$") possède aussi un arc inverse $u \xleftarrow{pred}
-    v$ ("$u$ est un prédécesseur de $v$"). Une telle structure permet donc de trouver tous les "\en{fork}"
-    d'un projet avec un classique calcul de composante fortement connexe, ce qui peut se faire avec un simple
+    permet par exemple de grandement faciliter la détection des \en{clones} ou \en{forks} de projets, c'est à
+    dire des projets ayant une part de leur historique de développement en commun. La structure de donnée
+    proposée par \textcite{swh-graph-2020} est un graphe orienté où chaque \en{commit} est représenté par un
+    nœud et où chaque arc $u \xrightarrow{succ} v$ ("$v$ est un successeur de $u$", autrement dit pour les
+    \en{commits} "$v$ est un ancêtre immédiat de $u$") possède aussi un arc inverse $u \xleftarrow{pred} v$
+    ("$u$ est un prédécesseur de $v$"). Une telle structure permet donc de trouver tous les \en{fork} d'un
+    projet avec un classique calcul de composante fortement connexe, ce qui peut se faire avec un simple
     parcours profondeur ou largeur du graphe à partir de n'importe lequel de ses \en{commits}.
 
     Software Heritage est une initiative exploitant ces techniques de compression afin de construire une
@@ -223,7 +223,7 @@
     leur modèle de compression. L'archive comptait en 2018 plus d'un milliard de \en{commits} uniques archivés
     depuis quatre-vingt-cinq millions d'origines différentes (telles que des \en{remotes} \en{git} ou des
     versions de paquets Python publiés sur \href{https://pypi.org/}{PyPi}). L'archive est stockée dans une
-    structure en "ajout seul" : elle grandit de façon continue en archivant petit à petit de nouveaux projets
+    structure en ajout seul : elle grandit de façon continue en archivant petit à petit de nouveaux projets
     et en ajoutant de nouveaux artéfacts à chaque évolution des projets déjà archivés, ce qui en fait l'un des
     corpus les plus complets et exploitable par la recherche scientifique
     \parencite{swh-2019,swh-growth-2019}.
@@ -239,8 +239,8 @@
 
     Quand \textcite{mining-github-2014} analysent les \en{pull requests} sur \en{github}, ils ne retiennent
     que les projets ayant au moins deux auteurs de \en{commits} uniques, ce qu'ils considèrent comme des
-    projets "vraiment collaboratifs". Ce choix vient de leur observation qu'une très grande partie des projets
-    hébergés sur la plateforme ($71\%$) sont des projets "personnels", utilisés par leurs auteurs à des fins
+    projets vraiment collaboratifs. Ce choix vient de leur observation qu'une très grande partie des projets
+    hébergés sur la plateforme ($71\%$) sont des projets personnels, utilisés par leurs auteurs à des fins
     d'expérimentation ou de stockage, sans réelle ouverture à la collaboration.
 
     \section{Méthodologie}
@@ -287,8 +287,8 @@
     }
 
     \newhyp{contributionguidelines}{%
-        les projets possédant des instructions de contribution (fichier type "\texttt{CONTRIBUTING.md}" ou
-        section type "\en{Contributing}" dans un fichier type \texttt{README.md}) sont plus accessibles pour
+        les projets possédant des instructions de contribution (fichier type \texttt{CONTRIBUTING.md} ou
+        section type \en{Contributing} dans un fichier type \texttt{README.md}) sont plus accessibles pour
         les nouveaux contributeurs que ceux n'en ayant pas \parencite[voir][p.~11]{signals-2019}.%
     }
 
@@ -343,21 +343,21 @@
     \end{itemize}
 
     Afin de découvrir et sélectionner les projets dans lesquels nous collecterons les données, une première
-    exploration est lancée à partir de chaque nœud de type "origine" du graphe avec deux objectifs :
+    exploration est lancée à partir de chaque nœud de type \en{origin} du graphe avec deux objectifs :
     identifier tous les \en{forks} du projet de départ et sélectionner un représentant pour le groupe. Pour ce
-    faire, l'exploration prend la forme d'un premier parcours largeur sur les arcs "successeur" des nœuds
-    "révision" afin d'identifier tous les \en{commits} initiaux accessibles depuis l'origine de départ, puis
+    faire, l'exploration prend la forme d'un premier parcours largeur sur les arcs \en{successor} des nœuds
+    \en{revision} afin d'identifier tous les \en{commits} initiaux accessibles depuis l'origine de départ, puis
     d'un deuxième parcours largeur partant de chacun de ces \en{commits} initiaux afin d'identifier tous les
-    autres nœuds "origine" de la composante connexe. Des marqueurs de niveaux lors de ce deuxième parcours
+    autres nœuds \en{origin} de la composante connexe. Des marqueurs de niveaux lors de ce deuxième parcours
     largeur permettent de mesurer la distance qui éloigne chaque origine ainsi découverte de son \en{commit}
     initial le plus éloigné. Pour chaque composante connexe, seule le \en{snapshot} le plus récent de
     l'origine la plus éloignée d'un \en{commit} initial est retenu pour la collecte.
 
     Pour tous les projets ainsi retenu, un nouveau parcours largeur est démarré à partir de sa branche
     principale afin de récolter les données de recherche. Le nombre de contributeurs uniques récents et de
-    \en{commits} récents se compte facilement en accédant à la date et aux auteurs de chaque nœud "révision"
-    rencontré, mais la vérification de la présence d'instructions de contribution demande un peu plus de
-    travail. Le graphe possède le nom et la hiérarchie de chacun des fichiers du projet pour chaque
+    \en{commits} récents se compte facilement en accédant à la date et aux auteurs de chaque nœud
+    \en{revision} rencontré, mais la vérification de la présence d'instructions de contribution demande un peu
+    plus de travail. Le graphe possède le nom et la hiérarchie de chacun des fichiers du projet pour chaque
     \en{commit}, mais pas leur contenu. Ce parcours se contente donc initialement de vérifier la présence d'un
     fichier nommé \texttt{CONTRIBUTING.md} ou assimilé, nous considérons que le projet possède effectivement
     des instructions de contribution si un tel fichier existe. Si aucun fichier de ce type n'est trouvé, nous
@@ -387,21 +387,20 @@
     parviendrons pas à y trouver.
 
     Une fois le contenu des \texttt{README} téléchargés, nous y cherchons une section dont le nom contient le
-    mot "\en{contributing}" ou un mot proche. Pour identifier les noms de section dans les fichiers
-    téléchargés, nous supposons que ceux-ci sont formatés suivant un des deux standards les plus répandus de
-    formatage de text brut : le Markdown (dont l'extension courante est \texttt{.md}) ou le reStructuredText
-    (dont l'extension courante est \texttt{.rst}). Le format Markdown autorise deux façon de définir une
-    section \parencite{markdown-headings}, la première consiste à démarrer une ligne avec un ou plusieurs
-    caractères "\texttt{\#}" puis d'écrire le nom de la section sur la fin de la ligne, l'autre consiste à
-    écrire directement le nom de la section, puis à la "souligner" en écrivant plusieurs fois le caractère
-    "\texttt{=}" ou "\texttt{-}" sur la ligne suivante. Le format reStructuredText n'autorise qu'une seule
-    façon de définir des sections, en soulignant une ligne de la même façon que la deuxième méthode du
-    Markdown, à ceci près que d'autres caractères sont aussi acceptés pour composer la ligne
-    \parencite{rst-sections}.
+    mot \en{contributing} ou un mot proche. Pour identifier les noms de section dans les fichiers téléchargés,
+    nous supposons que ceux-ci sont formatés suivant un des deux standards les plus répandus de formatage de
+    text brut : le Markdown (dont l'extension courante est \texttt{.md}) ou le reStructuredText (dont
+    l'extension courante est \texttt{.rst}). Le format Markdown autorise deux façon de définir une section
+    \parencite{markdown-headings}, la première consiste à démarrer une ligne avec un ou plusieurs caractères
+    \texttt{\#} puis d'écrire le nom de la section sur la fin de la ligne, l'autre consiste à écrire
+    directement le nom de la section, puis à la "souligner" en écrivant plusieurs fois le caractère \texttt{=}
+    ou \texttt{-} sur la ligne suivante. Le format reStructuredText n'autorise qu'une seule façon de définir
+    des sections, en soulignant une ligne de la même façon que la deuxième méthode du Markdown, à ceci près
+    que d'autres caractères sont aussi acceptés pour composer la ligne \parencite{rst-sections}.
 
     Pour déterminer si un fichier \texttt{README} contient des instructions de contribution, nous identifions
-    donc tous les noms de section le composant et vérifions si l'un d'eux contient le mot "\en{contributing}"
-    ou assimilé.
+    donc tous les noms de section le composant et vérifions si l'un d'eux contient le mot \en{contributing} ou
+    assimilé.
 
     \subsection{Reproduction des travaux}
 
@@ -524,8 +523,8 @@
     de chances que le projet $A$ ait vu un plus grand nombre de nouveaux contributeurs durant la période
     étudiée que le projet $B$. Le test confirme en outre avec un degré de confiance quasi certain ($p \approx
     0$) que la distribution des valeurs au sein de ces deux catégories (projets avec instructions de
-    contribution ou sans) est bien différente. Le test ayant été réalisé avec l'hypothèse que les projets
-    "avec instructions de contribution" ont un meilleur score que les autres (contrairement à la version
+    contribution ou sans) est bien différente. Le test ayant été réalisé avec l'hypothèse que les projets avec
+    instructions de contribution ont un meilleur score que les autres (contrairement à la version
     \en{two-tailed} du test), nous pouvons formellement affirmer que cette différence est à l'avantage des
     projets possédant des instructions de contribution, ce qui valide
     \hyperref[hyp:contributionguidelines]{l'hypothèse H\ref*{hyp:contributionguidelines}}.
@@ -664,7 +663,7 @@
     leur première contribution à terme.
 
     Nos résultats suggèrent que la présence d'instructions de contribution au sein d'un projet (typiquement au
-    travers d'un fichier "\texttt{CONTRIBUTING.md}"), ainsi que le nombre de contributeurs uniques ayant
+    travers d'un fichier \texttt{CONTRIBUTING.md}), ainsi que le nombre de contributeurs uniques ayant
     récemment contribué au projet, sont positivement corrélés au nombre de \emph{nouveaux} contributeurs étant
     parvenus à ajouter leur pierre à l'édifice. Nous n'avons en revanche pas trouvé de corrélation, positive
     ou négative, permettant d'affirmer que le nombre de \en{commits} récents au sein d'un projet était
@@ -694,7 +693,7 @@
     trouver un projet sur lequel faire travailler ses étudiants, de futures recherches mériteraient d'être
     conduites afin de déterminer si cette accessibilité se traduit effectivement dans la qualité de
     l'apprentissage, ou si le contexte est trop différent pour que les étudiants soient réduit à la catégorie
-    générique des "nouveaux contributeurs".
+    générique des nouveaux contributeurs.
 
     \todo{TODO : réduire le nombre d'URL dans la biblio (garder seulement le doi) et voir s'il n'y a pas
     d'autres simplifications possibles, retirer les backrefs par exemple}
