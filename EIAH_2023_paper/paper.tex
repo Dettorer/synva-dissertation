@@ -19,6 +19,8 @@
 \newcommand{\en}[1]{\foreignlanguage{english}{\emph{#1}}}
 \usepackage{csquotes}
 \MakeOuterQuote{"}
+% Fix LLNCS language handling of the "keywords" part of the abstracts
+\addto{\captionsfrench}{\renewcommand{\keywordname}{\textbf{Mots-clé:}}}
 
 % bibliography settings
 \usepackage[hyperref=true,backref=true]{biblatex}
@@ -71,10 +73,13 @@
         logiciel libre, les enseignants de ce sujet rencontrant des difficultés à sélectionner des projets
         accessibles sur lesquels faire travailler leurs étudiants.
 
-        \todo{TODO : utiliser comme mots-clé les catégories de la conférence (pour les deux ou trois
-        premiers)}
-        \textbf{Mots-clé :} Logiciel libre, Analyse automatique de dépôts logiciels, Barrières d'entrée du
-        logiciel libre, Nouveaux contributeurs.
+        \keywords{
+            Collecte, traitement et analyse des traces d’apprentissage \and
+            Analyse d’usage(s) et de pratiques \and
+            Logiciel libre \and
+            Analyse automatique de dépôts logiciels \and
+            Barrières d'entrée du logiciel libre
+        }
     \end{abstract}
     \selectlanguage{english}
     \begin{abstract}
@@ -89,8 +94,13 @@
         signals could find a use in the teaching of FOSS practices, as teachers of this subject often find it
         difficult to select an accessible project for their students to work on.
 
-        \textbf{Keywords:} FOSS, Mining Software Repositories, Open source barriers to entry, New
-        contributors.
+        \keywords{
+            Collection, processing and analysis of learning traces \and
+            Usage and practices analysis \and
+            FOSS \and
+            Mining Software Repositories \and
+            Open source barriers to entry
+        }
     \end{abstract}
     \selectlanguage{french}
 
