@@ -12,7 +12,7 @@
 
 % llncs class documentation:
 % https://ctan.tetaneutral.net/macros/latex/contrib/llncs/llncsdoc.pdf
-\documentclass[dvipsnames]{llncs}
+\documentclass[dvipsnames,runningheads]{llncs}
 
 % language settings
 \usepackage[main=french,english]{babel}
@@ -44,19 +44,19 @@
 \usepackage{mathtools}
 
 \title{L'Identification des Projets de Logiciel Libre Accessibles aux Nouveaux Contributeurs}
+\titlerunning{Projets de Logiciel Libre Accessibles aux Nouveaux Contributeurs}
 \author{%
     Premier Auteur\inst{1}%Paul Hervot\inst{1}%
     \and%
     Deuxième Auteur\inst{2}%Benoît Crespin\inst{2}\orcidID{0000-0002-9105-0243}%
 }
 \institute{Institution du premier auteur \and institution du deuxième auteur} %\institute{EPITA \and Université de Limoge}
+% hack the "short author" mecanism to display the conference name on even pages instead
+\authorrunning{Environnements Informatiques pour l’Apprentissage Humain 2023}
 
 \begin{document}
     \maketitle
     \todo{TODO général : réduire à 12 pages}
-    \todo{TODO : Ajouter la petite ligne de header (pages paires : nom de la conférence, pages impaires :
-    titre court)}
-    \todo{TODO : relire le document de référence docx}
 
     % Abstracts and keywords
     \selectlanguage{french}
