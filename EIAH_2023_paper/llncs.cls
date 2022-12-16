@@ -1190,10 +1190,8 @@ to0pt{\kern0.55\wd0\vrule height0.45\ht0\hss}\box0}}}}
 
 \def\ps@headings{\let\@mkboth\@gobbletwo
    \let\@oddfoot\@empty\let\@evenfoot\@empty
-   \def\@evenhead{\normalfont\small\rlap{\thepage}\hspace{\headlineindent}%
-                  \leftmark\hfil}
-   \def\@oddhead{\normalfont\small\hfil\rightmark\hspace{\headlineindent}%
-                 \llap{\thepage}}
+   \def\@evenhead{\normalfont\small\leftmark\hfil}
+   \def\@oddhead{\normalfont\small\hfil\rightmark}
    \def\chaptermark##1{}%
    \def\sectionmark##1{}%
    \def\subsectionmark##1{}}
