@@ -1,7 +1,8 @@
-# Remarque
+# Data analysis script
 
-Les visualisations présentes ici sont calculées à partir d'un parcours complet
-du graphe de Software Heritage en date du 18 août 2022, complété d'une analyse
-du contenu des fichiers `README` pour les projets le nécessitant. Le résultat de
-cette collecte complétée est compressé dans le fichier
-<./2022-08-18_completed.csv.xz> du dossier courant.
+**Requirements**: a Python3 interpreter with the packages listed in
+`requirements.txt`, which can typically be installed with pip in a virtualenv.
+
+The `2022-08-18_completed.csv` file contains the result of a run of the data
+collection pipeline on the full Software Heritage graph as of August 18th, 2022.
+It is the collected data used to generate the visualizations on the document.
