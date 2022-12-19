@@ -12,6 +12,12 @@ from statsmodels.stats.diagnostic import het_white
 from typing import cast
 
 
+# We have too many data points for scatter plots to render reasonably fast in
+# vectorized output, so we rasterize only this part of the figure, with the
+# following DPI
+RASTERIZATION_DPI=300
+
+
 def float_to_tex(f: float) -> str:
     """Represent the given float in LaTeX, handling the possibly needed scientific notation"""
     float_str = f"{f:.8g}"
@@ -36,7 +42,7 @@ def write_regression_viz(
     intercept, slope = model.params.const, getattr(model.params, x_col)
 
     # Plot
-    plt.scatter(x, y, s=0.5)
+    plt.scatter(x, y, s=0.5, rasterized=True)
     plt.plot(x, intercept + slope * x, 'r', label="regression")
     plt.xlabel(x_col)
     plt.ylabel(y_col)
@@ -45,7 +51,7 @@ def write_regression_viz(
     plt.legend()
 
     # Output and clean
-    plt.savefig(f"{x_col}Regression_{scale}Scale.png")
+    plt.savefig(f"{x_col}Regression_{scale}Scale.pdf", dpi=RASTERIZATION_DPI)
     plt.clf()
     if output_tex_data:
         # Regression parameters and coefficient of determination
@@ -73,19 +79,19 @@ def test_hasContrib(data: pd.DataFrame) -> None:
     data.groupby(["hasContrib"])["hasContrib"].count().plot.bar()
     plt.ylabel("projects")
     plt.xticks(rotation=0, horizontalalignment="center")
-    plt.savefig("hasContrib_Count.png")
+    plt.savefig("hasContrib_Count.pdf")
     plt.clf()
 
     data.groupby(["hasContrib"])["newContributorCount"].mean().plot.bar()
     plt.ylabel("newContributorCount (mean)")
     plt.xticks(rotation=0, horizontalalignment="center")
-    plt.savefig("hasContrib_meanNewContributorCount.png")
+    plt.savefig("hasContrib_meanNewContributorCount.pdf")
     plt.clf()
 
     data.groupby(["hasContrib"])["newContributorCount"].var().plot.bar()
     plt.ylabel("newContributorCount variance")
     plt.xticks(rotation=0, horizontalalignment="center")
-    plt.savefig("hasContrib_varianceNewContributorCount.png")
+    plt.savefig("hasContrib_varianceNewContributorCount.pdf")
     plt.clf()
 
     # Compute Mann-Whitney U test
@@ -125,14 +131,14 @@ def write_initial_viz(data: pd.DataFrame) -> None:
         if pd_types.is_numeric_dtype(column.dtype):
             column.plot.hist(bins=50)
             plt.yscale("log")
-            plt.savefig(f"{column_name}_distribution.png")
+            plt.savefig(f"{column_name}_distribution.pdf")
             plt.clf()
 
         # Q-Q plots
         if pd_types.is_numeric_dtype(column.dtype):
-            sm.qqplot(column, line="s", markersize=0.5)
+            sm.qqplot(column, line="s", markersize=0.5, rasterized=True)
             #  plt.yscale("log")
-            plt.savefig(f"{column_name}_qqplot.png")
+            plt.savefig(f"{column_name}_qqplot.pdf", dpi=RASTERIZATION_DPI)
             plt.clf()
 
 
