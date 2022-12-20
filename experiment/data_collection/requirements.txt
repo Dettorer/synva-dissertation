@@ -1,0 +1,5 @@
+boto3
+charset-normalizer
+more-itertools
+mypy-boto3-s3
+requests
