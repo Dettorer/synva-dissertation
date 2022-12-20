@@ -42,7 +42,7 @@ def write_regression_viz(
     intercept, slope = model.params.const, getattr(model.params, x_col)
 
     # Plot
-    plt.scatter(x, y, s=0.5, rasterized=True)
+    plt.scatter(x, y, s=2, rasterized=True)
     plt.plot(x, intercept + slope * x, 'r', label="regression")
     plt.xlabel(x_col)
     plt.ylabel(y_col)
@@ -139,7 +139,7 @@ def write_initial_viz(data: pd.DataFrame) -> None:
 
         # Q-Q plots
         if pd_types.is_numeric_dtype(column.dtype):
-            sm.qqplot(column, line="s", markersize=0.5, rasterized=True)
+            sm.qqplot(column, line="s", markersize=4, rasterized=True)
             #  plt.yscale("log")
             plt.savefig(f"{column_name}_qqplot.pdf", dpi=RASTERIZATION_DPI)
             plt.clf()
