@@ -439,7 +439,6 @@
         \end{tabular}
         \label{tab:data_description}
     \end{table}
-    \todo{TODO : mettre les noms de propriété en gras (hasContrib, recentCommitCount, etc.)}
 
     Un aperçu initial des données collectées (table~\ref{tab:data_description}) révèle quelques propriétés
     intéressantes de la population étudiée. Les projets possédant des instructions de contribution sont
@@ -455,21 +454,20 @@
     \begin{figure}[ht]
         \begin{subfigure}[t]{0.3\textwidth}
             \includegraphics[width=\textwidth]{../experiment/data_analysis/recentCommitCount_distribution}
-            \caption{Nombre de \emph{commits} récents\\(ordonnées logarithmiques)}
+            \caption{Nombre de \emph{commits} récents}
         \end{subfigure}
         \begin{subfigure}[t]{0.3\textwidth}
             \includegraphics[width=\textwidth]{../experiment/data_analysis/recentContributorCount_distribution}
-            \caption{Nombre de contributeurs récents\\(ordonnées logarithmiques)}
+            \caption{Nombre de contributeurs récents}
         \end{subfigure}%
         \begin{subfigure}[t]{0.3\textwidth}
             \includegraphics[width=\textwidth]{../experiment/data_analysis/newContributorCount_distribution}
-            \caption{Nombre de nouveaux contributeurs\\(ordonnées logarithmiques)}
+            \caption{Nombre de nouveaux contributeurs}
         \end{subfigure}
 
-        \caption{Distribution des individus selon chaque variable numérique}
+        \caption{Distribution des individus selon chaque variable numérique (ordonnées logarithmiques)}
         \label{fig:distribution}
     \end{figure}
-    \todo{TODO : voir à augmenter la taille des légendes dans les graphiques pour améliorer la lisibilité}
 
     \begin{figure}[ht]
         \begin{subfigure}[t]{0.3\textwidth}
@@ -503,16 +501,15 @@
     \begin{figure}[ht]
         \begin{subfigure}[t]{0.5\textwidth}
             \includegraphics[width=\textwidth]{../experiment/data_analysis/hasContrib_meanNewContributorCount}
-            \caption{Moyenne du nombre de nouveaux contributeurs pour chaque catégorie}
+            \caption{Moyenne}
         \end{subfigure}%
         \begin{subfigure}[t]{0.5\textwidth}
             \includegraphics[width=\textwidth]{../experiment/data_analysis/hasContrib_varianceNewContributorCount}
-            \caption{Variance du nombre de nouveaux contributeurs pour chaque catégorie}
+            \caption{Variance}
             \label{sfig:hasContribVariance}
         \end{subfigure}
 
-        \input{../experiment/data_analysis/hasContribTest.tex}
-        \caption{Moyenne du nombre de nouveaux contributeurs pour chaque catégorie}
+        \caption{Moyenne et variance du nombre de nouveaux contributeurs pour chaque catégorie}
         \label{fig:hasContrib}
     \end{figure}
 
@@ -565,10 +562,6 @@
             \caption{Échelle logarithmique}
         \end{subfigure}
 
-        \input{../experiment/data_analysis/recentContributorCountRegressionFormula.tex}
-
-        \input{../experiment/data_analysis/recentContributorCount_white_test.tex}
-
         \caption{Nombre de nouveaux contributeurs en fonction du nombre de contributeurs récents uniques}
         \label{fig:contributorCount}
     \end{figure}
@@ -617,14 +610,9 @@
             \caption{Échelle logarithmique}
         \end{subfigure}
 
-        \input{../experiment/data_analysis/recentCommitCountRegressionFormula.tex}
-
-        \input{../experiment/data_analysis/recentCommitCount_white_test.tex}
-
         \caption{Nombre de nouveaux contributeurs en fonction du nombre de \emph{commits} récents}
         \label{fig:commitCount}
     \end{figure}
-    \todo{TODO : retirer les formules dans toutes les figures de regression}
 
     Le modèle suggère ici aussi une corrélation positive entre le nombre de \en{commits} récents d'un projet
     et son nombre de nouveaux contributeurs, mais son coefficient de détermination est trop faible ($R^2
