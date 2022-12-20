@@ -119,10 +119,13 @@ def write_initial_viz(data: pd.DataFrame) -> None:
         "recentCommitCount"
     ]:
         # column descriptions, LaTeX format
+        # the first `replace` fixes a math formatting oversight from
+        # `to_latex()`, the second one makes each column name bold
         tex_output = data[[column_name]] \
             .describe() \
             .style.to_latex() \
-            .replace("%", "\\%") # fix a formatting oversight
+            .replace("%", "\\%") \
+            .replace(f"{column_name}", f"\\textbf{{{column_name}}}")
         with open(f"{column_name}_describe.tex", "w") as outfile:
             outfile.write(tex_output)
 
@@ -186,6 +189,12 @@ def setup_argparse() -> argparse.ArgumentParser:
 
 if __name__ == "__main__":
     args = setup_argparse().parse_args()
+
+    # Configure matplotlib
+    plt.rcParams.update({
+        'font.size': 20,  # Increase font size
+        'figure.autolayout': True,  # avoid cropping large text
+    })
 
     print("Preparing the data...")
     initial_data = cast(
