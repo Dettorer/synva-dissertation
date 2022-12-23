@@ -208,164 +208,105 @@
 
     La question de l'accessibilité des projets de logiciel libre pour les nouveaux contributeurs est encore
     assez peu explorée de façon quantitative dans la littérature. \textcite{signals-2019} se sont intéressés
-    aux signaux que les potentiels nouveaux contributeurs utilisent afin de sélectionner les projets auxquels
-    ils \emph{essayent} de contribuer, c'est à dire les signaux formant l'attractivité de ces projets. Nous
-    nous attacherons ici à déterminer si certains de ces mêmes signaux sont, de surcroit, prédictifs d'une
-    réelle accessibilité de ces projets, c'est à dire à quel point de nouveaux contributeurs
-    \emph{réussissent} à produire une contribution apparaissant dans l'historique de développement du projet.
+    aux signaux que les potentiels nouveaux contributeurs observent pour choisir un projets auquel
+    \emph{essayer} de contribuer, nous proposons de déterminer si certains de ces signaux sont de
+    surcroit prédictifs d'une réelle accessibilité de ces projets, c'est à dire à quel point de nouveaux
+    contributeurs \emph{réussissent} à produire une contribution apparaissant dans l'historique de
+    développement du projet. Pour dépasser les limitations de GitHub, nous utiliserons l'archive de Software
+    Heritage comme vue sur la population étudiée. Ce choix nous empêchera cependant d'étudier les indicateurs
+    propres à GitHub (comme le nombre de \en{pull requests} d'un projet).
 
-    Comme nous l'avons vu, la recherche quantitative portant sur les historiques de développement des
-    logiciels libre a récemment eu tendance à limiter sa population étudiée aux projets hébergés sur la
-    plateforme \en{github}, ce qui occulte une part importante des projets de logiciel libre
-    \parencites{mining-github-2014}{penumbra-oss-2022}. Pour améliorer la représentativité de nos résultats,
-    nous utiliserons donc dans notre étude l'archive de Software Heritage, celle-ci ne se limitant pas aux
-    projets hébergés sur \en{github}, ni même au système de versionnement \en{git}.
+    Pour évaluer l'accessibilité d'un projet, nous proposons d'utiliser comme variable proxy le nombre de
+    contributeurs apparaissant pour la première fois dans l'historique de développement du projet entre le
+    premier juin 2019 et le premier septembre 2019 \parencite[voir section \ref{sec:accessibility-measure},
+    ainsi que][p.~13,16]{signals-2019}. Cette période de référence a été choisie sur recommandation de
+    Software Heritage, la désignant comme un bon compromis entre le nombre de projets pour lesquels les
+    données sont disponible dans l'archive et le caractère récent des observations.
 
-    L'usage de cette archive nous limitera en revanche dans le type de données que nous pourrons collecter. Il
-    sera par exemple impossible de mesurer le nombre d'\en{issues} publiées par de nouveaux intervenants dans
-    le \en{bug tracker} des projets, ou le nombre de \en{pull requests}. Nous devrons nous servir
-    exclusivement des données disponibles dans l'historique de développement en tant que tel, comme l'ensemble
-    des \en{commits}, leurs auteurs, leur date, ainsi que les noms et contenus des fichiers qu'ils manipulent.
-
-    \subsection{Mesure de l'accessibilité choisie}
-
-    La variable mesurée qui sera utilisée comme proxy pour l'accessibilité d'un projet pour les nouveaux
-    contributeurs est le nombre de contributeurs apparaissant pour la première fois dans l'historique de
-    développement du projet au cours de la période de référence étudiée : du premier juin 2019 au premier
-    septembre 2019 \parencite[voir section \ref{sec:accessibility-measure}, ainsi
-    que][p.~13,16]{signals-2019}. Cette période de référence a été choisie sur recommandation de Software
-    Heritage, la désignant comme un bon compromis entre le nombre de projets pour lesquels les données sont
-    disponible dans l'archive à cette période et le caractère récent des observations.
-
-    \subsection{Hypothèses}
+    Nous souhaitons tester trois hypothèses reprenant celles de \textcite[voir p.~11-13 et 16]{signals-2019}.
+    Nous considérons comme "récent" tout événement survenu dans les six mois avant la période de référence
+    étudiée.
 
     \newcommand{\newhyp}[2]{%
         \begin{hypo}
-            \label{hyp:#1}#2
+            \label{hyp:#1}: #2
         \end{hypo}%
     }
 
     \newhyp{contributionguidelines}{%
-        les projets possédant des instructions de contribution (fichier type \texttt{CONTRIBUTING.md} ou
-        section type \en{Contributing} dans un fichier type \texttt{README.md}) sont plus accessibles pour
-        les nouveaux contributeurs que ceux n'en ayant pas \parencite[voir][p.~11]{signals-2019}.%
+        les projets possédant des instructions de contribution sont plus accessibles pour les nouveaux
+        contributeurs que ceux n'en ayant pas.%
     }
 
     \newhyp{recentcontributorcount}{%
-        le nombre de contributeurs uniques récents (au cours des six mois précédents la période de référence
-        étudiée) d'un projet est positivement corrélée à son accessibilité pour les nouveaux contributeurs
-        \parencite[voir][p.~12-13,16]{signals-2019}.%
+        le nombre de contributeurs uniques récents d'un projet est positivement corrélée à son accessibilité
+        pour les nouveaux contributeurs.%
     }
 
     \newhyp{recentcommitcount}{%
-        le nombre de \en{commits} récents (au cours des six mois précédents la période de référence étudiée)
-        au sein d'un projet est positivement corrélé à son accessibilité pour les nouveaux contributeurs
-        \parencite[voir][p.~13,16]{signals-2019}.
+        le nombre de \en{commits} récents au sein d'un projet est positivement corrélé à son accessibilité
+        pour les nouveaux contributeurs.%
     }
 
-    \subsection{Constitution de l'échantillon}
+    \subsection{Échantillon et collecte initiale}
     \label{sec:constitution_echantillon}
 
-    L'échantillon de départ est constitué de la totalité des projets archivés dans le graphe de Software
-    Heritage. Plusieurs critères d'exclusion ont ensuite été appliqués :
+    Plusieurs critères d'exclusion ont été appliqués sur l'archive de Software Heritage pour constituer notre
+    échantillon :
 
     \begin{itemize}
-        \item quand deux projets ou plus ont un ou plusieurs \en{commits} en commun et sont donc des
-            \en{forks} les uns des autres, seul celui qui a reçu le plus d'activité (mesuré par le nombre
-            d'arêtes maximal entre le \en{commit} source et un des \en{commits} initiaux) a été retenu comme
-            représentant du groupe, afin d'éviter de compter plusieurs fois les mêmes historiques ;
-        \item les projets n'ayant enregistré aucune activité (aucun \en{commit}) au cours de la période de
-            référence étudiée sont considérés inactifs et n'ont pas été retenus
-            \parencite[voir][]{mining-github-2014} ;
-        \item les projets ayant vu moins de deux contributeurs uniques récents (au cours des six mois
-            précédent la période de référence) sont considérés comme des projets individuels, non réellement
-            collaboratifs et n'ont pas été retenus \parencite[voir][]{mining-github-2014}.
+        \item quand plusieurs projets ont des \en{commits} en commun et sont donc des \en{forks} les uns des
+            autres, seul celui qui la plus longue chaîne de \en{commits} a été retenu comme représentant du
+            groupe ;
+        \item sont exclus pour inactivité les projets n'ayant reçu aucun \en{commit} pendant la période de
+            référence \parencite[voir][]{mining-github-2014} ;
+        \item sont exclus pour caractère non-collaboratif les projets ayant vu moins de deux
+            contributeurs uniques récents \parencite[voir][]{mining-github-2014}.
     \end{itemize}
 
-    \subsection{Collecte initiale des données}
-
-    \todo{TODO : il y a peut être des explications à dédupliquer avec la section \ref{ssec:swh-graph}}
-    Comme présenté en section \ref{ssec:swh-graph}, l'archive de Software Heritage se présente sous la forme
-    d'un graphe orienté. Ses nœuds représentent diverses entités de l'historique de développement, parmi
-    lesquelles les \en{commits} (appelés \en{revisions} au sein du graphe), les origines (l'URL à partir de
-    laquelle a été archivé un projet), les \en{snapshots} (point de départ d'un archivage précis et daté,
-    beaucoup de projets étant ré-archivés régulièrement), les dossiers et les fichiers (contenu du projet). Un
-    arc $u \xrightarrow{succ} v$ peut donc signifier, en fonction des types de $u$ et $v$ : 
+    Un nœud du graphe de l'archive de Software Heritage peut représenter un \en{commit} ("\en{revisions}"),
+    une origine (l'URL à partir de laquelle a été archivé un projet), un \en{snapshot} (point de départ daté
+    d'une passe d'archivage), un dossier ou un fichiers. Un arc $u \xrightarrow{succ} v$ peut donc signifier,
+    en fonction des types de $u$ et $v$, que : 
 
     \begin{itemize}
-        \item que $u$ est un \en{commit} créé immédiatement après le \en{commit} $v$ ;
-        \item que $v$ est un archivage (\en{snapshot}) du projet disponible à l'origine $u$ ;
-        \item que $v$ est le dernier \en{commit} d'une des branches visibles lors de l'archivage
-            (\en{snapshot}) $u$ ;
-        \item que $v$ est le dossier racine du contenu du projet en l'état du \en{commit} $u$ ;
+        \item $u$ est un \en{commit} successeur \en{commit} $v$ ;
+        \item $v$ est un \en{snapshot} du projet disponible à l'origine $u$ ;
+        \item $v$ est le dernier \en{commit} d'une des branches visibles lors du \en{snapshot} $u$ ;
+        \item $v$ est le dossier racine du contenu du projet en l'état du \en{commit} $u$ ;
         \item etc.
     \end{itemize}
 
-    Afin de découvrir et sélectionner les projets dans lesquels nous collecterons les données, une première
-    exploration est lancée à partir de chaque nœud de type \en{origin} du graphe avec deux objectifs :
-    identifier tous les \en{forks} du projet de départ et sélectionner un représentant pour le groupe. Pour ce
-    faire, l'exploration prend la forme d'un premier parcours largeur sur les arcs \en{successor} des nœuds
-    \en{revision} afin d'identifier tous les \en{commits} initiaux accessibles depuis l'origine de départ, puis
-    d'un deuxième parcours largeur partant de chacun de ces \en{commits} initiaux afin d'identifier tous les
-    autres nœuds \en{origin} de la composante connexe. Des marqueurs de niveaux lors de ce deuxième parcours
-    largeur permettent de mesurer la distance qui éloigne chaque origine ainsi découverte de son \en{commit}
-    initial le plus éloigné. Pour chaque composante connexe, seule le \en{snapshot} le plus récent de
-    l'origine la plus éloignée d'un \en{commit} initial est retenu pour la collecte.
+    Un premier parcours du graphe est effectué à partir de chaque origine afin d'identifier le représentant de
+    chaque groupe de fork (composante connexe sur les liens entre \en{commits}). Un parcours largeur avec
+    marqueurs de niveaux en remontant des \en{commits} initiaux vers les origines qui lui sont accessibles
+    permet d'identifier la plus longue chaîne de \en{commits} et donc le représentant de son groupe de
+    \en{fork}. Pour le \en{snapshot} le plus récent de chaque origine ainsi retenue, un nouveau parcours est
+    effectué à partir de sa branche principale afin de récolter les données de recherche. Le nombre de
+    contributeurs et de \en{commits} récents se compte facilement lors du parcours, mais la présence
+    d'instructions de contribution est plus difficile à vérifier car le graphe ne contient que les noms et la
+    hierarchie des fichiers d'un projet, mais pas leur contenu. Ce parcours ne vérifie donc pour l'instant que
+    la présence d'un fichier \texttt{CONTRIBUTING.md} ou assimilé, auquel cas nous validons la présence
+    d'instructions de contribution. Sinon, nous vérifions la présence d'un fichier \texttt{README.md} ou
+    assimilé, en son absence nous validons l'\emph{absence} d'instructions de contribution. En présence d'un
+    \texttt{README}, nous sauvegardons l'identifiant unique du fichier afin d'analyser son contenu
+    ultérieurement. Enfin, le nombre de nouveaux contributeurs est calculé en comptant les contributeurs
+    uniques de la période de référence qui n'apparaissent dans aucun \en{commit} antérieur à cette période.
 
-    Pour tous les projets ainsi retenu, un nouveau parcours largeur est démarré à partir de sa branche
-    principale afin de récolter les données de recherche. Le nombre de contributeurs uniques récents et de
-    \en{commits} récents se compte facilement en accédant à la date et aux auteurs de chaque nœud
-    \en{revision} rencontré, mais la vérification de la présence d'instructions de contribution demande un peu
-    plus de travail. Le graphe possède le nom et la hiérarchie de chacun des fichiers du projet pour chaque
-    \en{commit}, mais pas leur contenu. Ce parcours se contente donc initialement de vérifier la présence d'un
-    fichier nommé \texttt{CONTRIBUTING.md} ou assimilé, nous considérons que le projet possède effectivement
-    des instructions de contribution si un tel fichier existe. Si aucun fichier de ce type n'est trouvé, nous
-    recherchons alors la présence d'un fichier nommé \texttt{README.md} ou assimilé, l'absence d'un tel
-    fichier nous permet de conclure que le projet ne possède \emph{pas} d'instructions de contribution. Si un
-    tel fichier est trouvé, en revanche, nous devons vérifier son contenu avant de conclure, nous sauvegardons
-    alors l'identifiant unique du contenu du fichier afin de pouvoir l'analyser lors d'une phase de collecte
-    ultérieure. Enfin, le nombre de nouveaux contributeurs est calculé en comptant les contributeurs uniques
-    de la période de référence qui n'apparaissent dans aucun \en{commit} antérieur à cette période (et non
-    seulement au cours des six mois précédents la période de référence).
-
-    \subsection{Collecte complémentaire des données}
     \label{sec:collectreadme}
+    Restent à traiter certains \texttt{README}. Leur contenu peut être téléchargé publiquement soit via des
+    requêtes HTTP sur le site \href{https://archive.softwareheritage.org/}{archive.softwareheritage.org}, soit
+    depuis le \en{registry} Amazon S3
+    \href{https://registry.opendata.aws/software-heritage}{software-heritage}. Le site limite le nombre de
+    requêtes autorisées par adresse IP à quelques dizaines par heure, contrairement au \en{registry}, mais ce
+    dernier ne contient pas encore tous les contenus archivés. Nous téléchargeons donc en priorité via le
+    \en{registry} Amazon S3 et nous rabattons sur le site pour les fichiers manquants. Nous cherchons ensuite
+    dans ces \texttt{README} une section contenant le mot \en{contributing} ou une expression proche. Les noms
+    de sections sont identifiés en supposant que les \texttt{README} sont formattés en Markdown ou
+    reStructuredText et en se basant sur leur syntaxe officielle \parencite{markdown-headings,rst-sections}.
 
-    Il nous faut maintenant vérifier le contenu du fichier \texttt{README.md} (ou assimilé) retenu pour chaque
-    projet ne possédant pas de fichier \texttt{CONTRIBUTING.md} (ou assimilé) afin de déterminer s'ils
-    possèdent ou non des instructions de contribution, et ainsi compléter notre jeu de donnée. Le contenu des
-    fichiers est bien archivé par Software Heritage mais n'est pas disponible directement dans le graphe, il
-    est en revanche possible de télécharger ces contenus de deux autres façons différentes : soit via des
-    requêtes HTTP sur le site web \href{https://archive.softwareheritage.org/}{archive.softwareheritage.org},
-    accessible publiquement, soit en téléchargeant les contenus directement depuis leur \en{registry} Amazon
-    S3 (\href{https://registry.opendata.aws/software-heritage}{registry.opendata.aws/software-heritage}), lui
-    aussi accessible publiquement. Le site limite le nombre de requêtes autorisées par adresse IP à quelques
-    dizaines par heure. Le \en{registry} n'impose pas ce genre de limite, mais le contenus de certains
-    fichiers n'y est pas encore disponible. Nous utiliserons donc en priorité le \en{registry} Amazon S3 pour
-    télécharger le contenu des fichiers \texttt{README} nécessaires, puis le site pour tous ceux que nous ne
-    parviendrons pas à y trouver.
-
-    Une fois le contenu des \texttt{README} téléchargés, nous y cherchons une section dont le nom contient le
-    mot \en{contributing} ou un mot proche. Pour identifier les noms de section dans les fichiers téléchargés,
-    nous supposons que ceux-ci sont formatés suivant un des deux standards les plus répandus de formatage de
-    text brut : le Markdown (dont l'extension courante est \texttt{.md}) ou le reStructuredText (dont
-    l'extension courante est \texttt{.rst}). Le format Markdown autorise deux façon de définir une section
-    \parencite{markdown-headings}, la première consiste à démarrer une ligne avec un ou plusieurs caractères
-    \texttt{\#} puis d'écrire le nom de la section sur la fin de la ligne, l'autre consiste à écrire
-    directement le nom de la section, puis à la "souligner" en écrivant plusieurs fois le caractère \texttt{=}
-    ou \texttt{-} sur la ligne suivante. Le format reStructuredText n'autorise qu'une seule façon de définir
-    des sections, en soulignant une ligne de la même façon que la deuxième méthode du Markdown, à ceci près
-    que d'autres caractères sont aussi acceptés pour composer la ligne \parencite{rst-sections}.
-
-    Pour déterminer si un fichier \texttt{README} contient des instructions de contribution, nous identifions
-    donc tous les noms de section le composant et vérifions si l'un d'eux contient le mot \en{contributing} ou
-    assimilé.
-
-    \subsection{Reproduction des travaux}
-
-    Afin d'améliorer la transparence méthodologique de ce travail et d'aider l'éventuelle reproduction des
-    résultats qui y sont présentés, un \en{replication package} contenant le code source et les bibliothèques
-    utilisés dans ce mémoire, ainsi que les données brut collectées, a été publié sur Zenodo
+    Un \en{replication package} contenant le code source et les bibliothèques utilisés dans ce mémoire, ainsi
+    que les données brut collectées, a été publié sur Zenodo
     \parencite[anonymisé]{anonymous-replication-package}.
     % TODO: de-anonymize and upload new version to zenodo
 
