@@ -22,15 +22,31 @@
 % Fix LLNCS language handling of the "keywords" part of the abstracts
 \addto{\captionsfrench}{\renewcommand{\keywordname}{\textbf{Mots-clé:}}}
 
-% bibliography settings
-\usepackage[hyperref=true]{biblatex}
-\DefineBibliographyExtras{french}{\restorecommand\mkbibnamefamily}
-\addbibresource{../references.bib}
-
 % links setup
 \usepackage[nobiblatex]{xurl}
 \usepackage{hyperref}
 \hypersetup{colorlinks=true}
+
+% bibliography settings
+\usepackage[hyperref=true,isbn=false,eprint=false,giveninits=true]{biblatex}
+% redefine the "title" field style to remove quotation marks
+\DeclareFieldFormat*{title}{#1}
+% redefine the "url" field to remove protocol information (https://)
+\DeclareSourcemap{
+    \maps[datatype=bibtex]{
+        \map{
+            \step[fieldsource=url, final=true]
+            \step[fieldset=verba, origfieldval, final=true]
+            \step[fieldsource=verba, match=\regexp{\A(ht|f)tp(s)?:\/\/}, replace={}]
+        }
+    }
+}
+\DeclareFieldFormat{url}{%
+    \mkbibacro{URL}\addcolon\space
+    \href{#1}{\nolinkurl{\thefield{verba}}}%
+}
+\DefineBibliographyExtras{french}{\restorecommand\mkbibnamefamily}
+\addbibresource{../references.bib}
 
 % Hypotheses
 \newtheorem{hypo}{Hypothèse}[theorem]
@@ -582,5 +598,6 @@
     l'apprentissage, ou si le contexte est trop différent pour que les étudiants soient réduit à la catégorie
     générique des nouveaux contributeurs.
 
+    \todo{Si vraiment j'arrive pas à atteindre 12 pages : enlever les doi et les URL dans la biblio}
     \printbibliography[heading=bibintoc]
 \end{document}
