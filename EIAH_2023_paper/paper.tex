@@ -130,106 +130,77 @@
     cependant plus accessibles aujourd'hui, possiblement à cause leur portée réduite à l'éducation et
     l'absence d'une communauté persistante autour d'eux.
 
-    \section{Nouveaux contributeurs et minage dans le logiciel libre}
+    \section{Nouveaux contributeurs}
 
     \textcite{barriers-2018} notent la difficulté des nouveaux volontaires à rejoindre une communauté de
     logiciel libre, citant comme exemple extrême le projet Apache Hadoop qui a vu 82\% de ses nouveaux
     volontaires quitter le projet après leur première contribution \parencite{hadoop-dropout-2013}. Une des
     tendances qu'ils trouvent est que la majorité ($58\%$) des barrières rencontrées dans leur étude sont de
-    nature sociale ("\en{community-oriented}") et non techniques \parencite[p.~1008]{barriers-2018}.
-    Concernant les aspects plus techniques, il semble que les outils et la documentation représentent la
-    majorité des barrières rencontrées, alors même que ces éléments ont spécifiquement pour objectif d'aider
-    les nouvelles contributions. C'est un type de barrière qui semble amplifié lorsque les méthodes
-    d'apprentissage et de traitement de l'information de la personne consistent à rassembler le plus
+    nature sociale et non techniques \parencite[p.~1008]{barriers-2018}. Il semble en outre que les outils et
+    la documentation représentent la majorité des barrières techniques rencontrées, éléments ayant
+    paradoxalement pour objectif d'aider les nouvelles contributions. Ce frein semble empirer lorsque les
+    méthodes d'apprentissage et de traitement de l'information de la personne consistent à rassembler le plus
     d'information possible avant de commencer à agir. Ces méthodes étant sur-représentées chez les femmes
     \parencite{gender-information-processing-1995,gender-information-processing-2015}, ces barrières
-    deviennent discriminantes selon le genre, et peuvent potentiellement participer à expliquer la
-    sous-représentation des femmes dans les communautés de logiciel libre.
+    deviennent discriminantes selon le genre, et peuvent participer à expliquer la sous-représentation des
+    femmes dans les communautés de logiciel libre.
 
     \label{sec:accessibility-measure}
-    Plusieurs essais de mesure \emph{a posteriori} de l'accessibilité des projets de logiciel libre on eu
-    lieu, en majorité de façon qualitative
-    \parencites{newcomers-accessibility-2016}{newcomers-onboarding-2018}[voir
-    aussi][]{newcomers-adaptation-2005}. Une autre approche, plus quantitatives, consiste à compter
-    automatiquement le nombre de contributeurs accumulés depuis le début de la vie du projet et jusqu'à
-    différents points dans le temps, afin d'étudier la progression de ce nombre\cite{contributor-count-2006}.
+    Plusieurs mesures \emph{a posteriori} de l'accessibilité des projets de logiciel libre ont été faites, en
+    majorité de façon qualitative \parencites{newcomers-accessibility-2016}{newcomers-onboarding-2018}[voir
+    aussi][]{newcomers-adaptation-2005}. Une approche quantitative encore rare consiste à étudier la
+    progression du nombre total de contributeurs au cours de la vie du projet \cite{contributor-count-2006}.
+    Similairement, \textcite{signals-2019} les signaux que les potentiels nouveaux contributeurs observent
+    pour choisir un projet auquel contribuer. Ils s'intéressent pour cela spécifiquement aux projets
+    disponibles publiquement sur \en{github}, ce qui leur permet d'étudier empiriquement l'effet des signaux
+    que la plateforme met en évidence. Ils suggèrent qu'une mesure possible de l'accessibilité pour les
+    nouveaux contributeurs ("\en{newcomers openness}" dans l'article) est le pourcentage de \en{pull requests}
+    créées par des contributeurs externes, qu'ils définissent par opposition aux \en{core contributors} : les
+    personnes auteurs de plus de 5\% des \en{commits} du projet. En réalité cependant, leur étude ne retient
+    que la présence ou non de \en{pull request} venant de nouveaux contributeurs (p.~16), ce qui leur permet
+    de n'étudier qu'une variable binaire.
 
-    \textcite{signals-2019} traitent d'une question similaire en essayant de déterminer quels sont les signaux
-    que les potentiels nouveaux contributeurs regardent (et comment) pour choisir un projet de logiciel libre
-    auquel contribuer. Ils s'intéressent pour cela spécifiquement aux projets disponibles publiquement sur
-    \en{github}, ce qui leur permet, après une approche exploratoire pour dégager des hypothèses, d'étudier
-    empiriquement l'effet des signaux que la plateforme met en évidence.
+    Pour leur analyse quantitative, \textcite{signals-2019} collectent leurs données via l'\en{API} de GitHub,
+    comme beaucoup d'études récentes \parencite{github-mapping-2017}. La plateforme est très populaire dans le
+    milieu du logiciel libre, mais ces mêmes études notent cependant que se restreindre à cette seule
+    plateforme limite la représentativité des données étudiées \parencite{swh-growth-2019}. Les limites et
+    erreurs courantes liées au minage de GitHub font d'ailleurs l'objet d'une littérature grandissante et
+    remettant en question certains résultats utilisant cette technique sans détailler suffisamment leur
+    méthodologie \parencite{mining-github-2014,penumbra-oss-2022}. \textcite{barriers-meta-2015} remarquent de
+    plus que dans la littérature, les études se concentrent trop sur les projets importants et matures, un
+    biais permettant d'obtenir une quantité importante de données mais ignorant une grande part du logiciel
+    libre. À l'inverse, 71\% des projets hébergés sur GitHub sont des projets personnels et non réellement
+    collaboratifs, c'est pourquoi \textcite{mining-github-2014} ne retiennent pour leur étude que ceux ayant
+    au moins deux auteurs uniques différents.
 
-    \textcite{signals-2019} suggèrent qu'une mesure possible de l'accessibilité pour les nouveaux
-    contributeurs ("\en{newcomers openness}" dans l'article) est le pourcentage de \en{pull requests} créées
-    par des contributeurs externes. Ils définissent les contributeurs externes par opposition aux
-    contributeurs principaux ("\en{core contributors}") qu'ils identifient, eux, comme étant les personnes
-    auteurs de plus de 5\% des \en{commits} du projet. En réalité cependant, leur étude quantitative simplifie
-    la mesure en ne retenant que la présence ou non de \en{pull request} venant de nouveaux contributeurs
-    (p.~16), ce qui leur permet de n'étudier qu'une variable binaire.
+    Il faut donc approfondir la recherche dans cette direction, mais le nombre de projets et des artéfacts qui
+    leur sont liés augmente exponentiellement \parencite{swh-growth-2019}, avec un phénomène de duplication :
+    des fichiers identiques se retrouvent dans de nombreux projets différents (comme les notices de licence).
+    Beaucoup de \en{commits} eux-même peuvent se trouver dans plusieurs projets différents après un \en{fork}.
+    L'analyse à grande échelle de l'historique de développement des projets de logiciel libre devient donc de
+    plus en plus complexe à faire efficacement.
 
-    Pour leur analyse quantitative, \textcite{signals-2019} commencent par collecter des données sur la
-    plateforme d'hébergement de code source \en{github} via son \en{API}. Ce choix est cohérent avec un grand
-    nombre d'études de ces dernières années \parencite{github-mapping-2017}, la plateforme est très populaire
-    dans le milieu du logiciel libre et a connu une croissance très importante ces dernières années. Ces mêmes
-    études notent cependant parfois que se restreindre à cette seule plateforme est une limite diminuant la
-    représentativité de l'échantillon qu'elles étudient \parencite{swh-growth-2019}. Les limites et erreurs
-    courantes liées au minage de \en{github} font d'ailleurs l'objet d'une littérature grandissante et
-    remettant potentiellement en question les résultats des études utilisant cette technique sans détailler
-    suffisamment leur méthodologie de collecte des données \parencite{mining-github-2014,penumbra-oss-2022}.
-
-    Le nombre de projets et d'artéfacts qui leur sont lié est par ailleurs en augmentation rapide, voir
-    exponentielle. \textcite{swh-growth-2019} estiment que le nombre de \en{commits} uniques originaux double
-    environ tous les trente mois, le nombre de fichiers uniques originaux doublerait quant à lui tous les
-    vingt-deux mois. Cette explosion du nombre de \en{commits} et de fichiers s'accompagne d'un important
-    phénomène de duplication : de nombreux fichiers se retrouvent dans de nombreux projets différents, comme
-    les notices de licence par exemple. Les \en{commits} eux-même peuvent se trouver dans plusieurs projets
-    différents, c'est ce qui arrive lorsqu'un projet débute en tant que \en{fork} d'un autre. Ces deux points
-    rendent de plus en plus difficile l'analyse efficace et à grande échelle de l'historique de développement
-    des projets de logiciel libre.
-
-    \subsection{L'archive de logiciels de Software Heritage}
+    \section{L'archive de logiciels de Software Heritage}
 
     \label{ssec:swh-graph}
 
     Les techniques de compression de graphe sont aujourd'hui suffisamment avancées pour permettre une nouvelle
-    approche à cette analyse automatique des projets, en rendant un très grand nombre de ceux-ci disponibles
-    au sein d'une même structure de donnée unifiée et optimisée \parencite{swh-graph-2020}. Cette approche
-    permet par exemple de grandement faciliter la détection des \en{clones} ou \en{forks} de projets, c'est à
-    dire des projets ayant une part de leur historique de développement en commun. La structure de donnée
-    proposée par \textcite{swh-graph-2020} est un graphe orienté où chaque \en{commit} est représenté par un
-    nœud et où chaque arc $u \xrightarrow{succ} v$ ("$v$ est un successeur de $u$", autrement dit pour les
-    \en{commits} "$v$ est un ancêtre immédiat de $u$") possède aussi un arc inverse $u \xleftarrow{pred} v$
-    ("$u$ est un prédécesseur de $v$"). Une telle structure permet donc de trouver tous les \en{fork} d'un
-    projet avec un classique calcul de composante fortement connexe, ce qui peut se faire avec un simple
-    parcours profondeur ou largeur du graphe à partir de n'importe lequel de ses \en{commits}.
+    approche à cette analyse automatique des projets, en les rassemblant au sein d'une même structure de
+    donnée unifiée et optimisée \parencite{swh-graph-2020}. La structure de donnée proposée par
+    \textcite{swh-graph-2020} est un graphe orienté où chaque \en{commit} est représenté par un nœud et où
+    chaque arc $u \xrightarrow{succ} v$ (le \en{commit} "$v$ est un ancêtre immédiat de $u$") possède aussi un
+    arc inverse $u \xleftarrow{pred} v$. Cette structure permet donc de trouver tous les \en{fork} d'un
+    projet avec un classique calcul de composante fortement connexe.
 
     Software Heritage est une initiative exploitant ces techniques de compression afin de construire une
     archive aussi complète que possible du code source actuellement disponible publiquement dans le monde.
-    L'archive est elle aussi publique et un de leurs objectifs est de la rendre exploitable pour la recherche
-    \parencite{swh-2017}. Il s'agit du corpus que \textcite{swh-graph-2020} ont utilisé comme exemple pour
-    leur modèle de compression. L'archive comptait en 2018 plus d'un milliard de \en{commits} uniques archivés
-    depuis quatre-vingt-cinq millions d'origines différentes (telles que des \en{remotes} \en{git} ou des
-    versions de paquets Python publiés sur \href{https://pypi.org/}{PyPi}). L'archive est stockée dans une
-    structure en ajout seul : elle grandit de façon continue en archivant petit à petit de nouveaux projets
-    et en ajoutant de nouveaux artéfacts à chaque évolution des projets déjà archivés, ce qui en fait l'un des
-    corpus les plus complets et exploitable par la recherche scientifique
-    \parencite{swh-2019,swh-growth-2019}.
-
-    \subsection{Sélection des projets étudiés}
-
-    Dans une méta-analyse concernant l'étude des barrières d'entrée, \textcite{barriers-meta-2015} remarquent
-    un biais courant dans la sélection des projets de logiciel libre retenus dans la littérature (p. 83) : les
-    auteurs ont tendance à plutôt étudier les projets importants, matures et populaires, car ils sont plus
-    susceptibles d'apporter un volume important de données. Bien que les résultats semblent cohérent avec les
-    plus rares études sélectionnant de petits projets, ils invitent la communauté scientifique à s'y
-    intéresser plus en profondeur et à constituer des échantillons plus variés.
-
-    Quand \textcite{mining-github-2014} analysent les \en{pull requests} sur \en{github}, ils ne retiennent
-    que les projets ayant au moins deux auteurs de \en{commits} uniques, ce qu'ils considèrent comme des
-    projets vraiment collaboratifs. Ce choix vient de leur observation qu'une très grande partie des projets
-    hébergés sur la plateforme ($71\%$) sont des projets personnels, utilisés par leurs auteurs à des fins
-    d'expérimentation ou de stockage, sans réelle ouverture à la collaboration.
+    L'archive est publique et se veut exploitable pour la recherche \parencite{swh-2017}. Il s'agit du corpus
+    que \textcite{swh-graph-2020} ont utilisé comme exemple pour leur modèle de compression. L'archive
+    comptait en 2018 plus d'un milliard de \en{commits} uniques depuis 85 millions d'origines différentes
+    (\en{remotes} \en{git}, paquets Python publiés sur \href{https://pypi.org/}{PyPi}, etc.). L'archive
+    grandit de façon continue en ajoutant petit à petit de nouveaux projets et de nouveaux artéfacts à chaque
+    évolution des projets déjà archivés, ce qui en fait l'un des corpus les plus complets et exploitable par
+    la recherche scientifique \parencite{swh-2019,swh-growth-2019}.
 
     \section{Méthodologie}
 
