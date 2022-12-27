@@ -22,6 +22,9 @@
 % Fix LLNCS language handling of the "keywords" part of the abstracts
 \addto{\captionsfrench}{\renewcommand{\keywordname}{\textbf{Mots-clé:}}}
 
+% Hyphenation
+\hyphenation{Git-Hub}
+
 % links setup
 \usepackage[nobiblatex]{xurl}
 \usepackage{hyperref}
@@ -142,7 +145,7 @@
     séquence pédagogique, donne des résultats encore meilleurs, mais est aussi plus incertain à mettre en
     place \cite{real-pbl-2010, real-pbl-2004}. Certains compromis on été tentés, consistant à créer des
     projets proches de situations réelles, mais dédiés à l'éducation \cite{oss-edu-2008}. Ces projets ne sont
-    cependant plus accessibles aujourd'hui, possiblement à cause leur portée réduite à l'éducation et
+    cependant plus accessibles aujourd'hui, possiblement à cause de leur portée réduite à l'éducation et à
     l'absence d'une communauté persistante autour d'eux.
 
     \section{Nouveaux contributeurs}
@@ -165,8 +168,8 @@
     majorité de façon qualitative \parencites{newcomers-accessibility-2016}{newcomers-onboarding-2018}[voir
     aussi][]{newcomers-adaptation-2005}. Une approche quantitative encore rare consiste à étudier la
     progression du nombre total de contributeurs au cours de la vie du projet \cite{contributor-count-2006}.
-    Similairement, \textcite{signals-2019} les signaux que les potentiels nouveaux contributeurs observent
-    pour choisir un projet auquel contribuer. Ils s'intéressent pour cela spécifiquement aux projets
+    Similairement, \textcite{signals-2019} étudient les signaux que les potentiels nouveaux contributeurs
+    observent pour choisir un projet auquel contribuer. Ils s'intéressent pour cela spécifiquement aux projets
     disponibles publiquement sur \en{github}, ce qui leur permet d'étudier empiriquement l'effet des signaux
     que la plateforme met en évidence. Ils suggèrent qu'une mesure possible de l'accessibilité pour les
     nouveaux contributeurs ("\en{newcomers openness}" dans l'article) est le pourcentage de \en{pull requests}
@@ -193,7 +196,7 @@
     des fichiers identiques se retrouvent dans de nombreux projets différents (comme les notices de licence).
     Beaucoup de \en{commits} eux-même peuvent se trouver dans plusieurs projets différents après un \en{fork}.
     L'analyse à grande échelle de l'historique de développement des projets de logiciel libre devient donc de
-    plus en plus complexe à faire efficacement.
+    plus en plus complexe à implémenter efficacement.
 
     \section{L'archive de logiciels de Software Heritage}
 
@@ -203,7 +206,7 @@
     approche à cette analyse automatique des projets, en les rassemblant au sein d'une même structure de
     donnée unifiée et optimisée \parencite{swh-graph-2020}. La structure de donnée proposée par
     \textcite{swh-graph-2020} est un graphe orienté où chaque \en{commit} est représenté par un nœud et où
-    chaque arc $u \xrightarrow{succ} v$ (le \en{commit} "$v$ est un ancêtre immédiat de $u$") possède aussi un
+    chaque arc $u \xrightarrow{succ} v$ ("le \en{commit} $v$ est un ancêtre immédiat de $u$") possède aussi un
     arc inverse $u \xleftarrow{pred} v$. Cette structure permet donc de trouver tous les \en{fork} d'un
     projet avec un classique calcul de composante fortement connexe.
 
@@ -211,11 +214,11 @@
     archive aussi complète que possible du code source actuellement disponible publiquement dans le monde.
     L'archive est publique et se veut exploitable pour la recherche \parencite{swh-2017}. Il s'agit du corpus
     que \textcite{swh-graph-2020} ont utilisé comme exemple pour leur modèle de compression. L'archive
-    comptait en 2018 plus d'un milliard de \en{commits} uniques depuis 85 millions d'origines différentes
-    (\en{remotes} \en{git}, paquets Python publiés sur \href{https://pypi.org/}{PyPi}, etc.). L'archive
-    grandit de façon continue en ajoutant petit à petit de nouveaux projets et de nouveaux artéfacts à chaque
-    évolution des projets déjà archivés, ce qui en fait l'un des corpus les plus complets et exploitable par
-    la recherche scientifique \parencite{swh-2019,swh-growth-2019}.
+    comptait en 2018 plus d'un milliard de \en{commits} uniques archivés depuis 85 millions d'origines
+    différentes (\en{remotes} \en{git}, paquets \href{https://pypi.org/}{PyPi}, etc.). L'archive grandit de
+    façon continue en ajoutant petit à petit de nouveaux projets et de nouveaux artéfacts à chaque évolution
+    des projets déjà archivés, ce qui en fait l'un des corpus les plus complets et exploitables par la
+    recherche scientifique \parencite{swh-2019,swh-growth-2019}.
 
     \section{Méthodologie}
 
@@ -224,12 +227,12 @@
     La question de l'accessibilité des projets de logiciel libre pour les nouveaux contributeurs est encore
     assez peu explorée de façon quantitative dans la littérature. \textcite{signals-2019} se sont intéressés
     aux signaux que les potentiels nouveaux contributeurs observent pour choisir un projets auquel
-    \emph{essayer} de contribuer, nous proposons de déterminer si certains de ces signaux sont de
-    surcroit prédictifs d'une réelle accessibilité de ces projets, c'est à dire à quel point de nouveaux
-    contributeurs \emph{réussissent} à produire une contribution apparaissant dans l'historique de
-    développement du projet. Pour dépasser les limitations de GitHub, nous utiliserons l'archive de Software
-    Heritage comme vue sur la population étudiée. Ce choix nous empêchera cependant d'étudier les indicateurs
-    propres à GitHub (comme le nombre de \en{pull requests} d'un projet).
+    \emph{essayer} de contribuer, nous proposons de déterminer si certains de ces signaux sont de surcroit
+    prédictifs d'une réelle accessibilité de ces projets, c'est à dire à quel point de nouveaux contributeurs
+    \emph{réussissent} à produire une contribution apparaissant dans l'historique de développement du projet.
+    Pour dépasser les limitations de GitHub, nous utiliserons l'archive de Software Heritage comme accès à la
+    population étudiée. Ce choix nous empêchera cependant d'étudier les indicateurs propres à GitHub comme le
+    nombre de \en{pull requests} d'un projet.
 
     Pour évaluer l'accessibilité d'un projet, nous proposons d'utiliser comme variable proxy le nombre de
     contributeurs apparaissant pour la première fois dans l'historique de développement du projet entre le
@@ -285,28 +288,29 @@
     en fonction des types de $u$ et $v$, que : 
 
     \begin{itemize}
-        \item $u$ est un \en{commit} successeur \en{commit} $v$ ;
+        \item $u$ est un \en{commit} successeur du \en{commit} $v$ ;
         \item $v$ est un \en{snapshot} du projet disponible à l'origine $u$ ;
         \item $v$ est le dernier \en{commit} d'une des branches visibles lors du \en{snapshot} $u$ ;
         \item $v$ est le dossier racine du contenu du projet en l'état du \en{commit} $u$ ;
         \item etc.
     \end{itemize}
 
-    Un premier parcours du graphe est effectué à partir de chaque origine afin d'identifier le représentant de
-    chaque groupe de fork (composante connexe sur les liens entre \en{commits}). Un parcours largeur avec
-    marqueurs de niveaux en remontant des \en{commits} initiaux vers les origines qui lui sont accessibles
-    permet d'identifier la plus longue chaîne de \en{commits} et donc le représentant de son groupe de
-    \en{fork}. Pour le \en{snapshot} le plus récent de chaque origine ainsi retenue, un nouveau parcours est
-    effectué à partir de sa branche principale afin de récolter les données de recherche. Le nombre de
-    contributeurs et de \en{commits} récents se compte facilement lors du parcours, mais la présence
+    Nous effectuons un premier parcours du graphe à partir de chaque origine afin d'identifier le représentant
+    de chaque groupe de fork (composante fortement connexe sur les liens entre \en{commits}). Un parcours
+    largeur avec marqueurs de niveaux en remontant des \en{commits} initiaux vers les origines qui lui sont
+    accessibles permet d'identifier la plus longue chaîne de \en{commits} et donc le représentant de son
+    groupe de \en{fork}. Pour le \en{snapshot} le plus récent de chaque origine ainsi retenue, un nouveau
+    parcours est effectué à partir de sa branche principale afin de récolter les données de recherche. Le
+    nombre de contributeurs et de \en{commits} récents se compte facilement lors du parcours, mais la présence
     d'instructions de contribution est plus difficile à vérifier car le graphe ne contient que les noms et la
-    hierarchie des fichiers d'un projet, mais pas leur contenu. Ce parcours ne vérifie donc pour l'instant que
+    hierarchie des fichiers d'un projet, mais pas leur contenu. Ce parcours ne vérifie donc initialement que
     la présence d'un fichier \texttt{CONTRIBUTING.md} ou assimilé, auquel cas nous validons la présence
-    d'instructions de contribution. Sinon, nous vérifions la présence d'un fichier \texttt{README.md} ou
-    assimilé, en son absence nous validons l'\emph{absence} d'instructions de contribution. En présence d'un
-    \texttt{README}, nous sauvegardons l'identifiant unique du fichier afin d'analyser son contenu
-    ultérieurement. Enfin, le nombre de nouveaux contributeurs est calculé en comptant les contributeurs
-    uniques de la période de référence qui n'apparaissent dans aucun \en{commit} antérieur à cette période.
+    d'instructions de contribution. En son absence, nous vérifions la présence d'un fichier \texttt{README.md}
+    ou assimilé, en cas de deuxième absence nous validons l'\emph{absence} d'instructions de contribution. En
+    présence d'un \texttt{README}, nous sauvegardons l'identifiant unique du fichier afin d'analyser son
+    contenu ultérieurement. Enfin, le nombre de nouveaux contributeurs est calculé en comptant les
+    contributeurs uniques de la période de référence qui n'apparaissent dans aucun \en{commit} antérieur à
+    cette période.
 
     \label{sec:collectreadme}
     Restent à traiter certains \texttt{README}. Leur contenu peut être téléchargé publiquement soit via des
@@ -432,7 +436,7 @@
             \caption{Échelle logarithmique}
         \end{subfigure}
 
-        \caption{Nombre de nouveaux contributeurs en fonction du nombre de contributeurs récents uniques}
+        \caption{Nombre de nouveaux contributeurs en fonction du nombre de contributeurs uniques récents}
         \label{fig:contributorCount}
     \end{figure}
 
@@ -458,7 +462,7 @@
     statistiquement efficace pour modéliser la relation entre les deux variables \parencite{GLS-2021}. Le
     modèle retenu utilise donc la méthode des moindres carrés généralisée (modèle
     \href{https://www.statsmodels.org/dev/generated/statsmodels.regression.linear_model.GLS.html}{GLS} du
-    paque Python \texttt{statsmodel}), il suggère effectivement que plus le nombre de contributeurs récents
+    paquet Python \texttt{statsmodel}), il suggère effectivement que plus le nombre de contributeurs récents
     d'un projet est élevé, plus son nombre de nouveaux contributeurs l'est aussi. Le coefficient de
     détermination $R^2 \approx 0.45$ du modèle indique que le nombre de contributeurs récents explique environ
     $45\%$ de la variation du nombre de nouveaux contributeurs, ce qui valide
@@ -471,19 +475,19 @@
     que, le nombre de contributeurs récents étant mesuré sur une période antécédente à celle sur laquelle est
     mesuré le nombre de nouveaux contributeurs, cette deuxième variable ne peut pas influencer la première.
 
-    Suivant la même approche que pour l'analyse du nombre de contributeurs récents, une première régression
-    avec la méthode des moindres carrés ordinaires a d'abord été faite, puis écartée par un test
-    d'homoscédasticité de White. C'est donc une régression linéaire utilisant la méthode des moindres carrés
-    généralisée qui a été retenue (Fig.~\ref{fig:commitCount}). Le modèle suggère ici aussi une corrélation
-    positive entre le nombre de \en{commits} récents d'un projet et son nombre de nouveaux contributeurs, mais
-    son coefficient de détermination est trop faible ($R^2 \approx 0.10$) pour considérer que le modèle
-    représente fidèlement des données du problème. Nous ne pouvons donc conclure à une relation entre ces deux
-    variables et devons rejeter \hyperref[hyp:recentcommitcount]{l'hypothèse H\ref*{hyp:recentcommitcount}}.
-    Ce résultat ne rejoint cette fois pas ceux de \textcite[p.~13,16]{signals-2019}. Cela qui pourrait
-    signifier que le nombre de \en{commits} récents d'un projet est un signal que les nouveaux
-    contributeurs potentiels utilisent \emph{à tort} pour choisir un projet auquel essayer de contribuer. Nos
-    résultats ne permettent pas de conclure qu'un grand nombre de \en{commits} récents, bien qu'il attire les
-    nouveaux contributeurs, est un indicateur de l'accessibilité du projet pour ces nouveaux contributeurs.
+    Suivant la même approche pour l'analyse du nombre de \en{commits} récents, une première régression avec la
+    méthode des moindres carrés ordinaires a d'abord été faite, puis écartée par un test d'homoscédasticité de
+    White. C'est donc une régression linéaire utilisant la méthode des moindres carrés généralisée qui a été
+    retenue (Fig.~\ref{fig:commitCount}). Le modèle suggère ici aussi une corrélation positive entre le nombre
+    de \en{commits} récents d'un projet et son nombre de nouveaux contributeurs, mais son coefficient de
+    détermination est trop faible ($R^2 \approx 0.10$) pour considérer que le modèle représente fidèlement des
+    données du problème. Nous ne pouvons donc conclure à une relation entre ces deux variables et devons
+    rejeter \hyperref[hyp:recentcommitcount]{l'hypothèse H\ref*{hyp:recentcommitcount}}. Ce résultat ne
+    rejoint cette fois pas ceux de \textcite[p.~13,16]{signals-2019}. Cela pourrait signifier que le nombre de
+    \en{commits} récents d'un projet est un signal que les nouveaux contributeurs potentiels utilisent \emph{à
+    tort} pour choisir un projet auquel essayer de contribuer. Nos résultats ne permettent pas de conclure
+    qu'un grand nombre de \en{commits} récents, bien qu'il attire les nouveaux contributeurs, est un
+    indicateur de l'accessibilité du projet pour ces nouveaux contributeurs.
 
     \section{Conclusion}
 
@@ -514,17 +518,17 @@
 
     Les perspectives de recherche concernant l'accessibilité des projets de logiciel libre sont encore
     nombreuses, le sujet étant à la fois très changeant et relativement nouveau, la littérature existe mais
-    est encore très qualitative. De futures études quantitatives pourraient s'intéresser aux éventuels
-    mécanismes causaux responsables de l'accessibilité observée des projets. Le domaine de l'analyse
-    automatique des dépôts logiciels pose encore beaucoup de questions intéressantes, l'archive de Software
-    Heritage par exemple apporte une nouvelle méthode d'observation particulièrement puissante, mais celle-ci
-    est encore jeune et peu d'étude se consacrent aux bénéfices et limites de ce qu'elle peut apporter à la
-    science. Enfin, si nos résultats suggèrent que la présence d'instructions de contribution ainsi que le
-    nombre de contributeurs uniques récents sont de bons indicateurs à observer pour un enseignant souhaitant
-    trouver un projet sur lequel faire travailler ses étudiants, de futures recherches mériteraient d'être
-    conduites afin de déterminer si cette accessibilité se traduit effectivement dans la qualité de
-    l'apprentissage, ou si le contexte est trop différent pour que les étudiants soient réduits à la catégorie
-    générique des nouveaux contributeurs.
+    est encore très qualitative. De futures études quantitatives pourraient s'intéresser aux mécanismes
+    causaux responsables de l'accessibilité observée des projets. Le domaine de l'analyse automatique des
+    dépôts logiciels pose encore beaucoup de questions intéressantes, l'archive de Software Heritage par
+    exemple apporte une nouvelle méthode d'observation particulièrement puissante, mais celle-ci est encore
+    jeune et peu d'étude se consacrent aux bénéfices et limites de ce qu'elle peut apporter à la science.
+    Enfin, si nos résultats suggèrent que la présence d'instructions de contribution ainsi que le nombre de
+    contributeurs uniques récents sont de bons indicateurs à observer pour un enseignant souhaitant trouver un
+    projet sur lequel faire travailler ses étudiants, de futures recherches mériteraient d'être conduites afin
+    de déterminer si cette accessibilité se traduit effectivement dans la qualité de l'apprentissage, ou si le
+    contexte est trop différent pour que les étudiants soient réduits à la catégorie générique des nouveaux
+    contributeurs.
 
     \printbibliography[heading=bibintoc]
 \end{document}
