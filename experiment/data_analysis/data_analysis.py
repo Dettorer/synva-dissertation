@@ -123,7 +123,9 @@ def write_initial_viz(data: pd.DataFrame) -> None:
         # `to_latex()`, the second one makes each column name bold
         tex_output = data[[column_name]] \
             .describe() \
-            .style.to_latex() \
+            .style \
+            .format(precision=2) \
+            .to_latex() \
             .replace("%", "\\%") \
             .replace(f"{column_name}", f"\\textbf{{{column_name}}}")
         with open(f"{column_name}_describe.tex", "w") as outfile:
