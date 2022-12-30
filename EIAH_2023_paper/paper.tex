@@ -164,11 +164,11 @@
     logiciel libre, citant comme exemple extrême le projet Apache Hadoop qui a vu 82\% de ses nouveaux
     volontaires quitter le projet après leur première contribution \parencite{hadoop-dropout-2013}. Une des
     tendances observées est que la majorité ($58\%$) des barrières rencontrées dans leur étude sont de nature
-    sociale et non technique \parencite[p.~1008]{barriers-2018}. Il semble en outre que les outils et la
-    documentation représentent la majorité des barrières restantes, éléments ayant paradoxalement
-    pour objectif d'aider les nouvelles contributions. Ce frein semble empirer lorsque les méthodes
-    d'apprentissage et de traitement de l'information de la personne consistent à rassembler le plus
-    d'information possible avant de commencer à agir. Ces méthodes étant sur-représentées chez les femmes
+    sociale et non technique \parencite{barriers-2018}. Il semble en outre que les outils et la documentation
+    représentent la majorité des barrières restantes, éléments ayant paradoxalement pour objectif d'aider les
+    nouvelles contributions. Ce frein semble empirer lorsque les méthodes d'apprentissage et de traitement de
+    l'information de la personne consistent à rassembler le plus d'information possible avant de commencer à
+    agir. Ces méthodes étant sur-représentées chez les femmes
     \parencite{gender-information-processing-1995,gender-information-processing-2015}, ces barrières
     deviennent discriminantes selon le genre, et peuvent participer à expliquer la sous-représentation des
     femmes dans les communautés de logiciel libre.
@@ -186,8 +186,7 @@
     l'article) est le pourcentage de \en{pull requests} créées par des contributeurs externes, qu'ils
     définissent par opposition aux \en{core contributors} : les personnes auteurs de plus de 5\% des
     \en{commits} du projet. En réalité cependant, leur étude ne retient que la présence ou non de \en{pull
-    request} venant de nouveaux contributeurs (p.~16), ce qui leur permet de n'étudier qu'une variable
-    binaire.
+    request} venant de nouveaux contributeurs, ce qui leur permet de n'étudier qu'une variable binaire.
 
     Pour leur analyse quantitative, \textcite{signals-2019} collectent leurs données via l'\en{API} de GitHub,
     comme beaucoup d'études récentes \parencite{github-mapping-2017}. La plateforme est très populaire dans le
@@ -336,7 +335,7 @@
 
     Un \en{replication package} contenant le code source et les bibliothèques utilisés pour l'étude présentée
     dans notre article, ainsi que les données brutes collectées, est disponible sur Zenodo :
-    \href{https://zenodo.org/record/7464290}{zenodo.org/record/7464290}.
+    \href{https://zenodo.org/record/7464290}{zenodo.org/record/7464290} (anonymisé).
     % TODO: de-anonymize and upload new version to zenodo
 
     \section{Résultats et discussion}
@@ -421,14 +420,14 @@
     et confirme ($p \approx 0$) que les deux distributions sont bien différentes. L'hypothèse du test étant
     que les projets avec instructions de contribution ont un meilleur score que les autres, nous pouvons
     valider \hyperref[hyp:contributionguidelines]{l'hypothèse H\ref*{hyp:contributionguidelines}}. Ce résultat
-    est cohérent avec ceux de \textcite[p.~11]{signals-2019}. De futures recherches pourraient essayer de
-    déterminer si ce plus grand nombre de nouveaux contributeurs \emph{ayant réussi} à contribuer est dû
-    uniquement à ce plus grand nombre de nouveaux contributeurs \emph{essayant} de contribuer, ou si la
-    présence d'instructions de contribution a un réel rôle dans le succès d'une tentative de contribution. Il
-    est tout de même important de noter que, bien que le test de Wilcoxon-Mann-Whitney ne soit pas
-    paramétrique et puisse donc s'appliquer à ces données, sa robustesse diminue significativement lorsque la
-    distribution des données ne suit pas une loi normale \emph{et} que les groupes comparés ont une variance
-    significativement différente \parencite{WMW-robustness-1998}, ce qui est le cas ici (voir Fig.
+    est cohérent avec ceux de \textcite{signals-2019}. De futures recherches pourraient essayer de déterminer
+    si ce plus grand nombre de nouveaux contributeurs \emph{ayant réussi} à contribuer est dû uniquement à ce
+    plus grand nombre de nouveaux contributeurs \emph{essayant} de contribuer, ou si la présence
+    d'instructions de contribution a un réel rôle dans le succès d'une tentative de contribution. Il est tout
+    de même important de noter que, bien que le test de Wilcoxon-Mann-Whitney ne soit pas paramétrique et
+    puisse donc s'appliquer à ces données, sa robustesse diminue significativement lorsque la distribution des
+    données ne suit pas une loi normale \emph{et} que les groupes comparés ont une variance significativement
+    différente \parencite{WMW-robustness-1998}, ce qui est le cas ici (voir Fig.
     \ref{sfig:newContributorQQplot} et \ref{sfig:hasContribVariance}). Ce point, ainsi que la petite taille
     d'effet obtenue, justifieraient une attention plus particulière à la collecte et préparation des données
     afin d'approcher une distribution normale et d'en homogénéiser la variance.
@@ -475,13 +474,13 @@
     détermination $R^2 \approx 0.45$ du modèle indique que le nombre de contributeurs récents explique environ
     $45\%$ de la variation du nombre de nouveaux contributeurs, ce qui valide
     \hyperref[hyp:recentcontributorcount]{l'hypothèse H\ref*{hyp:recentcontributorcount}}, avec une taille
-    d'effet tout de même modérée. Ce résultat est aussi cohérent avec ceux de
-    \textcite[p.~12-13,16]{signals-2019} qui observaient que le nombre de contributeurs uniques récents était
-    positivement corrélé au nombre de \emph{tentatives} de contribution faites par de nouveaux contributeurs
-    (mesuré par le nombre de \en{pull requests}). Là aussi de futures recherches pourraient s'intéresser à la
-    causalité de cette relation. Tout ce que notre étude peut affirmer sur un éventuel lien de causalité est
-    que, le nombre de contributeurs récents étant mesuré sur une période antécédente à celle sur laquelle est
-    mesuré le nombre de nouveaux contributeurs, cette deuxième variable ne peut pas influencer la première.
+    d'effet tout de même modérée. Ce résultat est aussi cohérent avec ceux de \textcite{signals-2019} qui
+    observaient que le nombre de contributeurs uniques récents était positivement corrélé au nombre de
+    \emph{tentatives} de contribution faites par de nouveaux contributeurs (mesuré par le nombre de \en{pull
+    requests}). Là aussi de futures recherches pourraient s'intéresser à la causalité de cette relation. Tout
+    ce que notre étude peut affirmer sur un éventuel lien de causalité est que, le nombre de contributeurs
+    récents étant mesuré sur une période antécédente à celle sur laquelle est mesuré le nombre de nouveaux
+    contributeurs, cette deuxième variable ne peut pas influencer la première.
 
     Suivant la même approche pour l'analyse du nombre de \en{commits} récents, une première régression avec la
     méthode des moindres carrés ordinaires a d'abord été faite, puis écartée par un test d'homoscédasticité de
@@ -491,7 +490,7 @@
     de détermination est trop faible ($R^2 \approx 0.10$) pour considérer que le modèle représente fidèlement
     des données du problème. Nous ne pouvons donc conclure à une relation entre ces deux variables et devons
     rejeter \hyperref[hyp:recentcommitcount]{l'hypothèse H\ref*{hyp:recentcommitcount}}. Ce résultat ne
-    rejoint cette fois pas ceux de \textcite[p.~13,16]{signals-2019}. Cela pourrait signifier que le nombre de
+    rejoint cette fois pas ceux de \textcite{signals-2019}. Cela pourrait signifier que le nombre de
     \en{commits} récents d'un projet est un signal que les nouveaux contributeurs potentiels utilisent \emph{à
     tort} pour choisir un projet auquel essayer de contribuer. Nos résultats ne permettent pas de conclure
     qu'un grand nombre de \en{commits} récents, bien qu'il attire les nouveaux contributeurs, est un
