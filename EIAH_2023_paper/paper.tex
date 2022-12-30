@@ -165,18 +165,19 @@
 
     \label{sec:accessibility-measure}
     Plusieurs mesures \emph{a posteriori} de l'accessibilité des projets de logiciel libre ont été faites, en
-    majorité de façon qualitative \parencites{newcomers-accessibility-2016}{newcomers-onboarding-2018}[voir
-    aussi][]{newcomers-adaptation-2005}. Une approche quantitative encore rare consiste à étudier la
-    progression du nombre total de contributeurs au cours de la vie du projet \cite{contributor-count-2006}.
-    Similairement, \textcite{signals-2019} étudient les signaux que les potentiels nouveaux contributeurs
-    observent pour choisir un projet auquel contribuer. Ils s'intéressent pour cela spécifiquement aux projets
-    disponibles publiquement sur \en{github}, ce qui leur permet d'étudier empiriquement l'effet des signaux
-    que la plateforme met en évidence. Ils suggèrent qu'une mesure possible de l'accessibilité pour les
-    nouveaux contributeurs ("\en{newcomers openness}" dans l'article) est le pourcentage de \en{pull requests}
-    créées par des contributeurs externes, qu'ils définissent par opposition aux \en{core contributors} : les
-    personnes auteurs de plus de 5\% des \en{commits} du projet. En réalité cependant, leur étude ne retient
-    que la présence ou non de \en{pull request} venant de nouveaux contributeurs (p.~16), ce qui leur permet
-    de n'étudier qu'une variable binaire.
+    majorité de façon qualitative
+    \parencites{newcomers-accessibility-2016}{newcomers-onboarding-2018}{newcomers-adaptation-2005}. Une
+    approche quantitative encore rare consiste à étudier la progression du nombre total de contributeurs au
+    cours de la vie du projet \cite{contributor-count-2006}. Similairement, \textcite{signals-2019} étudient
+    les signaux que les potentiels nouveaux contributeurs observent pour choisir un projet auquel contribuer.
+    Ils s'intéressent pour cela spécifiquement aux projets disponibles publiquement sur \en{github}, ce qui
+    leur permet d'étudier empiriquement l'effet des signaux que la plateforme met en évidence. Ils suggèrent
+    qu'une mesure possible de l'accessibilité pour les nouveaux contributeurs ("\en{newcomers openness}" dans
+    l'article) est le pourcentage de \en{pull requests} créées par des contributeurs externes, qu'ils
+    définissent par opposition aux \en{core contributors} : les personnes auteurs de plus de 5\% des
+    \en{commits} du projet. En réalité cependant, leur étude ne retient que la présence ou non de \en{pull
+    request} venant de nouveaux contributeurs (p.~16), ce qui leur permet de n'étudier qu'une variable
+    binaire.
 
     Pour leur analyse quantitative, \textcite{signals-2019} collectent leurs données via l'\en{API} de GitHub,
     comme beaucoup d'études récentes \parencite{github-mapping-2017}. La plateforme est très populaire dans le
@@ -236,14 +237,13 @@
 
     Pour évaluer l'accessibilité d'un projet, nous proposons d'utiliser comme variable proxy le nombre de
     contributeurs apparaissant pour la première fois dans l'historique de développement du projet entre le
-    premier juin 2019 et le premier septembre 2019 \parencite[voir section \ref{sec:accessibility-measure},
-    ainsi que][p.~13,16]{signals-2019}. Cette période de référence a été choisie sur recommandation de
-    Software Heritage, la désignant comme un bon compromis entre le nombre de projets pour lesquels les
+    premier juin 2019 et le premier septembre 2019 \parencite{signals-2019} (voir aussi section
+    \ref{sec:accessibility-measure}). Cette période de référence a été choisie sur recommandation
+    de Software Heritage, la désignant comme un bon compromis entre le nombre de projets pour lesquels les
     données sont disponible dans l'archive et le caractère récent des observations.
 
-    Nous souhaitons tester trois hypothèses reprenant celles de \textcite[voir p.~11-13 et 16]{signals-2019}.
-    Nous considérons comme "récent" tout événement survenu dans les six mois avant la période de référence
-    étudiée.
+    Nous souhaitons tester trois hypothèses reprenant celles de \textcite{signals-2019}. Nous considérons
+    comme "récent" tout événement survenu dans les six mois avant la période de référence étudiée.
 
     \newcommand{\newhyp}[2]{%
         \begin{hypo}
@@ -277,9 +277,9 @@
             autres, seul celui qui la plus longue chaîne de \en{commits} a été retenu comme représentant du
             groupe ;
         \item sont exclus pour inactivité les projets n'ayant reçu aucun \en{commit} pendant la période de
-            référence \parencite[voir][]{mining-github-2014} ;
-        \item sont exclus pour caractère non-collaboratif les projets ayant vu moins de deux
-            contributeurs uniques récents \parencite[voir][]{mining-github-2014}.
+            référence \parencite{mining-github-2014} ;
+        \item sont exclus pour caractère non-collaboratif les projets ayant vu moins de deux contributeurs
+            uniques récents \parencite{mining-github-2014}.
     \end{itemize}
 
     Un nœud du graphe de l'archive de Software Heritage peut représenter un \en{commit} ("\en{revisions}"),
@@ -353,7 +353,7 @@
     Sur les $60 966$ projets distincts (sans historique commun) analysés, $14\%$ d'entre eux possèdent des
     instructions de contribution. Les nombres de \en{commits} récents, de contributeurs récents et de nouveaux
     contributeurs varient fortement au sein de cette population, la distribution n'est normale dans aucun des
-    deux cas (voir figure \ref{fig:distribution}).
+    deux cas (voir Fig. \ref{fig:distribution}).
 
     \begin{figure}[ht]
         % Distribution
@@ -408,22 +408,21 @@
     \end{figure}
 
     Les projets possédant des instructions de contribution ont en moyenne plus de nouveaux contributeurs (voir
-    figure \ref{fig:hasContrib}), un test de Wilcoxon-Mann-Whitney donne une taille d'effet $\rho \approx
-    0.57$ et confirme ($p \approx 0$) que les deux distribution sont bien différente. L'hypothèse du test
-    étant que les projets avec instructions de contribution ont un meilleur score que les autres
-    (contrairement à la version \en{two-tailed}), nous pouvons valider
-    \hyperref[hyp:contributionguidelines]{l'hypothèse H\ref*{hyp:contributionguidelines}}. Ce résultat est
-    cohérent avec ceux de \textcite[p.~11]{signals-2019}. De futures recherches pourraient essayer de
-    déterminer si ce plus grand nombre de nouveaux contributeurs \emph{ayant réussi} à contribuer est dû
-    uniquement à ce plus grand nombre de nouveaux contributeurs \emph{essayant} de contribuer, ou si la
-    présence d'instructions de contribution a un réel rôle dans le succès d'une tentative de contribution. Il
-    est tout de même important de noter que, bien que le test de Wilcoxon-Mann-Whitney ne soit pas
-    paramétrique et puisse donc s'appliquer à ces données, sa robustesse diminue significativement lorsque la
-    distribution des données ne suit pas une loi normale \emph{et} que les groupes comparés ont une variance
-    significativement différente \parencite{WMW-robustness-1998}, ce qui est le cas ici (voir figures
-    \ref{sfig:newContributorQQplot} et \ref{sfig:hasContribVariance}). Ce point, ainsi que la petite taille
-    d'effet obtenue, justifieraient une attention plus particulière à la collecte et préparation des données
-    afin d'approcher une distribution normale et d'en homogénéiser la variance.
+    Fig. \ref{fig:hasContrib}), un test de Wilcoxon-Mann-Whitney donne une taille d'effet $\rho \approx 0.57$
+    et confirme ($p \approx 0$) que les deux distribution sont bien différente. L'hypothèse du test étant que
+    les projets avec instructions de contribution ont un meilleur score que les autres (contrairement à la
+    version \en{two-tailed}), nous pouvons valider \hyperref[hyp:contributionguidelines]{l'hypothèse
+    H\ref*{hyp:contributionguidelines}}. Ce résultat est cohérent avec ceux de \textcite[p.~11]{signals-2019}.
+    De futures recherches pourraient essayer de déterminer si ce plus grand nombre de nouveaux contributeurs
+    \emph{ayant réussi} à contribuer est dû uniquement à ce plus grand nombre de nouveaux contributeurs
+    \emph{essayant} de contribuer, ou si la présence d'instructions de contribution a un réel rôle dans le
+    succès d'une tentative de contribution. Il est tout de même important de noter que, bien que le test de
+    Wilcoxon-Mann-Whitney ne soit pas paramétrique et puisse donc s'appliquer à ces données, sa robustesse
+    diminue significativement lorsque la distribution des données ne suit pas une loi normale \emph{et} que
+    les groupes comparés ont une variance significativement différente \parencite{WMW-robustness-1998}, ce qui
+    est le cas ici (voir Fig. \ref{sfig:newContributorQQplot} et \ref{sfig:hasContribVariance}). Ce point,
+    ainsi que la petite taille d'effet obtenue, justifieraient une attention plus particulière à la collecte
+    et préparation des données afin d'approcher une distribution normale et d'en homogénéiser la variance.
 
     \begin{figure}
         \centering
@@ -456,8 +455,8 @@
     \end{figure}
 
     Un premier modèle de régression linéaire utilisant la méthode des moindres carrés ordinaires a été calculé
-    pour comparer le nombre de contributeurs récents avec celui des nouveaux contributeurs
-    (Fig.~\ref{fig:contributorCount}). Un test d'homoscédasticité de White revèle une forte hétéroscédasticité
+    pour comparer le nombre de contributeurs récents avec celui des nouveaux contributeurs (voir
+    Fig.~\ref{fig:contributorCount}). Un test d'homoscédasticité de White revèle une forte hétéroscédasticité
     des données de la régression ($p = 0$), ce qui implique que la méthode OLS n'est pas la plus
     statistiquement efficace pour modéliser la relation entre les deux variables \parencite{GLS-2021}. Le
     modèle retenu utilise donc la méthode des moindres carrés généralisée (modèle
@@ -478,10 +477,10 @@
     Suivant la même approche pour l'analyse du nombre de \en{commits} récents, une première régression avec la
     méthode des moindres carrés ordinaires a d'abord été faite, puis écartée par un test d'homoscédasticité de
     White. C'est donc une régression linéaire utilisant la méthode des moindres carrés généralisée qui a été
-    retenue (Fig.~\ref{fig:commitCount}). Le modèle suggère ici aussi une corrélation positive entre le nombre
-    de \en{commits} récents d'un projet et son nombre de nouveaux contributeurs, mais son coefficient de
-    détermination est trop faible ($R^2 \approx 0.10$) pour considérer que le modèle représente fidèlement des
-    données du problème. Nous ne pouvons donc conclure à une relation entre ces deux variables et devons
+    retenue (voir Fig.~\ref{fig:commitCount}). Le modèle suggère ici aussi une corrélation positive entre le
+    nombre de \en{commits} récents d'un projet et son nombre de nouveaux contributeurs, mais son coefficient
+    de détermination est trop faible ($R^2 \approx 0.10$) pour considérer que le modèle représente fidèlement
+    des données du problème. Nous ne pouvons donc conclure à une relation entre ces deux variables et devons
     rejeter \hyperref[hyp:recentcommitcount]{l'hypothèse H\ref*{hyp:recentcommitcount}}. Ce résultat ne
     rejoint cette fois pas ceux de \textcite[p.~13,16]{signals-2019}. Cela pourrait signifier que le nombre de
     \en{commits} récents d'un projet est un signal que les nouveaux contributeurs potentiels utilisent \emph{à
