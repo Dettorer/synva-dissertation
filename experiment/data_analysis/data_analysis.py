@@ -120,14 +120,16 @@ def write_initial_viz(data: pd.DataFrame) -> None:
     ]:
         # column descriptions, LaTeX format
         # the first `replace` fixes a math formatting oversight from
-        # `to_latex()`, the second one makes each column name bold
+        # `to_latex()`, the second one makes each column name bold, the third
+        # one remove decimals for integers
         tex_output = data[[column_name]] \
             .describe() \
             .style \
             .format(precision=2) \
             .to_latex() \
             .replace("%", "\\%") \
-            .replace(f"{column_name}", f"\\textbf{{{column_name}}}")
+            .replace(f"{column_name}", f"\\textbf{{{column_name}}}") \
+            .replace(".00", "")
         with open(f"{column_name}_describe.tex", "w") as outfile:
             outfile.write(tex_output)
 
