@@ -126,15 +126,14 @@
 
     \section{Introduction}
 
-    Quelques initiatives existent pour enseigner les pratiques du logiciel libre dans l'éducation supérieur et
-    la formation professionnelle, mais elles sont rares. Certaines viennent des communautés du logiciel libre,
-    comme le
+    Différentes initiatives existent pour enseigner les pratiques du logiciel libre dans l'éducation supérieur
+    et la formation professionnelle. Certaines viennent des communautés du logiciel libre, comme le
     \href{https://www.edx.org/professional-certificate/linuxfoundationx-open-source-software-development-linux-and-git}{\en{Professional
     Certificate in Open Source Software Development, Linux and Git}} de la \en{Linux Foundation}, ou les
     séminaires de l'\href{https://opensource.org/osi-open-source-education}{\en{open source initiative}}.
     Certaines universités proposent des cursus en informatique abordant les pratiques du logiciel libre, comme
-    l'Université de l'État de Caroline du Nord aux États-Unis \parencite{oss-edu-2008} ; ou
-    l'université de Calais qui propose actuellement un
+    l'Université de l'État de Caroline du Nord aux États-Unis \parencite{oss-edu-2008} ; ou l'université de
+    Calais qui propose actuellement un
     \href{https://www.univ-littoral.fr/formation/offre-de-formation/masters/master-informatique-ingenierie-du-logiciel-libre/}{Master
     Informatique - Ingénierie du logiciel libre} en alternance.
 
@@ -153,11 +152,11 @@
     \textcite{barriers-2018} notent la difficulté des nouveaux volontaires à rejoindre une communauté de
     logiciel libre, citant comme exemple extrême le projet Apache Hadoop qui a vu 82\% de ses nouveaux
     volontaires quitter le projet après leur première contribution \parencite{hadoop-dropout-2013}. Une des
-    tendances qu'ils trouvent est que la majorité ($58\%$) des barrières rencontrées dans leur étude sont de
-    nature sociale et non techniques \parencite[p.~1008]{barriers-2018}. Il semble en outre que les outils et
-    la documentation représentent la majorité des barrières techniques rencontrées, éléments ayant
-    paradoxalement pour objectif d'aider les nouvelles contributions. Ce frein semble empirer lorsque les
-    méthodes d'apprentissage et de traitement de l'information de la personne consistent à rassembler le plus
+    tendances observées est que la majorité ($58\%$) des barrières rencontrées dans leur étude sont de nature
+    sociale et non technique \parencite[p.~1008]{barriers-2018}. Il semble en outre que les outils et la
+    documentation représentent la majorité des barrières restantes, éléments ayant paradoxalement
+    pour objectif d'aider les nouvelles contributions. Ce frein semble empirer lorsque les méthodes
+    d'apprentissage et de traitement de l'information de la personne consistent à rassembler le plus
     d'information possible avant de commencer à agir. Ces méthodes étant sur-représentées chez les femmes
     \parencite{gender-information-processing-1995,gender-information-processing-2015}, ces barrières
     deviennent discriminantes selon le genre, et peuvent participer à expliquer la sous-représentation des
@@ -170,9 +169,9 @@
     approche quantitative encore rare consiste à étudier la progression du nombre total de contributeurs au
     cours de la vie du projet \cite{contributor-count-2006}. Similairement, \textcite{signals-2019} étudient
     les signaux que les potentiels nouveaux contributeurs observent pour choisir un projet auquel contribuer.
-    Ils s'intéressent pour cela spécifiquement aux projets disponibles publiquement sur \en{github}, ce qui
-    leur permet d'étudier empiriquement l'effet des signaux que la plateforme met en évidence. Ils suggèrent
-    qu'une mesure possible de l'accessibilité pour les nouveaux contributeurs ("\en{newcomers openness}" dans
+    Ils s'intéressent pour cela spécifiquement aux projets disponibles publiquement sur GitHub, ce qui leur
+    permet d'étudier empiriquement l'effet des signaux que la plateforme met en évidence. Ils suggèrent qu'une
+    mesure possible de l'accessibilité pour les nouveaux contributeurs ("\en{newcomers openness}" dans
     l'article) est le pourcentage de \en{pull requests} créées par des contributeurs externes, qu'ils
     définissent par opposition aux \en{core contributors} : les personnes auteurs de plus de 5\% des
     \en{commits} du projet. En réalité cependant, leur étude ne retient que la présence ou non de \en{pull
@@ -195,9 +194,10 @@
     Il faut donc approfondir la recherche dans cette direction, mais le nombre de projets et des artéfacts qui
     leur sont liés augmente exponentiellement \parencite{swh-growth-2019}, avec un phénomène de duplication :
     des fichiers identiques se retrouvent dans de nombreux projets différents (comme les notices de licence).
-    Beaucoup de \en{commits} eux-même peuvent se trouver dans plusieurs projets différents après un \en{fork}.
-    L'analyse à grande échelle de l'historique de développement des projets de logiciel libre devient donc de
-    plus en plus complexe à implémenter efficacement.
+    Beaucoup de traces de nouvelles contributions (ou \en{commits}) elles-même peuvent se trouver dans
+    plusieurs projets différents après duplication (ou \en{fork}) d'un projet vers un autre. L'analyse à
+    grande échelle de l'historique de développement devient donc de plus en plus complexe à implémenter
+    efficacement.
 
     \section{L'archive de logiciels de Software Heritage}
 
@@ -216,10 +216,9 @@
     L'archive est publique et se veut exploitable pour la recherche \parencite{swh-2017}. Il s'agit du corpus
     que \textcite{swh-graph-2020} ont utilisé comme exemple pour leur modèle de compression. L'archive
     comptait en 2018 plus d'un milliard de \en{commits} uniques archivés depuis 85 millions d'origines
-    différentes (\en{remotes} \en{git}, paquets \href{https://pypi.org/}{PyPi}, etc.). L'archive grandit de
-    façon continue en ajoutant petit à petit de nouveaux projets et de nouveaux artéfacts à chaque évolution
-    des projets déjà archivés, ce qui en fait l'un des corpus les plus complets et exploitables par la
-    recherche scientifique \parencite{swh-2019,swh-growth-2019}.
+    différentes. L'archive grandit de façon continue en ajoutant petit à petit de nouveaux projets et de
+    nouveaux artéfacts à chaque évolution des projets déjà archivés, ce qui en fait l'un des corpus les plus
+    complets et exploitables par la recherche scientifique \parencite{swh-2019,swh-growth-2019}.
 
     \section{Méthodologie}
 
@@ -240,7 +239,7 @@
     premier juin 2019 et le premier septembre 2019 \parencite{signals-2019} (voir aussi section
     \ref{sec:accessibility-measure}). Cette période de référence a été choisie sur recommandation
     de Software Heritage, la désignant comme un bon compromis entre le nombre de projets pour lesquels les
-    données sont disponible dans l'archive et le caractère récent des observations.
+    données sont disponibles dans l'archive et le caractère récent des observations.
 
     Nous souhaitons tester trois hypothèses reprenant celles de \textcite{signals-2019}. Nous considérons
     comme "récent" tout événement survenu dans les six mois avant la période de référence étudiée.
@@ -257,7 +256,7 @@
     }
 
     \newhyp{recentcontributorcount}{%
-        le nombre de contributeurs uniques récents d'un projet est positivement corrélée à son accessibilité
+        le nombre de contributeurs uniques récents d'un projet est positivement corrélé à son accessibilité
         pour les nouveaux contributeurs.%
     }
 
@@ -284,7 +283,7 @@
 
     Un nœud du graphe de l'archive de Software Heritage peut représenter un \en{commit} ("\en{revisions}"),
     une origine (l'URL à partir de laquelle a été archivé un projet), un \en{snapshot} (point de départ daté
-    d'une passe d'archivage), un dossier ou un fichiers. Un arc $u \xrightarrow{succ} v$ peut donc signifier,
+    d'une passe d'archivage), un dossier ou un fichier. Un arc $u \xrightarrow{succ} v$ peut donc signifier,
     en fonction des types de $u$ et $v$, que : 
 
     \begin{itemize}
@@ -296,14 +295,14 @@
     \end{itemize}
 
     Nous effectuons un premier parcours du graphe à partir de chaque origine afin d'identifier le représentant
-    de chaque groupe de fork (composante fortement connexe sur les liens entre \en{commits}). Un parcours
+    de chaque groupe de fork (composante fortement connexe sur les liens entre \en{commits}). Un parcours en
     largeur avec marqueurs de niveaux en remontant des \en{commits} initiaux vers les origines qui lui sont
     accessibles permet d'identifier la plus longue chaîne de \en{commits} et donc le représentant de son
     groupe de \en{fork}. Pour le \en{snapshot} le plus récent de chaque origine ainsi retenue, un nouveau
     parcours est effectué à partir de sa branche principale afin de récolter les données de recherche. Le
     nombre de contributeurs et de \en{commits} récents se compte facilement lors du parcours, mais la présence
     d'instructions de contribution est plus difficile à vérifier car le graphe ne contient que les noms et la
-    hierarchie des fichiers d'un projet, mais pas leur contenu. Ce parcours ne vérifie donc initialement que
+    hiérarchie des fichiers d'un projet, mais pas leur contenu. Ce parcours ne vérifie donc initialement que
     la présence d'un fichier \texttt{CONTRIBUTING.md} ou assimilé, auquel cas nous validons la présence
     d'instructions de contribution. En son absence, nous vérifions la présence d'un fichier \texttt{README.md}
     ou assimilé, en cas de deuxième absence nous validons l'\emph{absence} d'instructions de contribution. En
@@ -319,14 +318,14 @@
     \href{https://registry.opendata.aws/software-heritage}{software-heritage}. Le site limite le nombre de
     requêtes autorisées par adresse IP à quelques dizaines par heure, contrairement au \en{registry}, mais ce
     dernier ne contient pas encore tous les contenus archivés. Nous téléchargeons donc en priorité via le
-    \en{registry} Amazon S3 et nous rabattons sur le site pour les fichiers manquants. Nous cherchons ensuite
-    dans ces \texttt{README} une section contenant le mot \en{contributing} ou une expression proche. Les noms
-    de sections sont identifiés en supposant que les \texttt{README} sont formattés en Markdown ou
+    \en{registry} Amazon S3 et nous nous rabattons sur le site pour les fichiers manquants. Nous cherchons
+    ensuite dans ces \texttt{README} une section contenant le mot \en{contributing} ou une expression proche.
+    Les noms de sections sont identifiés en supposant que les \texttt{README} sont formattés en Markdown ou
     reStructuredText et en se basant sur leur syntaxe officielle \parencite{markdown-headings,rst-sections}.
 
-    Un \en{replication package} contenant le code source et les bibliothèques utilisés dans ce mémoire, ainsi
-    que les données brut collectées, a été publié sur Zenodo
-    \parencite[anonymisé]{anonymous-replication-package}.
+    Un \en{replication package} contenant le code source et les bibliothèques utilisés pour l'étude présentée
+    dans notre article, ainsi que les données brutes collectées, est disponible sur Zenodo :
+    \href{https://zenodo.org/record/7464290}{zenodo.org/record/7464290}.
     % TODO: de-anonymize and upload new version to zenodo
 
     \section{Résultats et discussion}
@@ -386,8 +385,7 @@
         \end{subfigure}
 
         \caption{%
-            Distribution (avec ordonnée logarithmique) et diagrammes quantile-quantile pour variable
-            numérique%
+            Distributions (avec ordonnée logarithmique) et diagrammes quantile-quantile des données étudiées%
         }
         \label{fig:distribution}
     \end{figure}
@@ -409,20 +407,20 @@
 
     Les projets possédant des instructions de contribution ont en moyenne plus de nouveaux contributeurs (voir
     Fig. \ref{fig:hasContrib}), un test de Wilcoxon-Mann-Whitney donne une taille d'effet $\rho \approx 0.57$
-    et confirme ($p \approx 0$) que les deux distribution sont bien différente. L'hypothèse du test étant que
-    les projets avec instructions de contribution ont un meilleur score que les autres (contrairement à la
-    version \en{two-tailed}), nous pouvons valider \hyperref[hyp:contributionguidelines]{l'hypothèse
-    H\ref*{hyp:contributionguidelines}}. Ce résultat est cohérent avec ceux de \textcite[p.~11]{signals-2019}.
-    De futures recherches pourraient essayer de déterminer si ce plus grand nombre de nouveaux contributeurs
-    \emph{ayant réussi} à contribuer est dû uniquement à ce plus grand nombre de nouveaux contributeurs
-    \emph{essayant} de contribuer, ou si la présence d'instructions de contribution a un réel rôle dans le
-    succès d'une tentative de contribution. Il est tout de même important de noter que, bien que le test de
-    Wilcoxon-Mann-Whitney ne soit pas paramétrique et puisse donc s'appliquer à ces données, sa robustesse
-    diminue significativement lorsque la distribution des données ne suit pas une loi normale \emph{et} que
-    les groupes comparés ont une variance significativement différente \parencite{WMW-robustness-1998}, ce qui
-    est le cas ici (voir Fig. \ref{sfig:newContributorQQplot} et \ref{sfig:hasContribVariance}). Ce point,
-    ainsi que la petite taille d'effet obtenue, justifieraient une attention plus particulière à la collecte
-    et préparation des données afin d'approcher une distribution normale et d'en homogénéiser la variance.
+    et confirme ($p \approx 0$) que les deux distributions sont bien différentes. L'hypothèse du test étant
+    que les projets avec instructions de contribution ont un meilleur score que les autres, nous pouvons
+    valider \hyperref[hyp:contributionguidelines]{l'hypothèse H\ref*{hyp:contributionguidelines}}. Ce résultat
+    est cohérent avec ceux de \textcite[p.~11]{signals-2019}. De futures recherches pourraient essayer de
+    déterminer si ce plus grand nombre de nouveaux contributeurs \emph{ayant réussi} à contribuer est dû
+    uniquement à ce plus grand nombre de nouveaux contributeurs \emph{essayant} de contribuer, ou si la
+    présence d'instructions de contribution a un réel rôle dans le succès d'une tentative de contribution. Il
+    est tout de même important de noter que, bien que le test de Wilcoxon-Mann-Whitney ne soit pas
+    paramétrique et puisse donc s'appliquer à ces données, sa robustesse diminue significativement lorsque la
+    distribution des données ne suit pas une loi normale \emph{et} que les groupes comparés ont une variance
+    significativement différente \parencite{WMW-robustness-1998}, ce qui est le cas ici (voir Fig.
+    \ref{sfig:newContributorQQplot} et \ref{sfig:hasContribVariance}). Ce point, ainsi que la petite taille
+    d'effet obtenue, justifieraient une attention plus particulière à la collecte et préparation des données
+    afin d'approcher une distribution normale et d'en homogénéiser la variance.
 
     \begin{figure}
         \centering
@@ -456,10 +454,10 @@
 
     Un premier modèle de régression linéaire utilisant la méthode des moindres carrés ordinaires a été calculé
     pour comparer le nombre de contributeurs récents avec celui des nouveaux contributeurs (voir
-    Fig.~\ref{fig:contributorCount}). Un test d'homoscédasticité de White revèle une forte hétéroscédasticité
-    des données de la régression ($p = 0$), ce qui implique que la méthode OLS n'est pas la plus
-    statistiquement efficace pour modéliser la relation entre les deux variables \parencite{GLS-2021}. Le
-    modèle retenu utilise donc la méthode des moindres carrés généralisée (modèle
+    Fig.~\ref{fig:contributorCount}). Un test de White revèle une forte hétéroscédasticité des données de la
+    régression ($p = 0$), ce qui implique que la méthode OLS n'est pas la plus statistiquement efficace pour
+    modéliser la relation entre les deux variables \parencite{GLS-2021}. Le modèle retenu utilise donc la
+    méthode des moindres carrés généralisée (modèle
     \href{https://www.statsmodels.org/dev/generated/statsmodels.regression.linear_model.GLS.html}{GLS} du
     paquet Python \texttt{statsmodel}), il suggère effectivement que plus le nombre de contributeurs récents
     d'un projet est élevé, plus son nombre de nouveaux contributeurs l'est aussi. Le coefficient de
@@ -510,18 +508,17 @@
     libre pour les nouveaux contributeurs, la corrélation que nous observons entre ces deux variables pourrait
     s'expliquer par le fait que les mainteneurs d'un projet qui ont tendance à efficacement guider les
     nouveaux contributeurs ont aussi tendance à écrire des instructions de contribution. Par ailleurs,
-    plusieurs propriétés statistiques des données collectées rendent difficile leur analyse. Nous avons tenté
-    traiter ces difficultés au mieux de nos capacités, mais une collecte et une préparation plus rigoureuse
-    des données pourraient, au mieux, améliorer la fiabilité des conclusions que nous en avons tiré ou, au
-    pire, les invalider.
+    plusieurs propriétés statistiques des données collectées rendent difficile leur analyse ; une collecte et
+    une préparation plus rigoureuse des données pourraient, au mieux, améliorer la fiabilité des conclusions
+    que nous en avons tiré ou, au pire, les invalider.
 
     Les perspectives de recherche concernant l'accessibilité des projets de logiciel libre sont encore
-    nombreuses, le sujet étant à la fois très changeant et relativement nouveau, la littérature existe mais
+    nombreuses : le sujet étant à la fois très changeant et relativement nouveau, la littérature existe mais
     est encore très qualitative. De futures études quantitatives pourraient s'intéresser aux mécanismes
     causaux responsables de l'accessibilité observée des projets. Le domaine de l'analyse automatique des
     dépôts logiciels pose encore beaucoup de questions intéressantes, l'archive de Software Heritage par
     exemple apporte une nouvelle méthode d'observation particulièrement puissante, mais celle-ci est encore
-    jeune et peu d'étude se consacrent aux bénéfices et limites de ce qu'elle peut apporter à la science.
+    jeune et peu d'études se consacrent aux bénéfices et limites de ce qu'elle peut apporter à la science.
     Enfin, si nos résultats suggèrent que la présence d'instructions de contribution ainsi que le nombre de
     contributeurs uniques récents sont de bons indicateurs à observer pour un enseignant souhaitant trouver un
     projet sur lequel faire travailler ses étudiants, de futures recherches mériteraient d'être conduites afin
