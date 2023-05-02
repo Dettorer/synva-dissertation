@@ -176,66 +176,23 @@
         pythonDistribution ++ javaDistribution ++ [ cmph pkgs.postgresql ];
     in
     rec {
-      packages.dissertation = pkgs.stdenv.mkDerivation {
-        name = "PaulHervotSYNVADissertation";
+      packages.documents = pkgs.stdenv.mkDerivation {
+        name = "documents";
         src = ./.;
         buildInputs = [ texDistribution ] ++ texDependencies;
         phases = [ "unpackPhase" "buildPhase" "installPhase" ];
         buildPhase = ''
-          cd master_dissertation
           export FONTCONFIG_FILE=${FONTCONFIG_FILE}
           mkdir -p .cache/texmf-var
           DIR=$(mktemp -d)
           env \
             TEXMFHOME=.cache TEXMFVAR=.cache/texmf-var \
             SOURCE_DATE_EPOCHE=${toString self.lastModified} \
-            latexmk -interaction=nonstopmode
+            make documents
         '';
         installPhase = ''
           mkdir -p $out
-          mv build/main.pdf $out/Paul_Hervot_M2_dissertation.pdf
-        '';
-      };
-
-      packages.slides = pkgs.stdenv.mkDerivation {
-        name = "PaulHervotSYNVADissertationSlides";
-        src = ./.;
-        buildInputs = [ texDistribution ] ++ texDependencies;
-        phases = [ "unpackPhase" "buildPhase" "installPhase" ];
-        buildPhase = ''
-          cd defense_slides
-          export FONTCONFIG_FILE=${FONTCONFIG_FILE}
-          mkdir -p .cache/texmf-var
-          DIR=$(mktemp -d)
-          env \
-            TEXMFHOME=.cache TEXMFVAR=.cache/texmf-var \
-            SOURCE_DATE_EPOCHE=${toString self.lastModified} \
-            latexmk -interaction=nonstopmode
-        '';
-        installPhase = ''
-          mkdir -p $out
-          mv build/slides.pdf $out/Paul_Hervot_M2_dissertation_slides.pdf
-        '';
-      };
-
-      packages.paper = pkgs.stdenv.mkDerivation {
-        name = "EIAH2023Paper";
-        src = ./.;
-        buildInputs = [ texDistribution ] ++ texDependencies;
-        phases = [ "unpackPhase" "buildPhase" "installPhase" ];
-        buildPhase = ''
-          cd EIAH_2023_paper
-          export FONTCONFIG_FILE=${FONTCONFIG_FILE}
-          mkdir -p .cache/texmf-var
-          DIR=$(mktemp -d)
-          env \
-            TEXMFHOME=.cache TEXMFVAR=.cache/texmf-var \
-            SOURCE_DATE_EPOCHE=${toString self.lastModified} \
-            latexmk -interaction=nonstopmode
-        '';
-        installPhase = ''
-          mkdir -p $out
-          mv build/paper.pdf $out/EIAH_2023_paper.pdf
+          mv documents/* $out/
         '';
       };
 
@@ -277,7 +234,7 @@
         '';
       };
 
-      packages.default = packages.dissertation;
+      packages.default = packages.documents;
 
       devShells.default = pkgs.mkShell {
         inherit FONTCONFIG_FILE;

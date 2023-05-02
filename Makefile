@@ -1,6 +1,8 @@
 DOCUMENTS=$(addprefix documents/,masters_dissertation.pdf masters_defense.pdf EIAH_2023_article.pdf)
 
-all: ${DOCUMENTS}
+all: documents
+
+documents: ${DOCUMENTS}
 
 # Master's dissertation
 documents/masters_dissertation.pdf:
@@ -22,4 +24,4 @@ documents/EIAH_2023_article.pdf:
 
 # Make everything phony to force the latexmk invocation, which will handle the
 # real dependencies
-.PHONY: ${DOCUMENTS}
+.PHONY: ${DOCUMENTS} documents
