@@ -11,29 +11,21 @@ jobs:
       uses: actions/checkout@v2.4.0
     - name: Install nix
       uses: cachix/install-nix-action@v16
-    - name: Setup cachix
-      uses: cachix/cachix-action@v10
-      with:
-        name: dettorer
-        authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
 
-    # Build, publish to cachix and retrieve the PDF in the current directory
-    - name: Build the PDF
+    # Build and retrieve the documents in the current directory
+    - name: Build the documents
       id: nix-build
       run: nix build
-    - name: Publish the build result to cachix
-      run: nix path-info --recursive | cachix push dettorer
     - name: Retrieve the PDF
       run: |
-        cp $(nix path-info)/Paul_Hervot_M2_dissertation.pdf .
+        cp $(nix path-info)/*.pdf .
 
     # Upload the PDF as job artifact
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: "Dissertation PDF"
-        path: |
-          Paul_Hervot_M2_dissertation.pdf
+        name: "documents"
+        path: ./*.pdf 
 
     # If the build failed, upload the build log instead
     - name: Retrieve build log
@@ -62,27 +54,16 @@ jobs:
       - name: Download artifacts
         uses: actions/download-artifact@v2
         with:
-          name: "Dissertation PDF"
+          name: "documents"
 
-      # Create a new release to host the PDF
-      - name: Create Release
-        uses: actions/create-release@v1
-        id: create_release
-        env:
-          GITHUB_TOKEN: '${{secrets.GITHUB_TOKEN}}'
+      # Create a new release with the documents as assets
+      - uses: meeDamian/github-release@2.0
         with:
-          tag_name: 'dissertation-${{ steps.vars.outputs.date }}-${{ steps.vars.outputs.sha8 }}'
-          release_name: 'Dissertation (version ${{ steps.vars.outputs.date }})'
-          draft: false
-          prerelease: false
-
-      # Attach the PDF to the release
-      - name: Attach PDF
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
-        with:
-          upload_url: '${{ steps.create_release.outputs.upload_url }}'
-          asset_path: ./Paul_Hervot_M2_dissertation.pdf
-          asset_name: Paul_Hervot_M2_dissertation.pdf
-          asset_content_type: application/pdf
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: 'documents-${{ steps.vars.outputs.date }}-${{ steps.vars.outputs.sha8 }}'
+          name: 'Documents (version ${{ steps.vars.outputs.date }})'
+          gzip: false
+          files: >
+            masters_dissertation.pdf
+            masters_defense.pdf
+            EIAH_2023_article.pdf 
