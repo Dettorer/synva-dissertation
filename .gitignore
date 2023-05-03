@@ -3,3 +3,6 @@ result
 .venv
 _minted-main
 documents
+replication_package
+replication_package.zip
+swh-graph-1.0.1.jar
