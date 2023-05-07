@@ -1,10 +1,11 @@
 name: "Build and release"
 on:
   push:
+    tags:
+      - '**'
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
     steps:
     # Set up the build environment
     - name: Checkout
@@ -20,7 +21,7 @@ jobs:
       run: |
         cp $(nix path-info)/*.pdf .
 
-    # Upload the PDF as job artifact
+    # Upload the PDFs as job artifact
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
@@ -40,16 +41,8 @@ jobs:
 
   release:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
     needs: [build]
     steps:
-      # Set up the variables that we will use to build the release name
-      - name: Set release variables
-        id: vars
-        run: |
-          echo "::set-output name=date::$(date +'%Y-%m-%d-%Hh%Mm%Ss')"
-          echo "::set-output name=sha8::$(echo ${GITHUB_SHA} | cut -c1-8)"
-
       # Retrieve the PDF
       - name: Download artifacts
         uses: actions/download-artifact@v2
@@ -60,8 +53,7 @@ jobs:
       - uses: meeDamian/github-release@2.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          tag: 'documents-${{ steps.vars.outputs.date }}-${{ steps.vars.outputs.sha8 }}'
-          name: 'Documents (version ${{ steps.vars.outputs.date }})'
+          name: 'Documents (as of ${{ github.ref_name }} tag)'
           gzip: false
           files: >
             masters_dissertation.pdf
