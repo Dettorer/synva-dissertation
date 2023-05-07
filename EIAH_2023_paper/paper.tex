@@ -23,6 +23,7 @@
 \MakeOuterQuote{"}
 % Fix LLNCS language handling of the "keywords" part of the abstracts
 \addto{\captionsfrench}{\renewcommand{\keywordname}{\textbf{Mots-clé:}}}
+\addto{\captionsfrench}{\renewcommand{\andname}{et}}
 
 % Hyphenation
 \hyphenation{Git-Hub}
@@ -70,12 +71,14 @@
 \author{%
     Paul Hervot\inst{1}%
     \and%
-    Benoît Crespin\inst{2}\orcidID{0000-0002-9105-0243}%
+    Benoît Crespin\inst{2}%
 }
 \institute{
-    Laboratoire de Recherche de L’EPITA (LRE), 14-16 rue Voltaire, 94270 Le Kremlin-Bicêtre, France
+    Laboratoire de Recherche de L’EPITA (LRE), 14-16 rue Voltaire, \\94270 Le Kremlin-Bicêtre, France
     \and
     Université de Limoges, XLIM/ASALI, UMR CNRS 7252, France
+    %\\
+    %{ORCID~: 0000-0002-9105-0243}
 }
 % hack the "short author" mecanism to display the conference name on even pages instead
 \authorrunning{Environnements Informatiques pour l’Apprentissage Humain 2023}
@@ -95,8 +98,7 @@
         une corrélation positive entre le nombre de premières contributions réussies dans un projet et la
         présence d'instructions de contribution, ainsi qu'entre ce même nombre et celui des contributeurs
         uniques récents du projet. Ces indicateurs trouveront une utilité dans l'enseignement des pratiques du
-        logiciel libre, les enseignants de ce sujet rencontrant des difficultés à sélectionner des projets
-        accessibles sur lesquels faire travailler leurs étudiants.
+        logiciel libre pour aider les enseignants à sélectionner des projets accessibles pour leurs étudiants.
 
         \keywords{
             Collecte, traitement et analyse des traces d’apprentissage \and
@@ -117,8 +119,8 @@
         Our results show a positive correlation between the number of new contributors of a project
         successfully bringing their contribution to completion and the presence of contributing guidelines, as
         well as between that same number and the number of recent unique contributors in the project. Such
-        signals could find a use in the teaching of FOSS practices, as teachers of this subject often find it
-        difficult to select an accessible project for their students to work on.
+        signals could find a use in the teaching of FOSS practices, helping teachers to select accessible
+        projects for their students.
 
         \keywords{
             Collection, processing and analysis of learning traces \and
@@ -233,7 +235,7 @@
     téléchargeons donc en priorité via le \en{registry} Amazon S3 et nous nous rabattons sur le site pour les
     fichiers manquants. Nous cherchons ensuite dans le \texttt{README} une section contenant le mot
     \en{contributing} ou une expression proche. Les noms de sections sont identifiés en supposant que les
-    \texttt{README} sont formattés en Markdown ou reStructuredText \parencite{markdown-headings,rst-sections}.
+    \texttt{README} sont formatés en Markdown ou reStructuredText \parencite{markdown-headings,rst-sections}.
     Enfin, le nombre de nouveaux contributeurs est calculé en comptant les contributeurs uniques de la période
     de référence qui n'apparaissent dans aucun \en{commit} antérieur à cette période, et le nombre de
     contributeurs uniques récents en les comptant simplement dans la période de six mois précédent la période
@@ -278,8 +280,8 @@
     \emph{ayant réussi} à contribuer est dû uniquement à ce plus grand nombre de nouveaux contributeurs
     \emph{essayant} de contribuer, ou si la présence d'instructions de contribution a un réel rôle dans le
     succès d'une tentative de contribution. Notons tout de même que la robustesse du test MWW diminue
-    significativement dans une situation comme la notre (distribution non-normale et variance
-    significativement différente entre les deux catégories) \parencite{WMW-robustness-1998}.
+    significativement dans une situation comme la nôtre (distribution non-normale et variances
+    significativement différentes entre les deux catégories) \parencite{WMW-robustness-1998}.
 
     \begin{figure}
         \centering
