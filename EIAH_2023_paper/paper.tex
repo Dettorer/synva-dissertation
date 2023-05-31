@@ -21,9 +21,10 @@
 \newcommand{\en}[1]{\foreignlanguage{english}{\emph{#1}}}
 \usepackage{csquotes}
 \MakeOuterQuote{"}
-% Fix LLNCS language handling of the "keywords" part of the abstracts
+% Fix LLNCS language handling of the "keywords" part of the abstracts and figures' caption's label
 \addto{\captionsfrench}{\renewcommand{\keywordname}{\textbf{Mots-clé:}}}
 \addto{\captionsfrench}{\renewcommand{\andname}{et}}
+\addto{\captionsfrench}{\renewcommand{\figurename}{\textup{Fig.}}}
 
 % Hyphenation
 \hyphenation{Git-Hub}
@@ -51,6 +52,8 @@
     \mkbibacro{URL}\addcolon\space
     \href{#1}{\nolinkurl{\thefield{verba}}}%
 }
+% redefine the numbering of references from "[1]" to "1."
+\DeclareFieldFormat{labelnumberwidth}{#1.}
 \DefineBibliographyExtras{french}{\restorecommand\mkbibnamefamily}
 \addbibresource{../references.bib}
 
@@ -65,9 +68,10 @@
 \usepackage{todonotes}
 \usepackage{mathtools}
 \usepackage[inline]{enumitem}
+\usepackage{xcolor}
 
 \title{L'Identification des Projets de Logiciel Libre Accessibles aux Nouveaux Contributeurs}
-\titlerunning{Projets de Logiciel Libre Accessibles aux Nouveaux Contributeurs}
+\titlerunning{\small\color{gray}Projets de Logiciel Libre Accessibles aux Nouveaux Contributeurs}
 \author{%
     Paul Hervot\inst{1}%
     \and%
@@ -81,7 +85,7 @@
     %{ORCID~: 0000-0002-9105-0243}
 }
 % hack the "short author" mecanism to display the conference name on even pages instead
-\authorrunning{Environnements Informatiques pour l’Apprentissage Humain 2023}
+\authorrunning{\small\color{gray}Environnements Informatiques pour l’Apprentissage Humain 2023}
 
 \begin{document}
     \maketitle

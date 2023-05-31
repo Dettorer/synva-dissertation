@@ -108,6 +108,7 @@
           minted
           morewrites
           multirow
+          nature
           needspace
           nomencl
           options
@@ -123,6 +124,7 @@
           transparent
           trimspaces
           xfor
+          xcolor
           xifthen
           xpatch
           xstring
