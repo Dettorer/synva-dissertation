@@ -1,4 +1,4 @@
-DOCUMENTS=$(addprefix documents/,masters_dissertation.pdf masters_defense.pdf EIAH_2023_article.pdf)
+DOCUMENTS=$(addprefix documents/,masters_dissertation.pdf masters_defense.pdf EIAH_2023_article.pdf EIAH_2023_slides.pdf)
 
 all: documents
 
@@ -21,6 +21,12 @@ documents/EIAH_2023_article.pdf:
 	mkdir -p documents
 	cd EIAH_2023_paper && latexmk
 	cp EIAH_2023_paper/build/paper.pdf $@
+
+# EIAH 2023 presentation slides
+documents/EIAH_2023_slides.pdf:
+	mkdir -p documents
+	cd EIAH_2023_slides && latexmk
+	cp EIAH_2023_slides/build/slides.pdf $@
 
 # ReplicationPackage
 replication_package.zip: swh-graph-1.0.1.jar
