@@ -1,4 +1,4 @@
-name: "Build and release"
+name: "Documents"
 on:
   push:
     tags:

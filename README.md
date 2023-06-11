@@ -1,11 +1,11 @@
 # SYNVA M2 dissertation and corresponding EIAH 2023 article
 
-Last successful build of each document (click the badge to access the
-corresponding PDF):
+Last successful build of each document:
 
-- Master's dissertation: [![workflow status badge](https://github.com/Dettorer/synva-dissertation/actions/workflows/build-and-release.yml/badge.svg)](https://github.com/Dettorer/synva-dissertation/releases/latest/download/masters_dissertation.pdf)
-- Master's defense slides: [![workflow status badge](https://github.com/Dettorer/synva-dissertation/actions/workflows/build-and-release.yml/badge.svg)](https://github.com/Dettorer/synva-dissertation/releases/latest/download/masters_defense.pdf)
-- EIAH 2023 article: [![workflow status badge](https://github.com/Dettorer/synva-dissertation/actions/workflows/build-and-release.yml/badge.svg)](https://github.com/Dettorer/synva-dissertation/releases/latest/download/EIAH_2023_article.pdf)
+| ![Workflow status badge](https://github.com/Dettorer/synva-dissertation/actions/workflows/documents.yml/badge.svg) | Main document | Presentation slides (presentation date) |
+|---|---|---|
+| Master's dissertation | [manuscript](https://github.com/Dettorer/synva-dissertation/releases/latest/download/masters_dissertation.pdf) | [slides (Sept. 8, 2022)](https://github.com/Dettorer/synva-dissertation/releases/latest/download/masters_defense.pdf) |
+| EIAH 2023 article | [article](https://github.com/Dettorer/synva-dissertation/releases/latest/download/EIAH_2023_article.pdf) | [slides (June 15, 2023)](https://github.com/Dettorer/synva-dissertation/releases/latest/download/EIAH_2023_slides.pdf) |
 
 My research dissertation for Strasbourg University's
 [SYNVA](https://sfc.unistra.fr/formations/formation_-_ingenierie-de-formation_-_master-2-ingenierie-des-systemes-numeriques-virtuels-pour-lapprentissage-synva_-_2393/)
