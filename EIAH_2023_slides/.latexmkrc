@@ -10,4 +10,4 @@ $pdf_previewer = 'start evince';
 set_tex_cmds( '--shell-escape %O %S' );
 
 # vendored APA biblatex style
-ensure_path( 'TEXINPUTS', '../biblatex-apa//' );
+ensure_path( 'TEXINPUTS', './biblatex-lncs//' );

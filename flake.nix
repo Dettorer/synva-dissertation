@@ -116,6 +116,7 @@
           relsize
           sidenotes
           silence
+          siunitx
           subfiles
           svg
           thmtools

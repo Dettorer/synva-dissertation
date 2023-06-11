@@ -20,13 +20,14 @@
 }
 
 % bibliography configuration
-\usepackage[style=apa,backref=true]{biblatex}
+\usepackage[style=lncs,backend=biber,backref=true]{biblatex}
 
 \usepackage{csquotes} % biblatex extensions for non-english languages
 \usepackage{caption} % more control over captions
 \usepackage{subcaption} % for subfigures
 \usepackage{ccicons} % icons for Creative-Commons licenses
 \usepackage{hologo} % tex and co. logos
+\usepackage{siunitx} % for displaying large numbers
 \usepackage[inkscapepath=./build/svg-inkscape/]{svg}
 
 \graphicspath{{images/} {../images}}
@@ -57,99 +58,129 @@
 }
 \date{15 juin 2023}
 
+\newcommand{\mycite}[1]{%
+    \citeauthor{#1} \citeyear{#1} \cite{#1}%
+}
+
 \begin{document}
 
 \frame{\titlepage{}}
 
-\section{Évolution du sujet}
+\section{Contexte}
 
-\begin{frame}[fragile]{Parcours personnel}
-    \begin{figure}
-        \includegraphics[width=0.36\textwidth]{epita}
-        \includegraphics[width=0.27\textwidth]{prologin}
-        \includegraphics[width=0.27\textwidth]{fosdem}
-    \end{figure}
+\begin{frame}{Mémoire de Master}
+    Formation d'ingénieur, enseignant à EPITA.
 
-    \note[item]{Parcours perso informatique + éducation avec EPITA}
-    \note[item]{Attrait logiciel libre avec Prologin et les rendez-vous au
-    FOSDEM}
+    Mémoire supervisé par Benoît Crespin.
+    
+    \note[item]{Très rapide, juste histoire de dire que je ne suis pas issu
+    moi-même du milieu EIAH}
 \end{frame}
 
-\begin{frame}[fragile]{Idée de départ}
-    Axe enseignement et logiciel libre.
+\begin{frame}[fragile]{Contributions au logiciel libre}
+    Nombreuses barrières d'accès, souvent discriminantes :
+    \mycite{barriers-2018}, \mycite{newcomers-accessibility-2016},
+    \mycite{newcomers-onboarding-2018}.
 
-    Approche initiale enseignement $\rightarrow$ recherche de cours existants.
+    \bigskip\bigskip
 
-    Faire une étude de besoin ?
-
-    Évaluer le succès d'une formation existante ?
-\end{frame}
-
-\begin{frame}{Littérature sur les barrières d'entrée}
-    Beaucoup d'articles de Igor Steinmacher.
-
-    Recherche principalement qualitative grandissante et très intéressante.
-
-    Début de recherche quantitative, notamment avec \textcite{signals-2019}.
+    Souvent liées aux propriétés des projets $\implies$ peut-on identifier
+    lesquels sont accessibles ?
 
     \note[item]{%
-        Steinmacher est partout et utilise des méthodologies qualitatives très
-        intéressantes, c'est rigolo mais donc j'ai voulu trouver d'autres
-        auteurs et d'autres approches sur le sujet
-    }
-    \note[item]{%
-        Très dur de naviguer la littérature, mon approche était de chercher des
-        mots-clés puis d'approfondir en suivant les études citées par les
-        articles que je trouvais.
-    }
-    \note[item]{%
-        Une approche quantitative avec minage de projets me permettrait d'être
-        d'exploiter un peu plus mes compétences existantes afin de me concentrer
-        sur certains aspects recherche.
+        Même des projets populaires comme Apache Hadoop ont un très
+        faible taux de rétention des nouveaux contributeurs, $82\%$ d'après
+        Mendez et al. Les barrières sont très variées et sont souvent
+        actionables par le projet lui-même : elles concernent la documentation
+        disponible, la complexité des outils nécessaires et du setup à mettre en
+        place pour commencer à travailler, ainsi que le comportement des
+        mainteneurs.
     }
 \end{frame}
 
-\section{L'archive de Software Heritage}
+\begin{frame}[fragile]{Inspiration}
+    \mycite{signals-2019} : quels signaux utilisent les aspirants contributeurs.
 
-\begin{frame}[fragile]{Idée venant de mes relations}
+    \begin{minipage}{.49\textwidth}
+        \begin{figure}
+            \includegraphics[width=\textwidth]{qiu_overview}
+        \end{figure}
+    \end{minipage}
+    \begin{minipage}{.49\textwidth}
+        \begin{figure}
+            \includegraphics[width=\textwidth]{qiu_regressions}
+        \end{figure}
+    \end{minipage}
+
+    \note[item]{%
+        Je me suis beaucoup inspiré de cet article de Huilian Sophie Qiu et al.
+        qui identifie certains signaux que les aspirants contributeurs regardent
+        dans un projet pour choisir auquel contribuer, puis mesure la
+        correlation qu'il y a entre ces signaux et la présence de tentative de
+        contributions.
+
+        Ils trouvent en particulier qu'un grand nombre de commits récents est
+        lié à une meilleur attractivité, contrairement à la présence
+        d'instructions de contribution. Leur étude mesure aussi de façon très
+        intéressante l'impact de la politesse des mainteneurs, ce que mon
+        approche ne me permettra pas de faire.
+
+        Mon but est de vérifier si ces signaux marchent aussi pour identifier
+        les projets \emph{accessibles} (les contributeurs arrivent à contribuer,
+        leur code est merged dans le projet) et non seulement attractifs (les
+        gens \emph{essayent} de contribuer).
+    }
+\end{frame}
+
+\section{Méthodologie}
+
+\begin{frame}[fragile]{Pour dépasser les limites de GitHub}
+    \mycite{mining-github-2014}, \mycite{penumbra-oss-2022} : limites du minage
+    mono-plateforme.
+
+    \mycite{barriers-2018} : limites des études se concentrant sur quelques gros
+    projets uniquement.
+
+    \bigskip
+
+    $\implies$ Besoin d'une stratégie de minage de données plus représentative
+    et générique.
+
     \begin{figure}
         \includesvg[width=0.5\textwidth]{softwareheritage}
     \end{figure}
 
-    Connu via la thèse d'un ami : \emph{\citetitle{swh-seirl}},
-    \textcite{swh-seirl}.
-
-    Permet de construire à partir de \textcite{signals-2019}.
-
     \note[item]{%
-        Approche suffisamment nouvelle pour que je puisse apprendre des choses
-        sur la collecte de donnée, tout en se basant sur certaines technologies
-        que je connais, donc moins perdre de temps sur des questions purement
-        techniques
+        Autre objectif : dépasser les limites de l'analyse de données issues de
+        GitHub (beaucoup de projets "personnels", beaucoup de PR non marquées
+        comme merged alors qu'elles l'ont été à la main, etc.).
     }
 \end{frame}
 
-\begin{frame}{Formateur, même techniquement}
-    Java et big data.
+\begin{frame}{Pertinence pour la recherche}
+    \mycite{swh-2019}, \mycite{swh-seirl}.
 
-    Accès temporaire au serveur, travail sous contrainte de temps $\rightarrow$
-    plusieurs solutions de secours.
-
-    Trois jours d'exécution (malgré une forte parallélisation).
-\end{frame}
-
-\section{L'analyse statistique sans distribution normale}
-
-\begin{frame}{Outils utilisés}
-    Les classiques : numpy, scipy, matplotlib.
-
-    Plus spécialisé : pandas (similarités avec le R), statsmodels.
+    \begin{itemize}
+        \item $+$\num{239000000} projets
+        \item $+$\num{3000000000} \emph{commits} uniques
+        \item Parcours régulièrement Bitbucket, GitHub, gitlab.com, CRAN, Maven,
+            gnu.org, NPM, pypi, sourceforge, \ldots
+        \item google code, autres GitLabs, autres origines à la demande
+    \end{itemize}
 
     \note[item]{%
-        J'ai essayé de rendre le code le plus lisible et réutilisable possible,
-        mentionner aussi le replication package ?
+        Software Heritage maintien la plus grande archive logicielle publique au
+        monde avec l'objectif spécifique de la rendre exploitable à des fins de
+        recherche. L'archive contient des projets issus de nombreuses sources
+        différentes (GitHub restant la principale), y compris venant de
+        logiciels de versionnement différents, et tous représentés sous un seul
+        grand graphe de commits dédupliqués.
     }
 \end{frame}
+
+% TODO : présenter le graphe et la façon dont je le parcours
+
+\section{Résultats}
 
 \begin{frame}{Traitement de la présence d'instructions de contribution}
     \begin{figure}
@@ -162,10 +193,22 @@
             \caption{Nombre de nouveaux contributeurs\\(ordonnées logarithmiques)}
         \end{subfigure}
     \end{figure}
+\end{frame}
 
-    Vu en cours : test de Fisher et test de Student $\rightarrow$ paramétriques
+% TODO : montrer les deux autres résultats
 
-    Non paramétrique : test de Wilcoxon-Mann-Whitney.
+\begin{frame}{Contact}
+    \begin{itemize}
+        \item Contact : \href{mailto:paul.hervot@epita.fr}{paul.hervot@epita.fr}
+        \item Dépôt GitHub :
+            \href{https://github.com/Dettorer/synva-dissertation}{Dettorer/synva-dissertation}
+        \item \emph{Replication package} :
+            \href{https://zenodo.org/record/7023495}{zenodo.org/record/7023495}
+    \end{itemize}
+
+    \note[item]{%
+        J'ai essayé de rendre le code le plus lisible et réutilisable possible.
+    }
 \end{frame}
 
 \section{Bibliographie}
