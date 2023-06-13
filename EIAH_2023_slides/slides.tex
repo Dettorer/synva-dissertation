@@ -36,7 +36,7 @@
 \usetheme{metropolis}
 \metroset{sectionpage=progressbar, progressbar=frametitle}
 \setbeamertemplate{caption}[numbered] % Show figure number when using `\caption` instead of `\caption*`
-\setbeamertemplate{footline}[page number] % Show the current page number in the bottom line of each slide
+\setbeamertemplate{footline}[frame number] % Show the current frame number instead of page number in the bottom line of each slide
 % \setbeameroption{show only notes}
 
 % Bibliography configuration
@@ -73,8 +73,14 @@
 
     Mémoire supervisé par Benoît Crespin.
     
-    \note[item]{Très rapide, juste histoire de dire que je ne suis pas issu
-    moi-même du milieu EIAH}
+    \note[item]{%
+        Je ne viens pas, à la base, du monde de la recherche, j'ai une formation
+        d'ingénieur et j'enseigne l'informatique depuis six ans. Cet article est
+        en fait le fruit d'un travail de mémoire de M2 que j'ai fait l'année
+        dernière en formation continue et supervisé par mon co-autheur, qui n'a
+        pas pu venir aujourd'hui mais que je remercie beaucoup pour son aide, en
+        particulier quand il a été question de soumettre à cette conférence.
+    }
 \end{frame}
 
 \begin{frame}[fragile]{Contributions au logiciel libre}
@@ -88,18 +94,26 @@
     lesquels sont accessibles ?
 
     \note[item]{%
-        Même des projets populaires comme Apache Hadoop ont un très
-        faible taux de rétention des nouveaux contributeurs, $82\%$ d'après
-        Mendez et al. Les barrières sont très variées et sont souvent
-        actionables par le projet lui-même : elles concernent la documentation
-        disponible, la complexité des outils nécessaires et du setup à mettre en
-        place pour commencer à travailler, ainsi que le comportement des
-        mainteneurs.
+        Ce travail s'inscrit dans la recherche autour des barrières d'accès que
+        les nouveaux contributeurs rencontrent en essayent de contribuer aux
+        projets de logiciel libre. Ce type de contribution est parfois utilisé
+        en cours dans le cadre de la pédagogie de projet mais c'est encore assez
+        rare, en partie à cause de ces barrières justement.
+
+        Ce sont des barrières qui sont même assez souvent discriminantes, en
+        particulier sur le genre.
+
+        Notre question est donc de savoir s'il existe des indicateurs facilement
+        observables permettant d'avoir une idée de l'accessibilité d'un projet
+        de logiciel pour les nouveaux contributeurs, ce qui serait
+        particulièrement utile à un enseignant souhaitant proposer ça à ses
+        étudiants comme execrice "monde réel".
     }
 \end{frame}
 
 \begin{frame}[fragile]{Inspiration}
-    \mycite{signals-2019} : quels signaux utilisent les aspirants contributeurs.
+    \mycite{signals-2019} : les signaux qu'utilisent les aspirants contributeurs
+    pour \emph{choisir} où contribuer.
 
     \begin{minipage}{.49\textwidth}
         \begin{figure}
@@ -125,10 +139,10 @@
         intéressante l'impact de la politesse des mainteneurs, ce que mon
         approche ne me permettra pas de faire.
 
-        Mon but est de vérifier si ces signaux marchent aussi pour identifier
-        les projets \emph{accessibles} (les contributeurs arrivent à contribuer,
-        leur code est merged dans le projet) et non seulement attractifs (les
-        gens \emph{essayent} de contribuer).
+        Notre but était de vérifier si certains de ces signaux marchent aussi
+        pour identifier les projets \emph{accessibles} (les contributeurs
+        arrivent à contribuer, leur code est merged dans le projet) et non
+        seulement attractifs (les gens \emph{essayent} de contribuer).
     }
 \end{frame}
 
@@ -312,7 +326,22 @@
 \end{frame}
 
 \begin{frame}{Conclusion}
-    % TODO
+    Ceci n'était pas une publicité déguisée pour Software Heritage.
+    \bigskip
+
+    Le logiciel libre est un gigantesque vivier de projets intéressants et
+    "réels" où envoyer s'exercer des étudiants.
+    \bigskip
+
+    Des indicateurs semblent exister pour déterminer facilement lesquels sont
+    accesibles aux nouveaux contributers, deux légers sont proposés dans cet
+    article.
+
+    \note[item]{%
+        Ma présentation ressemble un petit peu à une pub pour Software Heritage,
+        pourtant je vous assure que je ne suis pas sponsorisé. Mais je dois
+        admettre que c'était très intéressant de travailler avec leur archive.
+    }
 \end{frame}
 
 \begin{frame}{Contact}
@@ -325,7 +354,14 @@
     \end{itemize}
 
     \note[item]{%
-        J'ai essayé de rendre le code le plus lisible et réutilisable possible.
+        La totalité du code utilisé dans l'article, ainsi que le LaTeX pour
+        l'écrire lui-même, ainsi que les slides et le mémoire qui a servi de
+        base, se trouvent dans ce repo github opensource, mais il y a aussi un
+        replication package pour les gens souhaitant plus directement
+        expérimenter avec le code de collecte et d'analyse des données. Je suis
+        joignable à cette adresse mail et je serais, comme tout le monde
+        j'imagine, bien évidemment très heureux de répondre à des questions si
+        quelqu'un avait la curiosité d'aller regarder tout ça.
     }
 \end{frame}
 
