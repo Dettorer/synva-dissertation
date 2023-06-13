@@ -119,8 +119,8 @@
         correlation qu'il y a entre ces signaux et la présence de tentative de
         contributions.
 
-        Ils trouvent en particulier qu'un grand nombre de commits récents est
-        lié à une meilleur attractivité, contrairement à la présence
+        Ils trouvent en particulier qu'un grand nombre de \emph{commits} récents
+        est lié à une meilleur attractivité, contrairement à la présence
         d'instructions de contribution. Leur étude mesure aussi de façon très
         intéressante l'impact de la politesse des mainteneurs, ce que mon
         approche ne me permettra pas de faire.
@@ -174,28 +174,146 @@
         recherche. L'archive contient des projets issus de nombreuses sources
         différentes (GitHub restant la principale), y compris venant de
         logiciels de versionnement différents, et tous représentés sous un seul
-        grand graphe de commits dédupliqués.
+        grand graphe de \emph{commits} dédupliqués.
     }
 \end{frame}
 
-% TODO : présenter le graphe et la façon dont je le parcours
+\begin{frame}{Un grand \emph{Merkle DAG}}
+    \begin{minipage}{.46\textwidth}
+        \begin{figure}
+            \includegraphics[width=\textwidth]{swh-graph}
+        \end{figure}
+
+        \mycite{swh-2019}
+    \end{minipage}
+    \begin{minipage}{.52\textwidth}
+        Exclus de l'étude : \begin{itemize}
+            \item les \emph{forks}
+            \item les projets inactifs
+            \item les projets non colaboratifs
+        \end{itemize}
+
+        \bigskip
+
+        Données de recherche : \begin{itemize}
+            \item nombre de nouveaux contributeurs (variable expliquée)
+            \item nombre de contributeurs uniques récents
+            \item nombre de \emph{commits} récents
+            \item présence d'instructions de contribution
+        \end{itemize}
+    \end{minipage}
+    
+    \note[item]{%
+        C'est un Merkle DAG, donc un graphe orienté sans cycle dont tous les
+        nœuds sont identifiés par un hash unique, ce qui permet de dédupliquer.
+
+        La vue ici est pour une "origine" (URL à partir de laquelle un archivage
+        peut être effectué). Les infos qui nous intéressent sont les snapshots
+        (date d'archivage), les révisions et, plus tard, les contenus des
+        fichiers.
+
+        Je commence donc par parcourir *tous* les nœuds du graphe, à chaque fois
+        que je trouve une origine je lance une découverte de composante connexe
+        en considérant aussi les arcs inverses des révisions (c'est à dire les
+        clusters de fork) ce qui me permet de sélectionner une origine
+        "représentante" des fork (celle la plus éloignée d'un \emph{commit}
+        initial) et d'éliminer toutes les autres de mon parcours.
+
+        Ensuite, pour chacun des projets retenus, je lance un parcours largeur à
+        partir de ce qui ressemble le plus à une branche principale afin de
+        récolter les données de recherche. Tout est prélevé uniquement au sein
+        d'une période de référence bien définie (et le caractère "récent" est
+        une autre période bien définie précédant la période de référence).
+    }
+\end{frame}
+
+\begin{frame}{Un \textbf{GRAND} \emph{Merkle DAG}}
+    \centering
+
+    Essentiellement trois parcours largeur
+    \pause
+
+    Entièrement en RAM (7 TiB), 48 cœurs
+    \pause
+
+    Structures et algorithmes optimisés, peu de synchronisation
+    \pause
+    \bigskip
+    \bigskip
+
+    {\huge Trois jours}\\{\footnotesize (et un jour de plus pour les READMEs)}
+
+    \note[item]{%
+        Software Heritage a été assez gentil pour faire tourner mon code sur
+        leur serveur capable de faire tenir tout le graphe en RAM, pendant deux
+        semaines où personne d'autre ne s'en servait j'ai pu utiliser les 48
+        cœurs et paralléliser à fond.
+
+        Heureusement y'a sous-graphes de taille raisonnable dont j'ai pu
+        me servir pour tester mon code de collecte chez moi)
+    }
+\end{frame}
 
 \section{Résultats}
 
-\begin{frame}{Traitement de la présence d'instructions de contribution}
+\begin{frame}{Instructions de contribution}
     \begin{figure}
-        \begin{subfigure}[t]{0.45\textwidth}
-            \includegraphics[width=\textwidth]{../experiment/data_analysis/hasContrib_meanNewContributorCount}
-            \caption{Moyenne du nombre de nouveaux contributeurs pour chaque catégorie}
-        \end{subfigure}
-        \begin{subfigure}[t]{0.45\textwidth}
-            \includegraphics[width=\textwidth]{../experiment/data_analysis/newContributorCount_distribution}
-            \caption{Nombre de nouveaux contributeurs\\(ordonnées logarithmiques)}
-        \end{subfigure}
+        \includegraphics[width=.5\textwidth]{../experiment/data_analysis/hasContrib_meanNewContributorCount}
+        \caption{%
+            Moyenne du nombre de nouveaux contributeurs en fonction de la
+            présence d'instructions de contribution
+        }
     \end{figure}
+
+    Test MWW : $\rho \approx 0.57$, $p \approx 0$
+
+    \note[item]{%
+        C'est très léger, mais d'après le test de Wilcoxon-Mann-Whitney il y a
+        effectivement un lien entre la présence d'instructions de contribution
+        d'un projet et son accessibilité pour les nouveaux contributeurs
+    }
 \end{frame}
 
-% TODO : montrer les deux autres résultats
+\begin{frame}{Nombre de contributeurs uniques récents}
+    \begin{figure}
+        \includegraphics[width=.5\textwidth]{../experiment/data_analysis/recentContributorCountRegression_linearScale}
+        \caption{%
+            Nombre de nouveaux contributeurs en fonction du nombre de
+            contributeurs uniques récents
+        }
+    \end{figure}
+
+    Régression GLS : $R^2 \approx 0.45$
+
+    \note[item]{%
+        Là aussi c'est léger mais pareil, on voit un lien avec un coefficient de
+        détermination de $45\%$. La difficulté c'est que la distribution des
+        données n'est pas du tout normale, d'où l'utilisation d'un modèle
+        utilisant la méthode des moindres carrés.
+    }
+\end{frame}
+
+\begin{frame}{Nombre de \emph{commits} récents}
+    \begin{figure}
+        \includegraphics[width=.5\textwidth]{../experiment/data_analysis/recentCommitCountRegression_linearScale}
+        \caption{%
+            Nombre de nouveaux contributeurs en fonction du nombre de
+            \emph{commits} récents
+        }
+    \end{figure}
+
+    Régression GLS : $R^2 \approx 0.10$
+
+    \note[item]{%
+        Là c'est encore plus léger et le coefficient de détermination est à
+        seulement $10\%$, c'est donc le seul lien que je ne retiens pas comme
+        significatif.
+    }
+\end{frame}
+
+\begin{frame}{Conclusion}
+    % TODO
+\end{frame}
 
 \begin{frame}{Contact}
     \begin{itemize}
