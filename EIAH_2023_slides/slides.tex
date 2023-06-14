@@ -77,7 +77,7 @@
         Je ne viens pas, à la base, du monde de la recherche, j'ai une formation
         d'ingénieur et j'enseigne l'informatique depuis six ans. Cet article est
         en fait le fruit d'un travail de mémoire de M2 que j'ai fait l'année
-        dernière en formation continue et supervisé par mon co-autheur, qui n'a
+        dernière en formation continue et supervisé par mon co-auteur, qui n'a
         pas pu venir aujourd'hui mais que je remercie beaucoup pour son aide, en
         particulier quand il a été question de soumettre à cette conférence.
     }
@@ -107,7 +107,7 @@
         observables permettant d'avoir une idée de l'accessibilité d'un projet
         de logiciel pour les nouveaux contributeurs, ce qui serait
         particulièrement utile à un enseignant souhaitant proposer ça à ses
-        étudiants comme execrice "monde réel".
+        étudiants comme exercice "monde réel".
     }
 \end{frame}
 
@@ -130,7 +130,7 @@
         Je me suis beaucoup inspiré de cet article de Huilian Sophie Qiu et al.
         qui identifie certains signaux que les aspirants contributeurs regardent
         dans un projet pour choisir auquel contribuer, puis mesure la
-        correlation qu'il y a entre ces signaux et la présence de tentative de
+        corrélation qu'il y a entre ces signaux et la présence de tentative de
         contributions.
 
         Ils trouvent en particulier qu'un grand nombre de \emph{commits} récents
@@ -141,7 +141,7 @@
 
         Notre but était de vérifier si certains de ces signaux marchent aussi
         pour identifier les projets \emph{accessibles} (les contributeurs
-        arrivent à contribuer, leur code est merged dans le projet) et non
+        arrivent à contribuer, leur code est intégré dans le projet) et non
         seulement attractifs (les gens \emph{essayent} de contribuer).
     }
 \end{frame}
@@ -167,7 +167,7 @@
     \note[item]{%
         Autre objectif : dépasser les limites de l'analyse de données issues de
         GitHub (beaucoup de projets "personnels", beaucoup de PR non marquées
-        comme merged alors qu'elles l'ont été à la main, etc.).
+        comme \emph{merged} alors qu'elles l'ont été à la main, etc.).
     }
 \end{frame}
 
@@ -183,9 +183,9 @@
     \end{itemize}
 
     \note[item]{%
-        Software Heritage maintien la plus grande archive logicielle publique au
-        monde avec l'objectif spécifique de la rendre exploitable à des fins de
-        recherche. L'archive contient des projets issus de nombreuses sources
+        Software Heritage maintient la plus grande archive logicielle publique
+        au monde avec l'objectif spécifique de la rendre exploitable à des fins
+        de recherche. L'archive contient des projets issus de nombreuses sources
         différentes (GitHub restant la principale), y compris venant de
         logiciels de versionnement différents, et tous représentés sous un seul
         grand graphe de \emph{commits} dédupliqués.
@@ -204,7 +204,7 @@
         Exclus de l'étude : \begin{itemize}
             \item les \emph{forks}
             \item les projets inactifs
-            \item les projets non colaboratifs
+            \item les projets non collaboratifs
         \end{itemize}
 
         \bigskip
@@ -229,7 +229,7 @@
         Je commence donc par parcourir *tous* les nœuds du graphe, à chaque fois
         que je trouve une origine je lance une découverte de composante connexe
         en considérant aussi les arcs inverses des révisions (c'est à dire les
-        clusters de fork) ce qui me permet de sélectionner une origine
+        groupes de fork) ce qui me permet de sélectionner une origine
         "représentante" des fork (celle la plus éloignée d'un \emph{commit}
         initial) et d'éliminer toutes les autres de mon parcours.
 
@@ -263,7 +263,7 @@
         semaines où personne d'autre ne s'en servait j'ai pu utiliser les 48
         cœurs et paralléliser à fond.
 
-        Heureusement y'a sous-graphes de taille raisonnable dont j'ai pu
+        Heureusement il y a des sous-graphes de taille raisonnable dont j'ai pu
         me servir pour tester mon code de collecte chez moi)
     }
 \end{frame}
@@ -285,6 +285,8 @@
         C'est très léger, mais d'après le test de Wilcoxon-Mann-Whitney il y a
         effectivement un lien entre la présence d'instructions de contribution
         d'un projet et son accessibilité pour les nouveaux contributeurs
+
+        $p = 4.4591222 \times 10^{-135}$.
     }
 \end{frame}
 
@@ -329,18 +331,23 @@
     Ceci n'était pas une publicité déguisée pour Software Heritage.
     \bigskip
 
+    Limites : statistiques relativement faibles, absence d'information causale.
+
     Le logiciel libre est un gigantesque vivier de projets intéressants et
     "réels" où envoyer s'exercer des étudiants.
     \bigskip
 
     Des indicateurs semblent exister pour déterminer facilement lesquels sont
-    accesibles aux nouveaux contributers, deux légers sont proposés dans cet
+    accessibles aux nouveaux contributeurs, deux légers sont proposés dans cet
     article.
 
     \note[item]{%
         Ma présentation ressemble un petit peu à une pub pour Software Heritage,
         pourtant je vous assure que je ne suis pas sponsorisé. Mais je dois
         admettre que c'était très intéressant de travailler avec leur archive.
+
+        En limite, les résultats sont quand même statistiquement assez faibles,
+        et surtout on a aucune information causale.
     }
 \end{frame}
 
