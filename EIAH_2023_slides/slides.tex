@@ -74,14 +74,14 @@
 
     Mémoire supervisé par Benoît Crespin.
     
-    \note[item]{%
-        Je ne viens pas, à la base, du monde de la recherche, j'ai une formation
-        d'ingénieur et j'enseigne l'informatique depuis six ans. Cet article est
-        en fait le fruit d'un travail de mémoire de M2 que j'ai fait l'année
-        dernière en formation continue et supervisé par mon co-auteur, qui n'a
-        pas pu venir aujourd'hui mais que je remercie beaucoup pour son aide, en
-        particulier quand il a été question de soumettre à cette conférence.
-    }
+    % Je ne viens pas, à la base, du monde de la recherche, j'ai une formation
+    % d'ingénieur et j'enseigne l'informatique depuis six ans. Cet article est
+    % en fait le fruit d'un travail de mémoire de M2 que j'ai fait l'année
+    % dernière en formation continue et supervisé par mon co-auteur, qui n'a pas
+    % pu venir aujourd'hui mais que je remercie beaucoup pour son aide, en
+    % particulier quand il a été question de soumettre à cette conférence.
+    \note[item]{Profil ingénieur / prof, pas trop recherche}
+    \note[item]{Expérience lors d'un travail de mémoire de Master}
 \end{frame}
 
 \begin{frame}[fragile]{Contributions au logiciel libre}
@@ -94,22 +94,24 @@
     Souvent liées aux propriétés des projets $\implies$ peut-on identifier
     lesquels sont accessibles ?
 
-    \note[item]{%
-        Ce travail s'inscrit dans la recherche autour des barrières d'accès que
-        les nouveaux contributeurs rencontrent en essayent de contribuer aux
-        projets de logiciel libre. Ce type de contribution est parfois utilisé
-        en cours dans le cadre de la pédagogie de projet mais c'est encore assez
-        rare, en partie à cause de ces barrières justement.
+    % Ce travail s'inscrit dans la recherche autour des barrières d'accès que
+    % les nouveaux contributeurs rencontrent en essayent de contribuer aux
+    % projets de logiciel libre. Ce type de contribution est parfois utilisé en
+    % cours dans le cadre de la pédagogie de projet mais c'est encore assez
+    % rare, en partie à cause de ces barrières justement.
 
-        Ce sont des barrières qui sont même assez souvent discriminantes, en
-        particulier sur le genre.
+    % Ce sont des barrières qui sont même assez souvent discriminantes, en
+    % particulier sur le genre.
 
-        Notre question est donc de savoir s'il existe des indicateurs facilement
-        observables permettant d'avoir une idée de l'accessibilité d'un projet
-        de logiciel pour les nouveaux contributeurs, ce qui serait
-        particulièrement utile à un enseignant souhaitant proposer ça à ses
-        étudiants comme exercice "monde réel".
-    }
+    % Notre question est donc de savoir s'il existe des indicateurs facilement
+    % observables permettant d'avoir une idée de l'accessibilité d'un projet de
+    % logiciel pour les nouveaux contributeurs, ce qui serait particulièrement
+    % utile à un enseignant souhaitant proposer ça à ses étudiants comme
+    % exercice "monde réel".
+    \note[item]{Inscrit dans la recherche autour des barrières d'accès.}
+    \note[item]{Certains enseignants utilisent ces projets comme support ou souhaitent enseigner le travail logiciel libre}
+    \note[item]{mais c'est très rare notamment parce que les barrières}
+    \note[item]{$\implies$ peut-on aider les enseignants à trouver des projets ?}
 \end{frame}
 
 \begin{frame}[fragile]{Inspiration}
@@ -127,31 +129,33 @@
         \end{figure}
     \end{minipage}
 
-    \note[item]{%
-        Je me suis beaucoup inspiré de cet article de Huilian Sophie Qiu et al.
-        qui identifie certains signaux que les aspirants contributeurs regardent
-        dans un projet pour choisir auquel contribuer, puis mesure la
-        corrélation qu'il y a entre ces signaux et la présence de tentative de
-        contributions.
+    % Je me suis beaucoup inspiré de cet article de Huilian Sophie Qiu et al.
+    % qui identifie certains signaux que les aspirants contributeurs regardent
+    % dans un projet pour choisir auquel contribuer, puis mesure la corrélation
+    % qu'il y a entre ces signaux et la présence de tentative de contributions.
 
-        Ils trouvent en particulier qu'un grand nombre de \emph{commits} récents
-        est lié à une meilleur attractivité, contrairement à la présence
-        d'instructions de contribution. Leur étude mesure aussi de façon très
-        intéressante l'impact de la politesse des mainteneurs, ce que mon
-        approche ne me permettra pas de faire.
+    % Ils trouvent en particulier qu'un grand nombre de \emph{commits} récents
+    % est lié à une meilleur attractivité, contrairement à la présence
+    % d'instructions de contribution. Leur étude mesure aussi de façon très
+    % intéressante l'impact de la politesse des mainteneurs, ce que mon approche
+    % ne me permettra pas de faire.
 
-        Notre but était de vérifier si certains de ces signaux marchent aussi
-        pour identifier les projets \emph{accessibles} (les contributeurs
-        arrivent à contribuer, leur code est intégré dans le projet) et non
-        seulement attractifs (les gens \emph{essayent} de contribuer).
-    }
+    % Notre but était de vérifier si certains de ces signaux marchent aussi pour
+    % identifier les projets \emph{accessibles} (les contributeurs arrivent à
+    % contribuer, leur code est intégré dans le projet) et non seulement
+    % attractifs (les gens \emph{essayent} de contribuer).
+    \note[item]{Inspiration principale : signaux d'attractivité}
+    \note[item]{Par exemple HASCONTRIB négatif, recent commits positif}
+    \note[item]{Est-ce que ces signaux prédisent aussi l'accessibilité ?}
 \end{frame}
 
-\section{Méthodologie}
+\section{Méthode}
 
 \begin{frame}[fragile]{Pour dépasser les limites de GitHub}
     \mycite{mining-github-2014}, \mycite{penumbra-oss-2022} : limites du minage
     mono-plateforme.
+
+    \smallskip
 
     \mycite{barriers-2018} : limites des études se concentrant sur quelques gros
     projets uniquement.
@@ -165,11 +169,14 @@
         \includesvg[width=0.5\textwidth]{softwareheritage}
     \end{figure}
 
-    \note[item]{%
-        Autre objectif : dépasser les limites de l'analyse de données issues de
-        GitHub (beaucoup de projets "personnels", beaucoup de PR non marquées
-        comme \emph{merged} alors qu'elles l'ont été à la main, etc.).
-    }
+    % Autre objectif : dépasser les limites de l'analyse de données issues de
+    % GitHub (beaucoup de projets "personnels", beaucoup de PR non marquées
+    % comme \emph{merged} alors qu'elles l'ont été à la main, etc.).
+    % Aussi beaucoup de projets très collaboratifs et actifs en dehors des
+    % plateformes centralisées
+    \note[item]{Github est la plateforme par défaut de ce genre d'études}
+    \note[item]{Mais ses limites pour la recherche sont de plus en plus étudiées}
+    \note[item]{Beaucoup de projets très collaboratifs existent en dehors des plateformes centralisées}
 \end{frame}
 
 \begin{frame}{Pertinence pour la recherche}
@@ -183,14 +190,15 @@
         \item google code, autres GitLabs, autres origines à la demande
     \end{itemize}
 
-    \note[item]{%
-        Software Heritage maintient la plus grande archive logicielle publique
-        au monde avec l'objectif spécifique de la rendre exploitable à des fins
-        de recherche. L'archive contient des projets issus de nombreuses sources
-        différentes (GitHub restant la principale), y compris venant de
-        logiciels de versionnement différents, et tous représentés sous un seul
-        grand graphe de \emph{commits} dédupliqués.
-    }
+    % Software Heritage maintient la plus grande archive logicielle publique au
+    % monde avec l'objectif spécifique de la rendre exploitable à des fins de
+    % recherche. L'archive contient des projets issus de nombreuses sources
+    % différentes (GitHub restant la principale), y compris venant de logiciels
+    % de versionnement différents, et tous représentés sous un seul grand graphe
+    % de \emph{commits} dédupliqués.
+    \note[item]{Plus grande archive logicielle entièrement publique du monde}
+    \note[item]{Mise à disposition spécifiquement pour la recherche}
+    \note[item]{Plus grande variété et exhaustivité}
 \end{frame}
 
 \begin{frame}{Un grand \emph{Merkle DAG}}
@@ -218,28 +226,30 @@
         \end{itemize}
     \end{minipage}
     
-    \note[item]{%
-        C'est un Merkle DAG, donc un graphe orienté sans cycle dont tous les
-        nœuds sont identifiés par un hash unique, ce qui permet de dédupliquer.
+    % C'est un Merkle DAG, donc un graphe orienté sans cycle dont tous les nœuds
+    % sont identifiés par un hash unique, ce qui permet de dédupliquer.
 
-        La vue ici est pour une "origine" (URL à partir de laquelle un archivage
-        peut être effectué). Les infos qui nous intéressent sont les snapshots
-        (date d'archivage), les révisions et, plus tard, les contenus des
-        fichiers.
+    % La vue ici est pour une "origine" (URL à partir de laquelle un archivage
+    % peut être effectué). Les infos qui nous intéressent sont les snapshots
+    % (date d'archivage), les révisions et, plus tard, les contenus des
+    % fichiers.
 
-        Je commence donc par parcourir *tous* les nœuds du graphe, à chaque fois
-        que je trouve une origine je lance une découverte de composante connexe
-        en considérant aussi les arcs inverses des révisions (c'est à dire les
-        groupes de fork) ce qui me permet de sélectionner une origine
-        "représentante" des fork (celle la plus éloignée d'un \emph{commit}
-        initial) et d'éliminer toutes les autres de mon parcours.
+    % Je commence donc par parcourir *tous* les nœuds du graphe, à chaque fois
+    % que je trouve une origine je lance une découverte de composante connexe en
+    % considérant aussi les arcs inverses des révisions (c'est à dire les
+    % groupes de fork) ce qui me permet de sélectionner une origine
+    % "représentante" des fork (celle la plus éloignée d'un \emph{commit}
+    % initial) et d'éliminer toutes les autres de mon parcours.
 
-        Ensuite, pour chacun des projets retenus, je lance un parcours largeur à
-        partir de ce qui ressemble le plus à une branche principale afin de
-        récolter les données de recherche. Tout est prélevé uniquement au sein
-        d'une période de référence bien définie (et le caractère "récent" est
-        une autre période bien définie précédant la période de référence).
-    }
+    % Ensuite, pour chacun des projets retenus, je lance un parcours largeur à
+    % partir de ce qui ressemble le plus à une branche principale afin de
+    % récolter les données de recherche. Tout est prélevé uniquement au sein
+    % d'une période de référence bien définie (et le caractère "récent" est une
+    % autre période bien définie précédant la période de référence).
+    \note[item]{Gigantesque graphe qui rassemble tous les historiques de tout le monde}
+    \note[item]{Ici une vue depuis une seule "origine"}
+    \note[item]{Premier parcours pour découvrir les origines (puis un de plus pour trouver les forks)}
+    \note[item]{Ensuite récolte des données pour chaque projet retenu en partant d'une branche principale}
 \end{frame}
 
 \begin{frame}{Un \textbf{GRAND} \emph{Merkle DAG}}
@@ -258,15 +268,15 @@
 
     {\huge Trois jours}\\{\footnotesize (et un jour de plus pour les READMEs)}
 
-    \note[item]{%
-        Software Heritage a été assez gentil pour faire tourner mon code sur
-        leur serveur capable de faire tenir tout le graphe en RAM, pendant deux
-        semaines où personne d'autre ne s'en servait j'ai pu utiliser les 48
-        cœurs et paralléliser à fond.
+    % Software Heritage a été assez gentil pour faire tourner mon code sur leur
+    % serveur capable de faire tenir tout le graphe en RAM, pendant deux
+    % semaines où personne d'autre ne s'en servait j'ai pu utiliser les 48 cœurs
+    % et paralléliser à fond.
 
-        Heureusement il y a des sous-graphes de taille raisonnable dont j'ai pu
-        me servir pour tester mon code de collecte chez moi)
-    }
+    % Heureusement il y a des sous-graphes de taille raisonnable dont j'ai pu me
+    % servir pour tester mon code de collecte chez moi)
+    \note[item]{Le graphe est gros.}
+    \note[item]{Il existe cependant des sous-graphes pour tester ses algos}
 \end{frame}
 
 \section{Résultats}
